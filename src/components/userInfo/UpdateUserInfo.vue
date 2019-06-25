@@ -94,6 +94,13 @@
         </el-form-item>
       </el-col>
     </el-row>
+<!--    <el-row>-->
+<!--      <el-col :span="8" align="right">-->
+<!--        <el-form-item>-->
+<!--          <el-button type="primary" @click="reload">&nbsp;&nbsp;刷新&nbsp;&nbsp;</el-button>-->
+<!--        </el-form-item>-->
+<!--      </el-col>-->
+<!--    </el-row>-->
   </el-form>
 
   <div>
@@ -123,9 +130,11 @@
 
 <script>
   import {
-    UpdateUserInfo
+    UpdateUserInfo,
+    UpdatePasswd
   }from '../../api/userInfoApi';
   export default {
+    inject:['reload'],
     data() {
       return {
         // labelPosition: 'top',
@@ -149,28 +158,7 @@
           status:'',
           msg:'',
           data:{
-            //user:{
-            id:'',
-            userName:'',
-            realName:'',
-            passwd:'',
-            departmentID:'',
-            deptCode:'',
-            deptName:'',
-            typeID:'',
-            typeCode:'',
-            type:'',
-            rankID:'',
-            rankCode:'',
-            rank:'',
-            isSchedule:'',
-            appearUserID:'',
-            changeUserID:'',
-            appearDate:'',
-            changeDate:'',
-            photoLocation:'',
-            contact:'',
-            //}
+            number:'',
           }
         },
         userview:{
@@ -212,7 +200,7 @@
       updateUserInfo(){
         //如果没有更新密码
         if(this.updateForm.updatePasswdForm.oldPasswd===''&&this.updateForm.updatePasswdForm.newPasswd===''&&this.updateForm.updatePasswdForm.newPasswd2===''){
-          alert("没有更新密码！")
+          // alert("没有更新密码！")
           if(this.updateForm.updateUserInfoForm.userName===''){
             alert("用户名不能为空！");
           }else if(this.updateForm.updateUserInfoForm.realName===''){
@@ -226,7 +214,7 @@
                 let resu = res.data;
                 this.result = resu;
                 if (this.result.status === 'OK') {
-                  alert("成功")
+                  alert("信息更新成功！")
                   //更新session
                   var user = sessionStorage.getItem('user');
                   if (user) {
@@ -237,7 +225,7 @@
                     sessionStorage.setItem('user', JSON.stringify(user));
                   }
                 }else{
-                  alert("更新失败")
+                  alert("用户名重复，更新失败")
                 }
               }
               else {
@@ -247,7 +235,49 @@
           }
 
         }else{
-          alert(this.updateForm.updateUserInfoForm.oldPasswd)
+          if(this.updateForm.updatePasswdForm.newPasswd !== this.updateForm.updatePasswdForm.newPasswd2){
+            alert("两次新密码输入不一致！");
+          }
+          else{
+            UpdatePasswd(this.updateForm.updatePasswdForm.oldPasswd,this.updateForm.updatePasswdForm.newPasswd).then((res) => {
+              if (res.status === 200) {
+                let resu = res.data;
+                this.result = resu;
+                if (this.result.status === 'OK') {
+                  alert("密码更新成功！")
+                  UpdateUserInfo(this.updateForm.updateUserInfoForm.userName,this.updateForm.updateUserInfoForm.realName,this.updateForm.updateUserInfoForm.contact).then((res) => {
+                    if (res.status === 200) {
+                      let resu = res.data;
+                      this.result = resu;
+                      if (this.result.status === 'OK') {
+                        alert("信息更新成功！")
+                        //更新session
+                        var user = sessionStorage.getItem('user');
+                        if (user) {
+                          user = JSON.parse(user);
+                          user.userName = this.updateForm.updateUserInfoForm.userName;
+                          user.realName = this.updateForm.updateUserInfoForm.realName;
+                          user.contact = this.updateForm.updateUserInfoForm.contact;
+                          sessionStorage.setItem('user', JSON.stringify(user));
+                        }
+                      }else{
+                        alert("用户名重复，更新失败")
+                      }
+                    }
+                    else {
+                      alert("出现异常!")
+                    }
+                  });
+                }else{
+                  alert("旧密码输入错误，更新失败")
+                }
+              }
+              else {
+                alert("出现异常!")
+              }
+            });
+          }
+
         }
       },
       handleRemove(file, fileList) {

@@ -425,6 +425,7 @@
       }
     },
     mounted() {
+      alert('d');
       this.getDepartmentList();
       this.getAllDeptNamesAndCodes();
       this.getAllDeptTypeNamesAndCodes();
