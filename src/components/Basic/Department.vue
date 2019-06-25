@@ -211,7 +211,7 @@
     deptCategoryGetALLNamesAndCodes,
     deptTypeGetALLNamesAndCodes,
     deptGetByNameOrCode
-  } from '../../api/api';
+  } from '../../api/departmentApi';
   import Qs from 'qs';
 
   export default {
