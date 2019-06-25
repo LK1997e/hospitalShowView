@@ -2,10 +2,10 @@
   <el-container>
     <el-header style="background:#41cde5;">
       <el-row class="row-bg">
-        <el-col span="2" class="grid-content">
+        <el-col span=2 class="grid-content" style="margin-bottom: 4px">
           <span style="font-size:20px;color: white;">科室管理</span>
         </el-col>
-        <el-col class="grid-content" span="6" offset="16">
+        <el-col class="grid-content" span=6 offset=16>
           <el-select v-model="searchValue" @change="deptSearchChange"
                      filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
             <el-option
@@ -27,10 +27,10 @@
       <el-row class="row-bg show-shadow">
 
 
-        <el-col span="12"
+        <el-col span=12
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col span="2" class="el-col-display">科室分类</el-col>
+          <el-col span=2 class="el-col-display">科室分类</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
                      clearable placeholder="请选择">
@@ -43,7 +43,7 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
             </el-option>
           </el-select>
-          <el-col span="2" class="el-col-display">科室类型</el-col>
+          <el-col span=2 class="el-col-display">科室类型</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.typeID" filterable :filter-method="deptTypeSearchValuesFilter" clearable
                      placeholder="请选择">
@@ -59,20 +59,21 @@
         </el-col>
 
 
-        <el-col span="12"
+        <el-col span=12
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
           <el-divider content-position="left">管理操作</el-divider>
-          <el-col span="4" class="el-col-display">
+          <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c">添加</el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
+          <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
+          <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki">导出</el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
-            <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242">批量删除</el-link>
+          <el-col span=4 class="el-col-display">
+            <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
+            @click="deleteByChoose">批量删除</el-link>
           </el-col>
 
 
@@ -118,9 +119,9 @@
             </el-table-column>
             <el-table-column label="科室名称" prop="deptName">
             </el-table-column>
-            <el-table-column label="科室分类" prop="deptType">
+            <el-table-column label="科室分类" prop="deptCategory">
             </el-table-column>
-            <el-table-column label="科室类别" prop="deptCategory">
+            <el-table-column label="科室类别" prop="deptType">
             </el-table-column>
             <el-table-column label="操作1">
               <template slot-scope="props">
@@ -134,7 +135,7 @@
               <template slot-scope="props">
                 <el-button icon="el-icon-delete" @click.native.prevent="handleDelete(props.row.id)" type="text"
                            size="small" style="color: #e64242">
-                  移除
+                  删除
                 </el-button>
               </template>
             </el-table-column>
@@ -210,7 +211,9 @@
     deptGetALLNamesAndCodes,
     deptCategoryGetALLNamesAndCodes,
     deptTypeGetALLNamesAndCodes,
-    deptGetByNameOrCode
+    deptGetByNameOrCode,
+    deptDeleteByID,
+    deptDeleteByChooses
   } from '../../api/departmentApi';
   import Qs from 'qs';
 
@@ -218,6 +221,8 @@
     name: "Department",
     data() {
       return {
+        //判断是否需要copy
+        checkIfCopy: 0,
         //所有科室的名称或编号
         deptSearchValues: [],
         //存放入选择列表的科室名称或编号
@@ -264,7 +269,9 @@
         //科室搜索的名称或编号
         searchValue: '',
         //选中的科室id
-        checkList: []
+        checkList: [
+
+        ]
 
 
       }
@@ -283,6 +290,7 @@
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
+              this.searchValue = '';
               this.departmentList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
@@ -377,8 +385,13 @@
       deptSearchChange(val) {
         if (val === '') {
           this.returnCopyInfo();
+          this.checkIfCopy = 0;
         } else {
-          this.copyInfo();
+
+          if (this.checkIfCopy === 0) {
+            this.copyInfo();
+            this.checkIfCopy =this.checkIfCopy+1;
+          }
           this.listParam.typeID = '';
           this.listParam.deptCategoryID = '';
           this.pageParams.pageNum = 1;
@@ -392,7 +405,6 @@
                 let data = res.data;
                 if (data.status === 'OK') {
                   this.departmentList = data.data.list;
-                  this.pageParams.pages = data.data.pages;
                   this.pageParams.total = data.data.total;
                 } else {
                   alert(data.msg);
@@ -408,20 +420,78 @@
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
-          this.checkList.push({"id": item.id});
+          this.checkList.push(item.id);
         });
       },
       handleSizeChange(val) {
-        this.pageParams.pageSize=val;
+        this.pageParams.pageSize = val;
         this.getDepartmentList();
       },
       handleCurrentChange(val) {
-        this.pageParams.pageNum=val;
+        this.pageParams.pageNum = val;
         this.getDepartmentList();
       },
-      handleDeptTypeOrDeptCategoryChange(){
-        this.pageParams.pageNum=1;
+      handleDeptTypeOrDeptCategoryChange() {
+        this.pageParams.pageNum = 1;
         this.getDepartmentList();
+      },
+      //删除对象
+      handleDelete(val) {
+        let id={'id':val};
+        this.$confirm('确认删除？')
+          .then(_ => {
+            deptDeleteByID(id).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    if (this.searchValue === '') {
+                      this.getDepartmentList();
+                    } else {
+                      this.deptSearchChange(this.searchValue);
+                    }
+                    this.getAllDeptNamesAndCodes();
+                    this.getAllDeptTypeNamesAndCodes();
+                    this.getAllDeptCategoryNamesAndCodes();
+
+                  } else {
+                    alert(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      deleteByChoose(){
+        this.$confirm('确认批量删除？')
+          .then(_ => {
+            let params={"id":this.checkList};
+            deptDeleteByChooses(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    if (this.searchValue === '') {
+                      this.getDepartmentList();
+                    } else {
+                      this.deptSearchChange(this.searchValue);
+                    }
+                    this.getAllDeptNamesAndCodes();
+                    this.getAllDeptTypeNamesAndCodes();
+                    this.getAllDeptCategoryNamesAndCodes();
+
+                  } else {
+                    alert(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+
       }
     },
     mounted() {
