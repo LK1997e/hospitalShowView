@@ -33,3 +33,12 @@ export const deptGetByNameOrCode=(params)=>{
   params=Qs.stringify(params);
   return  axios.post(`${hospital}/department/findByNameOrCode`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
+
+export const deptDeleteByID=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/department/deleteById`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const deptDeleteByChooses=params=>{
+  return axios.post(`${hospital}/department/deleteByChoose`,params)
+}
