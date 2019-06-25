@@ -100,7 +100,135 @@ export const financeRoutes = [
         },
       },
       {
-        path: '/admin/UpdateUserInfo',
+        path: '/finance/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const medicalTechRoutes = [
+  {
+    path: '/medicalTech',
+    component: Home,
+    name: '医技人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '医技人员',
+    },
+    children: [
+      {
+        path: '/medicalTech/UserInfo',
+        component: UserInfo,
+        name: '医技人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '医技人员主页',
+        },
+      },
+      {
+        path: '/medicalTech/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const outpatientRoutes = [
+  {
+    path: '/outpatient',
+    component: Home,
+    name: '门诊人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '门诊人员',
+    },
+    children: [
+      {
+        path: '/outpatient/UserInfo',
+        component: UserInfo,
+        name: '门诊人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '门诊人员主页',
+        },
+      },
+      {
+        path: '/outpatient/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const pharmacyRoutes = [
+  {
+    path: '/pharmacy',
+    component: Home,
+    name: '药房人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '药房人员',
+    },
+    children: [
+      {
+        path: '/pharmacy/UserInfo',
+        component: UserInfo,
+        name: '药房人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '药房人员主页',
+        },
+      },
+      {
+        path: '/pharmacy/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const registerAndChargeRoutes = [
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '挂号收费员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '挂号收费员',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/UserInfo',
+        component: UserInfo,
+        name: '挂号收费员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '挂号收费员主页',
+        },
+      },
+      {
+        path: '/registerAndCharge/UpdateUserInfo',
         component: UpdateUserInfo,
         name: '修改个人信息' ,
         iconCls: 'el-icon-message',//图标样式class
