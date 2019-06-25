@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Qs from 'qs';
 let base = '';
-let hospital = 'http://localhost:8002/hospital';
+let hospital = 'http://localhost:8081/hospital';
 
 export const  departmentGetList = (listParams) =>
 {
