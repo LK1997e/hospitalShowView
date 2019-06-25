@@ -7,6 +7,8 @@ import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
 import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
+import InspectionSearch from '@/components/inspection/InspectionSearch'
+import FeeSearch from '@/components/feeSearch/FeeSearch'
 Vue.use(Router)
 Vue.use(Vuex)
 
@@ -142,6 +144,27 @@ export const medicalTechRoutes = [
       },
     ]
   },
+  {
+    path: '/medicalTech',
+    component: Home,
+    name: '检查检验',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '检查检验',
+    },
+    children: [
+      {
+        path: '/medicalTech/inspectionSearch',
+        component: InspectionSearch,
+        name: '检查检验查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '检查检验查询',
+        },
+      },
+    ]
+  }
+
 ]
 
 export const outpatientRoutes = [
@@ -238,6 +261,26 @@ export const registerAndChargeRoutes = [
       },
     ]
   },
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '费用查询',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '费用查询',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/FeeSearch',
+        component: FeeSearch,
+        name: '费用查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '费用查询',
+        },
+      },
+    ]
+  }
 ]
 
 export default routes;
