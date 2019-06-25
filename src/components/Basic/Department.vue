@@ -73,7 +73,7 @@
           </el-col>
           <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
-            @click="deleteByChoose">批量删除</el-link>
+                     @click="deleteByChoose">批量删除</el-link>
           </el-col>
 
 
