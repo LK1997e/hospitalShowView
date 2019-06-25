@@ -11,11 +11,15 @@
 			</el-col>
 			<el-col :span=4 class="userinfo">
 				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner">
+            <img :src=this.user.photoLocation />
+            {{this.user.sysUserName}}
+          </span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item divided @click.native="reload">刷新</el-dropdown-item>
+            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
@@ -78,12 +82,17 @@
 <script>
 
 	export default {
+    inject:['reload'],
 		data() {
 			return {
 				sysName:'东软医疗系统',
 				collapsed:false,
-				sysUserName: '',
-				sysUserAvatar: '',
+        user:{
+          sysUserName: '',
+          photoLocation:'',
+        },
+
+				// sysUserAvatar: '',
 				form: {
 					name: '',
 					region: '',
@@ -135,10 +144,9 @@
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-
-
+				this.user.sysUserName = user.name ;
+				// this.sysUserAvatar = user.avatar || '';
+        this.user.photoLocation = "http://localhost:8081/hospital/images/"+user.photoLocation;
 			}
 		}
 	}

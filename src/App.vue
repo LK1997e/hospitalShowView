@@ -2,7 +2,7 @@
   <div id="app">
     <transition name="fade"
                 mode="out-in">
-      <router-view></router-view>
+      <router-view v-if="isRouterAlive"></router-view>
     </transition>
   </div>
 </template>
@@ -10,6 +10,24 @@
 <script>
   export default {
     name: 'app',
+    provide(){
+      return {
+        reload:this.reload
+      }
+    },
+    data(){
+      return {
+        isRouterAlive :true
+      }
+    },
+    methods:{
+      reload(){
+        this.isRouterAlive = false;
+        this.$nextTick(function (){
+          this.isRouterAlive = true
+          })
+      }
+    },
     components: {
     }
   }
