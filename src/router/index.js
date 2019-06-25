@@ -1,62 +1,115 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Department from '@/components/Basic/Department'
+import Vuex from 'vuex'
+import Department from '@/components/basic/Department'
 import Home from '@/components/Home'
-import HelloWorld from '@/components/HelloWorld'
+import NotFound from '@/components/404'
+import Login from '@/components/login/Login'
+import UserInfo from '@/components/userInfo/UserInfo'
+import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
 Vue.use(Router)
+Vue.use(Vuex)
 
-let router =new Router({
-  routes: [
-    {
-      path: '/',
-      name: '基础信息管理',
-      component: Home,
-      iconCls: 'el-icon-message',
-      children:[
-        { path: '/baseInfoManage/departmentManage', component: Department, name: '挂号' }
-      ]
+let routes = [
 
-    }]
-});
-
-export const t1 = [
   {
-    path: '/',
-    name: '基础信息',
-    component: Home,
-    iconCls: 'el-icon-message',
-    children: [
-      {
-        path:'/t',
-        component: HelloWorld,
-        name: 'HelloWorld'
-      },
-    ]
-
-
-  },  {
-    path: '/',
-    name: '基础信息',
-    component: Home,
-    iconCls: 'el-icon-message',
-    children: [
-      {
-        path:'/t1',
-        component: HelloWorld,
-        name: 'HelloWorld'
-      },
-    ]
-
-
-  }
-
+    path: '/login',
+    component: Login,
+    name: '',
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: NotFound,
+    name: '',
+    hidden: true
+  },
 ];
 
 
+export const adminRoutes = [
+  {
+    path: '/admin',
+    component: Home,
+    name: '管理人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '管理人员',
+    },
+    children: [
+      {
+        path: '/admin/UserInfo',
+        component: UserInfo,
+        name: '管理人员主页' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '管理人员主页',
+        },
+      },
+      {
+        path: '/admin/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+  {
+    path: '/admin',
+    component: Home,
+    name: '基础信息管理',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '基础信息管理',
+    },
+    children:[
+      {
+        path: '/baseInfoManage/departmentManage',
+        component: Department,
+        iconCls: 'el-icon-message',
+        name: '部门管理',
+        meta: {
+          name: '部门管理',
+        },
+      },
+    ]
+  },
 
+]
 
+export const financeRoutes = [
+  {
+    path: '/finance',
+    component: Home,
+    name: '财务人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '财务人员',
+    },
+    children: [
+      {
+        path: '/finance/UserInfo',
+        component: UserInfo,
+        name: '财务人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '财务人员主页',
+        },
+      },
+      {
+        path: '/admin/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
 
-
-
-
-export default router;
+export default routes;

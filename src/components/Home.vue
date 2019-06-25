@@ -116,6 +116,7 @@
 				}).then(() => {
 					sessionStorage.removeItem('user');
 					_this.$router.push('/login');
+          location.reload();
 				}).catch(() => {
 
 				});
