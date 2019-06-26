@@ -2,10 +2,10 @@
   <el-container style="margin-top: 20px">
   <el-header style="background:#41cde5;padding: 20px;height: 100px">
     <el-row class="row-bg" type="flex" align="middle">
-      <el-col span="4" class="grid-content">
+      <el-col :span="4" class="grid-content">
        <span  style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 检查检验搜索</span>
       </el-col>
-      <el-col  class="grid-content" span="6" offset="1">
+      <el-col  class="grid-content" :span="6" :offset="1">
         <el-input v-model="condition.search"  style="font-size:20px;" clearable placeholder="请输入检查检验相关信息"></el-input>
       </el-col>
     </el-row>
@@ -15,10 +15,10 @@
 
     <el-row class="row-bg show-shadow" type="flex" align="middle">
 
-      <el-col span="24"
+      <el-col :span="24"
               style="padding-bottom: 10px;border-right: solid 1px #eee">
         <el-divider content-position="left">筛选查询</el-divider>
-        <el-col span="2" class="el-col-display">项目名称</el-col>
+        <el-col :span="2" class="el-col-display">项目名称</el-col>
 
 
         <el-select style="float: left;margin-left: 8px"  @change="handleFMedItemChange"
@@ -34,7 +34,7 @@
           </el-option>
         </el-select>
 
-        <el-col span="2" class="el-col-display">开设时间</el-col>
+        <el-col :span="2" class="el-col-display">开设时间</el-col>
 
         <el-date-picker
           style="float: left;margin-left: 8px"
@@ -54,7 +54,7 @@
     <el-row class="row show-shadow"
             style="padding-bottom: 10px;">
       <el-container>
-        <el-col  span="22" offset="1" class="grid-content">
+        <el-col  :span="22" :offset="1" class="grid-content">
         <el-tabs v-model="condition.mark" @tab-click="handleMark">
           <el-tab-pane label="待处置" name="144"></el-tab-pane>
           <el-tab-pane label="待审核" name="142"></el-tab-pane>
@@ -66,7 +66,7 @@
         <el-header>
           <el-divider content-position="left">检查检验列表</el-divider>
         </el-header>
-        <el-col  span="22" offset="1" class="grid-content">
+        <el-col  :span="22" :offset="1" class="grid-content">
         <el-table
           ref="multipleTable"
           :data="inspectFormViewList"
