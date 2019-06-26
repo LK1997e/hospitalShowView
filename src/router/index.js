@@ -7,8 +7,8 @@ import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
 import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
-import InspectionSearch from '@/components/inspection/InspectionSearch'
-import FeeSearch from '@/components/feeSearch/FeeSearch'
+import InspectionSearch from '@/components/medicalTech/inspection/InspectionSearch'
+import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 Vue.use(Router)
 Vue.use(Vuex)
 
