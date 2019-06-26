@@ -163,7 +163,7 @@
   import {
     InspectSearchFMedItem,
     Inspectformview
-  } from '../../api/inspectionApi';
+  } from '../../../api/inspectionApi';
   import Qs from 'qs';
 
   export default {
