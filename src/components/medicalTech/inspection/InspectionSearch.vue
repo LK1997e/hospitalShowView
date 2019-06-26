@@ -6,7 +6,7 @@
        <span  style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 检查检验搜索</span>
       </el-col>
       <el-col  class="grid-content" :span="6" :offset="1">
-        <el-input v-model="condition.search"  style="font-size:20px;" clearable placeholder="请输入检查检验相关信息"></el-input>
+        <el-input v-model="condition.search" @click="handleSearchChange" style="font-size:20px;" clearable placeholder="请输入检查检验相关信息"></el-input>
       </el-col>
     </el-row>
 
@@ -134,7 +134,7 @@
         </el-col>
         <hr>
 
-        <div class="block" align="center">
+        <div class="block"  style="text-align: center">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -260,6 +260,9 @@
       },
       handleCurrentChange(val) {
         this.pageParams.pageNum=val;
+        this.getInspectFormViewList();
+      },handleSearchChange(){
+        this.pageParams.pageNum=1;
         this.getInspectFormViewList();
       },
       handleMark(tab, event){
