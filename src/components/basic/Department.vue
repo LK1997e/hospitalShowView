@@ -1,11 +1,11 @@
 <template>
   <el-container>
     <el-header style="background:#41cde5;">
-      <el-row class="row-bg">
+      <el-row style = "align:center;top: 17px;" class="row-bg">
         <el-col span="2" class="grid-content">
           <span style="font-size:20px;color: white;">科室管理</span>
         </el-col>
-        <el-col class="grid-content" span="6" offset="16">
+        <el-col class="grid-content" span="2" offset="16">
           <el-select v-model="searchValue" @change="deptSearchChange"
                      filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
             <el-option
@@ -176,16 +176,9 @@
     height: 40px
   }
 
-  .el-row {
-    margin-bottom: 10px;
-  }
 
   .show-shadow {
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-  }
-
-  .row-bg {
-    padding: 10px 0;
   }
 
   .demo-table-expand {

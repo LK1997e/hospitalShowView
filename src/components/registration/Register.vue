@@ -2,9 +2,9 @@
     <el-container>
 
         <el-header style = "background:#41cde5;">
-            <el-row class = "row-bg">
-                <el-col span = "2" class = "grid-content">
-                    <span style = "font-size:20px;color: white;">科室管理</span>
+            <el-row style = "top: 17px;" class = "row-bg">
+                <el-col style = "text-align: center;" span = "2" class = "grid-content">
+                    <span style = "font-size:20px;color: white;">挂号</span>
                 </el-col>
             </el-row>
         </el-header>
@@ -83,9 +83,9 @@
                                    filter-method = "deptSearchValuesFilter" clearable
                                    placeholder = "请选择">
                             <el-option
-                            v-for="item in deptIDAndNameSearchValues"
-                            :label="item.deptName"
-                            :value="item.deptID">
+                                    v-for = "item in deptIDAndNameSearchValues"
+                                    :label = "item.deptName"
+                                    :value = "item.deptID">
                                 <span>{{ item.deptName }}</span>
                             </el-option>
                         </el-select>
@@ -289,11 +289,12 @@
       },
     },
     mounted() {
-      this.getDeptList();
-    }
+      this.getDeptList()
+    },
   }
 </script>
 
 <style scoped>
 
 </style>
+

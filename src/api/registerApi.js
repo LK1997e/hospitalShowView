@@ -11,3 +11,8 @@ export const getDeptList = () => {
   return axios.post(`${hospital}/register/getDeptList`)
 
 }
+
+//从后台获取挂号级别列表
+export const getRegLevelList = () => {
+
+}
