@@ -1,11 +1,11 @@
 <template>
-  <el-container>
+  <el-container style="margin-top: 6px">
     <el-header style="background:#41cde5;">
       <el-row class="row-bg">
-        <el-col span="2" class="grid-content">
+        <el-col span=2 class="grid-content" style="margin-bottom: 4px">
           <span style="font-size:20px;color: white;">科室管理</span>
         </el-col>
-        <el-col class="grid-content" span="6" offset="16">
+        <el-col class="grid-content" span=6 offset=16>
           <el-select v-model="searchValue" @change="deptSearchChange"
                      filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
             <el-option
@@ -27,10 +27,10 @@
       <el-row class="row-bg show-shadow">
 
 
-        <el-col span="12"
+        <el-col span=12
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col span="2" class="el-col-display">科室分类</el-col>
+          <el-col span=2 class="el-col-display">科室分类</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
                      clearable placeholder="请选择">
@@ -43,7 +43,7 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
             </el-option>
           </el-select>
-          <el-col span="2" class="el-col-display">科室类型</el-col>
+          <el-col span=2 class="el-col-display">科室类型</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.typeID" filterable :filter-method="deptTypeSearchValuesFilter" clearable
                      placeholder="请选择">
@@ -59,20 +59,24 @@
         </el-col>
 
 
-        <el-col span="12"
+        <el-col span=12
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
           <el-divider content-position="left">管理操作</el-divider>
-          <el-col span="4" class="el-col-display">
-            <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c">添加</el-link>
+          <el-col span=4 class="el-col-display">
+            <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
+                     @click="handleAdd">添加
+            </el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
+          <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
+          <el-col span=4 class="el-col-display">
             <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki">导出</el-link>
           </el-col>
-          <el-col span="4" class="el-col-display">
-            <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242">批量删除</el-link>
+          <el-col span=4 class="el-col-display">
+            <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
+                     @click="deleteByChoose">批量删除
+            </el-link>
           </el-col>
 
 
@@ -118,13 +122,13 @@
             </el-table-column>
             <el-table-column label="科室名称" prop="deptName">
             </el-table-column>
-            <el-table-column label="科室分类" prop="deptType">
+            <el-table-column label="科室分类" prop="deptCategory">
             </el-table-column>
-            <el-table-column label="科室类别" prop="deptCategory">
+            <el-table-column label="科室类别" prop="deptType">
             </el-table-column>
             <el-table-column label="操作1">
               <template slot-scope="props">
-                <el-button icon="el-icon-edit" @click.native.prevent="handleEdit(props.row.id)" type="text"
+                <el-button icon="el-icon-edit" @click.native.prevent="handleEdit(props.row)" type="text"
                            size="small">
                   编辑
                 </el-button>
@@ -134,7 +138,7 @@
               <template slot-scope="props">
                 <el-button icon="el-icon-delete" @click.native.prevent="handleDelete(props.row.id)" type="text"
                            size="small" style="color: #e64242">
-                  移除
+                  删除
                 </el-button>
               </template>
             </el-table-column>
@@ -158,6 +162,96 @@
           </div>
 
 
+          <el-dialog title="修改活动" :visible.sync="editDialogFormVisible" width="30%">
+            <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="科室名称" prop="deptName">
+                <el-input v-model="editForm.deptName" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item label="科室编号" prop="deptCode">
+                <el-input v-model="editForm.deptCode" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item label="科室分类" prop="deptCategoryID">
+                <el-select style="float: left;width: 250px"
+                           v-model="editForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
+                           clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in deptCategoryOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="科室类别" prop="deptTypeID" width="30%">
+                <el-select style="float: left;width: 250px"
+                           v-model="editForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
+                           clearable
+                           placeholder="请选择">
+                  <el-option
+                    v-for="item in deptTypeOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('editForm')">立即修改</el-button>
+                <el-button @click="resetForm('editForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+
+          </el-dialog>
+
+          <el-dialog :visible.sync="addDialogFormVisible" width="30%">
+            <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="科室名称" prop="deptName">
+                <el-input v-model="addForm.deptName" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item label="科室编号" prop="deptCode">
+                <el-input v-model="addForm.deptCode" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item label="科室分类" prop="deptCategoryID">
+                <el-select style="float: left;width: 250px"
+                           v-model="addForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
+                           clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in deptCategoryOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="科室类别" prop="deptTypeID">
+                <el-select style="float: left;width: 250px"
+                           v-model="addForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
+                           clearable
+                           placeholder="请选择">
+                  <el-option
+                    v-for="item in deptTypeOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('addForm')">立即创建</el-button>
+                <el-button @click="resetForm('addForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
+
         </el-container>
 
 
@@ -165,7 +259,10 @@
 
     </el-main>
 
+
   </el-container>
+
+
 </template>
 
 <style>
@@ -210,7 +307,11 @@
     deptGetALLNamesAndCodes,
     deptCategoryGetALLNamesAndCodes,
     deptTypeGetALLNamesAndCodes,
-    deptGetByNameOrCode
+    deptGetByNameOrCode,
+    deptDeleteByID,
+    deptDeleteByChooses,
+    deptInfoUpdate,
+    deptInfoAdd
   } from '../../api/departmentApi';
   import Qs from 'qs';
 
@@ -218,6 +319,8 @@
     name: "Department",
     data() {
       return {
+        //判断是否需要copy
+        checkIfCopy: 0,
         //所有科室的名称或编号
         deptSearchValues: [],
         //存放入选择列表的科室名称或编号
@@ -255,16 +358,56 @@
           pageNumCopy: '',
           totalCopy: '',
           //复制的科室分类id
-          deptCategoryIDCopy: '',
+          deptCategoryIDCopy: undefined,
           //复制的科室类别id
-          typeIDCopy: ''
+          typeIDCopy: undefined
 
         },
 
         //科室搜索的名称或编号
         searchValue: '',
         //选中的科室id
-        checkList: []
+        checkList: [],
+        //添加科室的对话框是否显示
+        addDialogFormVisible: false,
+        //修改科室的对话框是否显示
+        editDialogFormVisible: false,
+        //添加科室的内容
+        addForm: {
+          deptName: '',
+          deptCode: '',
+          deptTypeID: '',
+          deptCategoryID: ''
+        },
+        //修改科室的内容
+        editForm: {
+          id: '',
+          deptName: '',
+          deptCode: '',
+          deptTypeID: '',
+          deptCategoryID: ''
+
+        },
+        //修改科室规则
+        rules: {
+          deptName: [
+            {required: true, message: '请输入科室名称', trigger: 'blur'},
+            {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
+
+          ],
+          deptCode: [
+            {required: true, message: '请输入科室编号', trigger: 'blur'},
+            {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+          ],
+          deptCategoryID: [
+            {required: true, message: '请选择科室分类', trigger: 'change'}
+          ],
+          deptTypeID: [
+            {required: true, message: '请选择科室类别', trigger: 'change'}
+          ]
+
+
+        }
 
 
       }
@@ -283,12 +426,18 @@
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
+              this.searchValue = '';
               this.departmentList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
               this.copyInfo();
-            } else {
-              alert(data.msg);
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }else{
+              this.$message.error(data.msg);
             }
           }
         });
@@ -317,8 +466,13 @@
             if (data.status === 'OK') {
               this.deptSearchValues = data.data;
               this.deptSearchOptions = data.data;
-            } else {
-              alert(data.msg);
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }else{
+              this.$message.error(data.msg);
             }
           }
 
@@ -332,8 +486,13 @@
             if (data.status === 'OK') {
               this.deptTypeValues = data.data;
               this.deptTypeOptions = data.data;
-            } else {
-              alert(data.msg);
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }else{
+              this.$message.error(data.msg);
             }
           }
 
@@ -347,8 +506,13 @@
             if (data.status === 'OK') {
               this.deptCategoryValues = data.data;
               this.deptCategoryOptions = data.data;
-            } else {
-              alert(data.msg);
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }else{
+              this.$message.error(data.msg);
             }
           } else {
             alert('error');
@@ -377,8 +541,13 @@
       deptSearchChange(val) {
         if (val === '') {
           this.returnCopyInfo();
+          this.checkIfCopy = 0;
         } else {
-          this.copyInfo();
+
+          if (this.checkIfCopy === 0) {
+            this.copyInfo();
+            this.checkIfCopy = this.checkIfCopy + 1;
+          }
           this.listParam.typeID = '';
           this.listParam.deptCategoryID = '';
           this.pageParams.pageNum = 1;
@@ -392,10 +561,14 @@
                 let data = res.data;
                 if (data.status === 'OK') {
                   this.departmentList = data.data.list;
-                  this.pageParams.pages = data.data.pages;
                   this.pageParams.total = data.data.total;
-                } else {
-                  alert(data.msg);
+                } else if (data.status === 'WARN') {
+                  this.$message({
+                    message: data.msg,
+                    type: 'warning'
+                  });
+                }else{
+                  this.$message.error(data.msg);
                 }
               }
             }
@@ -405,34 +578,193 @@
 
 
       },
+      //科室的选择发生改变
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
-          this.checkList.push({"id": item.id});
+          this.checkList.push(item.id);
         });
       },
+      //处理页大小改变
       handleSizeChange(val) {
-        this.pageParams.pageSize=val;
+        this.pageParams.pageSize = val;
         this.getDepartmentList();
       },
+      //处理当前页改变
       handleCurrentChange(val) {
-        this.pageParams.pageNum=val;
+        this.pageParams.pageNum = val;
         this.getDepartmentList();
       },
-      handleDeptTypeOrDeptCategoryChange(){
-        this.pageParams.pageNum=1;
+      //处理选择的渴死类型或科室分类发生改变
+      handleDeptTypeOrDeptCategoryChange() {
+        this.pageParams.pageNum = 1;
         this.getDepartmentList();
+      },
+      //删除对象
+      handleDelete(val) {
+        let id = {'id': val};
+        this.$confirm('确认删除？')
+          .then(_ => {
+            deptDeleteByID(id).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                  }else if (data.status === 'WARN') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  }else{
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      //刷新页面信息
+      freshInfo() {
+        if (this.searchValue === '') {
+          this.getDepartmentList();
+        } else {
+          this.deptSearchChange(this.searchValue);
+        }
+        this.getAllDeptNamesAndCodes();
+        this.getAllDeptTypeNamesAndCodes();
+        this.getAllDeptCategoryNamesAndCodes();
+      },
+      //删除所选科室
+      deleteByChoose() {
+        this.$confirm('确认批量删除？')
+          .then(_ => {
+            let params = {"id": this.checkList};
+            deptDeleteByChooses(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+
+                  } else if (data.status === 'WARN') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  }else{
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      //点击编辑
+      handleEdit(propRow) {
+        this.editForm.id = propRow.id;
+        this.editForm.deptName = propRow.deptName;
+        this.editForm.deptCode = propRow.deptCode;
+        this.editForm.deptCategoryID = propRow.deptCategoryID;
+        this.editForm.deptTypeID = propRow.deptTypeID;
+        this.editDialogFormVisible = true;
+      },
+      //点击添加科室
+      handleAdd() {
+        this.addDialogFormVisible = true;
+        this.addForm.deptName='';
+        this.addForm.deptCode='';
+        this.addForm.deptCategoryID='';
+        this.addForm.deptTypeID='';
+      },
+      //提交（编辑表单）或（添加表单）
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (formName === 'editForm')
+              this.$confirm('确认修改科室信息？')
+                .then(_ => {
+                  deptInfoUpdate(this.editForm).then((res) => {
+                      if (res.status === 200) {
+                        let data = res.data;
+                        if (data.status === 'OK') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'success'
+                          });
+                          this.freshInfo();
+                        } else if (data.status === 'WARN') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'warning'
+                          });
+                        }else{
+                          this.$message.error(data.msg);
+                        }
+
+                      }
+                    }
+                  )
+
+                })
+                .catch(_ => {
+                });
+            else if (formName === 'addForm')
+              this.$confirm('确认添加科室信息？')
+                .then(_ => {
+                  deptInfoAdd(this.addForm).then((res) => {
+                      if (res.status === 200) {
+                        let data = res.data;
+                        if (data.status === 'OK') {
+                          this.freshInfo();
+                          this.$message({
+                            message: data.msg,
+                            type: 'success'
+                          });
+                        } else if (data.status === 'WARN') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'warning'
+                          });
+                        }else{
+                          this.$message.error(data.msg);
+                        }
+                      }
+                    }
+                  )
+
+                })
+                .catch(_ => {
+                });
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
     },
     mounted() {
-      alert('d');
       this.getDepartmentList();
       this.getAllDeptNamesAndCodes();
       this.getAllDeptTypeNamesAndCodes();
       this.getAllDeptCategoryNamesAndCodes();
     }
-
-
   }
 </script>
 
