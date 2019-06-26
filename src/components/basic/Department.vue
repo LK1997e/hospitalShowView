@@ -2,10 +2,10 @@
   <el-container style="margin-top: 6px">
     <el-header style="background:#41cde5;">
       <el-row class="row-bg">
-        <el-col span=2 class="grid-content" style="margin-bottom: 4px">
+        <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
           <span style="font-size:20px;color: white;">科室管理</span>
         </el-col>
-        <el-col class="grid-content" span=6 offset=16>
+        <el-col class="grid-content" :span="6" :offset="16">
           <el-select v-model="searchValue" @change="deptSearchChange"
                      filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
             <el-option
@@ -27,10 +27,10 @@
       <el-row class="row-bg show-shadow">
 
 
-        <el-col span=12
+        <el-col :span="12"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col span=2 class="el-col-display">科室分类</el-col>
+          <el-col :span="2" class="el-col-display">科室分类</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
                      clearable placeholder="请选择">
@@ -43,7 +43,7 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
             </el-option>
           </el-select>
-          <el-col span=2 class="el-col-display">科室类型</el-col>
+          <el-col :span="2" class="el-col-display">科室类型</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
                      v-model="listParam.typeID" filterable :filter-method="deptTypeSearchValuesFilter" clearable
                      placeholder="请选择">
@@ -59,21 +59,21 @@
         </el-col>
 
 
-        <el-col span=12
+        <el-col :span="12"
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
           <el-divider content-position="left">管理操作</el-divider>
-          <el-col span=4 class="el-col-display">
+          <el-col :span="4" class="el-col-display">
             <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
                      @click="handleAdd">添加
             </el-link>
           </el-col>
-          <el-col span=4 class="el-col-display">
+          <el-col :span="4" class="el-col-display">
             <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
           </el-col>
-          <el-col span=4 class="el-col-display">
+          <el-col :span="4" class="el-col-display">
             <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki">导出</el-link>
           </el-col>
-          <el-col span=4 class="el-col-display">
+          <el-col :span="4" class="el-col-display">
             <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
                      @click="deleteByChoose">批量删除
             </el-link>
