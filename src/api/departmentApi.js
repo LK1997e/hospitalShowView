@@ -32,13 +32,34 @@ export const deptCategoryGetALLNamesAndCodes=_=>{
 export const deptGetByNameOrCode=(params)=>{
   params=Qs.stringify(params);
   return  axios.post(`${hospital}/department/findByNameOrCode`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-}
+};
 
 export const deptDeleteByID=params=>{
   params=Qs.stringify(params);
   return axios.post(`${hospital}/department/deleteById`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-}
+};
 
 export const deptDeleteByChooses=params=>{
   return axios.post(`${hospital}/department/deleteByChoose`,params)
-}
+};
+
+export const deptInfoUpdate=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/department/update`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+};
+
+export const deptInfoAdd=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/department/add`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+};
+export const createXLSX=_=>{
+  return axios.post(`${hospital}/department/createXLSX`)
+};
+export const downloadXLSX=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/download/downloadXLSX`,params,
+    {headers: {'Content-Type': 'application/x-www-form-urlencoded'},responseType:'blob'});
+};
+
+
+
