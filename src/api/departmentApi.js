@@ -52,3 +52,14 @@ export const deptInfoAdd=params=>{
   params=Qs.stringify(params);
   return axios.post(`${hospital}/department/add`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 };
+export const createXLSX=_=>{
+  return axios.post(`${hospital}/department/createXLSX`)
+};
+export const downloadXLSX=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/download/downloadXLSX`,params,
+    {headers: {'Content-Type': 'application/x-www-form-urlencoded'},responseType:'blob'});
+};
+
+
+

@@ -1,6 +1,8 @@
 <template>
   <el-container style="margin-top: 6px">
     <el-header style="background:#41cde5;">
+
+
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
           <span style="font-size:20px;color: white;">科室管理</span>
@@ -68,10 +70,22 @@
             </el-link>
           </el-col>
           <el-col :span="4" class="el-col-display">
-            <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
+
+            <el-upload
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-remove="true"
+              :before-remove="beforeRemove"
+              :before-upload="handleBeforeUpload"
+            >
+              <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
+
+            </el-upload>
+
           </el-col>
           <el-col :span="4" class="el-col-display">
-            <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki">导出</el-link>
+            <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki"
+                     @click="getDownloadXLSX">导出
+            </el-link>
           </el-col>
           <el-col :span="4" class="el-col-display">
             <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
@@ -311,7 +325,9 @@
     deptDeleteByID,
     deptDeleteByChooses,
     deptInfoUpdate,
-    deptInfoAdd
+    deptInfoAdd,
+    downloadXLSX,
+    createXLSX
   } from '../../api/departmentApi';
   import Qs from 'qs';
 
@@ -436,7 +452,7 @@
                 message: data.msg,
                 type: 'warning'
               });
-            }else{
+            } else {
               this.$message.error(data.msg);
             }
           }
@@ -471,7 +487,7 @@
                 message: data.msg,
                 type: 'warning'
               });
-            }else{
+            } else {
               this.$message.error(data.msg);
             }
           }
@@ -491,7 +507,7 @@
                 message: data.msg,
                 type: 'warning'
               });
-            }else{
+            } else {
               this.$message.error(data.msg);
             }
           }
@@ -511,7 +527,7 @@
                 message: data.msg,
                 type: 'warning'
               });
-            }else{
+            } else {
               this.$message.error(data.msg);
             }
           } else {
@@ -567,7 +583,7 @@
                     message: data.msg,
                     type: 'warning'
                   });
-                }else{
+                } else {
                   this.$message.error(data.msg);
                 }
               }
@@ -614,12 +630,12 @@
                       message: data.msg,
                       type: 'success'
                     });
-                  }else if (data.status === 'WARN') {
+                  } else if (data.status === 'WARN') {
                     this.$message({
                       message: data.msg,
                       type: 'warning'
                     });
-                  }else{
+                  } else {
                     this.$message.error(data.msg);
                   }
                 }
@@ -661,7 +677,7 @@
                       message: data.msg,
                       type: 'warning'
                     });
-                  }else{
+                  } else {
                     this.$message.error(data.msg);
                   }
                 }
@@ -684,10 +700,10 @@
       //点击添加科室
       handleAdd() {
         this.addDialogFormVisible = true;
-        this.addForm.deptName='';
-        this.addForm.deptCode='';
-        this.addForm.deptCategoryID='';
-        this.addForm.deptTypeID='';
+        this.addForm.deptName = '';
+        this.addForm.deptCode = '';
+        this.addForm.deptCategoryID = '';
+        this.addForm.deptTypeID = '';
       },
       //提交（编辑表单）或（添加表单）
       submitForm(formName) {
@@ -710,7 +726,7 @@
                             message: data.msg,
                             type: 'warning'
                           });
-                        }else{
+                        } else {
                           this.$message.error(data.msg);
                         }
 
@@ -738,7 +754,7 @@
                             message: data.msg,
                             type: 'warning'
                           });
-                        }else{
+                        } else {
                           this.$message.error(data.msg);
                         }
                       }
@@ -755,9 +771,56 @@
           }
         });
       },
+      //重置表单
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      //导出XLSX文件
+      getDownloadXLSX() {
+        createXLSX().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              let params={fileName:data.data};
+              downloadXLSX(params).then((res) => {
+                if (!res) {
+                  return
+                }
+                let url = window.URL.createObjectURL(res.data)
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('download', params.fileName);
+                document.body.appendChild(link)
+                link.click();
+              })
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+        })
+      },
+      handleBeforeUpload(file) {
+        const isXLS = file.type === 'application/vnd.ms-excel';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('导入文件必须是xls或xlsx格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('导入文件大小不能超过 2MB!');
+        }
+        alert(JSON.stringify(file));
+        return (isXLS) && isLt2M;
       }
+
+
+
     },
     mounted() {
       this.getDepartmentList();
