@@ -75,7 +75,6 @@
               name="file"
               action="http://localhost:8081/hospital/department/upload"
               :http-request="myUpload"
-              :on-success="handleAvatarSuccess"
               :before-upload="handleBeforeUpload"
 
             >
@@ -183,7 +182,7 @@
           </div>
 
 
-          <el-dialog title="修改活动" :visible.sync="editDialogFormVisible" width="30%">
+          <el-dialog title="修改科室信息" :visible.sync="editDialogFormVisible" width="30%">
             <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="科室名称" prop="deptName">
                 <el-input v-model="editForm.deptName" style="width: 280px"></el-input>
@@ -228,7 +227,7 @@
 
           </el-dialog>
 
-          <el-dialog :visible.sync="addDialogFormVisible" width="30%">
+          <el-dialog title="添加科室信息" :visible.sync="addDialogFormVisible" width="30%">
             <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="科室名称" prop="deptName">
                 <el-input v-model="addForm.deptName" style="width: 280px"></el-input>
@@ -434,7 +433,14 @@
 
         },
         //是否显示上传列表
-        whetherShowList:false
+        whetherShowList: false,
+        //导入条件选定
+        uploadXLSCondition: {
+          //遇到错误继续执行
+          errorHappenContinue: false,
+          //遇到重复的进行覆盖
+          repeatCoverage: false
+        }
 
 
       }
@@ -543,6 +549,7 @@
             }
           } else {
             alert('error');
+
           }
 
         });
@@ -553,7 +560,6 @@
       },
       deptTypeSearchValuesFilter(val) {
         this.deptTypeOptions = val ? this.deptTypeValues.filter(this.createFilter(val)) : this.deptTypeValues;
-        alert(this.deptTypeOptions.length);
       },
       deptCategorySearchValuesFilter(val) {
         this.deptCategoryOptions = val ? this.deptCategoryValues.filter(this.createFilter(val)) : this.deptCategoryValues;
@@ -792,7 +798,7 @@
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              let params={fileName:data.data,pos:'static/basicXLS'};
+              let params = {fileName: data.data, pos: 'static/basicXLS'};
               downloadXLS(params).then((res) => {
                 if (!res) {
                   return
@@ -822,17 +828,17 @@
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              let params={fileName:data.data,pos:'static/basicXLSTemplate'};
+              let params = {fileName: data.data, pos: 'static/basicXLSTemplate'};
               downloadXLS(params).then((res) => {
                 if (!res) {
                   return
                 }
-                let url = window.URL.createObjectURL(res.data)
-                let link = document.createElement('a')
-                link.style.display = 'none'
-                link.href = url
+                let url = window.URL.createObjectURL(res.data);
+                let link = document.createElement('a');
+                link.style.display = 'none';
+                link.href = url;
                 link.setAttribute('download', params.fileName);
-                document.body.appendChild(link)
+                document.body.appendChild(link);
                 link.click();
               })
             } else if (data.status === 'WARN') {
@@ -848,7 +854,7 @@
       },
       //上传之前
       handleBeforeUpload(file) {
-        this.whetherShowList=true;
+        this.whetherShowList = true;
         const isXLS = file.type === 'application/vnd.ms-excel';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -858,18 +864,55 @@
         if (!isLt2M) {
           this.$message.error('导入文件大小不能超过 2MB!');
         }
-        alert(JSON.stringify(file));
         return (isXLS) && isLt2M;
       },
+      //导入信息
       myUpload(content) {
-            console.log('myUpload...');
-            uploadXLS(content);
-         },
-      handleAvatarSuccess(file){
-        this.whetherShowList=false;
+        this.uploadXLSCondition.errorHappenContinue = false;
+
+        this.$confirm('是否确定导入？').then(_ => {
+          this.$confirm('遇到错误是否继续？').then(_ => {
+            this.uploadXLSCondition.errorHappenContinue = true;
+          }).catch(_ => {
+            this.uploadXLSCondition.errorHappenContinue = false;
+          });
+        }).then(_ => {
+          this.$confirm('科室信息重复是否覆盖？').then(_ => {
+            this.uploadXLSCondition.repeatCoverage = true;
+          }).catch(_ => {
+            this.uploadXLSCondition.repeatCoverage = false;
+          }).finally(_ => {
+            uploadXLS(content, this.uploadXLSCondition).then(res => {
+              if (res.status === 200) {
+                let data = res.data;
+                if (data.status === 'OK') {
+                  this.freshInfo();
+                  this.$message({
+                    message: data.msg,
+                    type: 'success'
+                  });
+                  content.onSuccess('文件上传成功')
+
+                } else if (data.status === 'WARN') {
+                  this.$message({
+                    message: data.msg,
+                    type: 'warning'
+                  });
+                } else {
+                  this.$message.error(data.msg);
+                }
+              }
+            }).catch(error => {
+              content.onError('文件上传失败');
+            });
+          });
+        })
+      },
+
+      handleAvatarSuccess(file) {
+        this.whetherShowList = false;
         console.log(file);
       }
-
 
 
     },
