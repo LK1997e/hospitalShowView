@@ -167,7 +167,7 @@
   import Qs from 'qs';
 
   export default {
-    name: "inpection",
+    name: "inpectionSearch",
     data() {
       return {
         condition:{
@@ -188,7 +188,6 @@
         fMedItemSearchValues: [],
         fMedItemSearchOptions: [],
 
-        //存放科室列表
         inspectFormViewList: [],
 
 
@@ -197,7 +196,7 @@
 
     },
     methods: {
-      //获得所有科室列表
+
       getInspectFormViewList() {
         let params = Qs.stringify(
           {

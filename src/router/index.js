@@ -8,6 +8,7 @@ import Login from '@/components/login/Login'
 import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
 import InspectionSearch from '@/components/medicalTech/inspection/InspectionSearch'
+import InspectionCheck from '@/components/medicalTech/inspection/InspectionCheck'
 import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
@@ -115,70 +116,6 @@ export const financeRoutes = [
       },
     ]
   },
-  {
-    path: '/finance',
-    component: Home,
-    name: '费用类型管理',
-    iconCls: 'el-icon-message',//图标样式class
-    meta: {
-      name: '费用类型管理',
-    },
-    children: [
-      {
-        path: '/finance/Expenseclass',
-        component: Expenseclass,
-        name: '费用类型管理',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '费用类型管理',
-        },
-      },
-
-    ]
-  },
-  {
-    path: '/finance',
-    component: Home,
-    name: '费用核对',
-    iconCls: 'el-icon-message',//图标样式class
-    meta: {
-      name: '费用核对',
-    },
-    children: [
-      {
-        path: '/finance/CheckWork',
-        component: CheckWork,
-        name: '费用核对',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '费用核对',
-        },
-      },
-
-    ]
-  },
-  {
-    path: '/finance',
-    component: Home,
-    name: '工作量统计',
-    iconCls: 'el-icon-message',//图标样式class
-    meta: {
-      name: '工作量统计',
-    },
-    children: [
-      {
-        path: '/finance/WorkloadStatistics',
-        component: WorkloadStatistics,
-        name: '工作量统计',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '工作量统计',
-        },
-      },
-
-    ]
-  },
-
 ]
 
 export const medicalTechRoutes = [

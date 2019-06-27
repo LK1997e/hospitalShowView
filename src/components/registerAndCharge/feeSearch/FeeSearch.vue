@@ -1,7 +1,7 @@
 <template>
   <el-container style="margin-top: 20px">
     <el-header style="background:#41cde5;padding: 20px;height: 100px">
-      <el-row class="row-bg" type="flex" align="middle">
+      <el-row class="row-bg" type="flex" align="top">
         <el-col :span="4" class="grid-content">
           <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 费用查询</span>
         </el-col>
@@ -253,6 +253,9 @@
                       <el-form-item label="项目拼音助记码" prop="mnemonicCode">
                         <span>{{ props.row.mnemonicCode }}</span>
                       </el-form-item>
+                      <el-form-item label="项目数量" prop="number">
+                        <span>{{ props.row.number }}</span>
+                      </el-form-item>
                       <el-form-item label="金额" prop="fee">
                         <span>{{ props.row.fee }}</span>
                       </el-form-item>
@@ -268,6 +271,8 @@
                 <el-table-column label="费用科目" prop="expName">
                 </el-table-column>
                 <el-table-column label="规格" prop="format">
+                </el-table-column>
+                <el-table-column label="数量" prop="number">
                 </el-table-column>
                 <el-table-column label="金额" prop="fee">
                 </el-table-column>
@@ -402,7 +407,7 @@
               </el-table>
             </el-col>
           </template>
-<!--处方费清单-->
+          <!--处方费清单-->
           <template v-if="tollExist.presExist">
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">处置费</el-divider>
@@ -555,7 +560,7 @@
               </el-table>
             </el-col>
           </template>
-<!--项目药品清单-->
+          <!--项目药品清单-->
           <template v-if="tollExist.medExist">
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">项目药品费</el-divider>
@@ -681,8 +686,8 @@
                         <span>{{ props.row.quantity}}</span>
                       </el-form-item>
                       <el-form-item label="药品单价" prop="drugsPrice">
-                      <span>{{ props.row.drugsPrice }}</span>
-                    </el-form-item>
+                        <span>{{ props.row.drugsPrice }}</span>
+                      </el-form-item>
                       <el-form-item label="报销比例" prop="reimbursement">
                         <span>{{ props.row.reimbursement}}</span>
                       </el-form-item>
