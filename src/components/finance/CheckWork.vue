@@ -153,7 +153,7 @@
           </el-table>
           <hr>
 
-          <div class="block">
+          <div class="block" align="center">
 
             <el-pagination
               @size-change="handleSizeChange"
