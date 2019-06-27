@@ -7,6 +7,12 @@ import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
 import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
+import InspectionSearch from '@/components/medicalTech/inspection/InspectionSearch'
+import InspectionCheck from '@/components/medicalTech/inspection/InspectionCheck'
+import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
+import CheckWork from '@/components/finance/CheckWork'
+import Expenseclass from '@/components/finance/Expenseclass'
+import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
 Vue.use(Router)
 Vue.use(Vuex)
 
@@ -100,7 +106,7 @@ export const financeRoutes = [
         },
       },
       {
-        path: '/admin/UpdateUserInfo',
+        path: '/finance/UpdateUserInfo',
         component: UpdateUserInfo,
         name: '修改个人信息' ,
         iconCls: 'el-icon-message',//图标样式class
@@ -110,6 +116,175 @@ export const financeRoutes = [
       },
     ]
   },
+]
+
+export const medicalTechRoutes = [
+  {
+    path: '/medicalTech',
+    component: Home,
+    name: '医技人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '医技人员',
+    },
+    children: [
+      {
+        path: '/medicalTech/UserInfo',
+        component: UserInfo,
+        name: '医技人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '医技人员主页',
+        },
+      },
+      {
+        path: '/medicalTech/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+  {
+    path: '/medicalTech',
+    component: Home,
+    name: '检查检验',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '检查检验',
+    },
+    children: [
+      {
+        path: '/medicalTech/inspectionSearch',
+        component: InspectionSearch,
+        name: '检查检验查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '检查检验查询',
+        },
+      },
+    ]
+  }
+
+]
+
+export const outpatientRoutes = [
+  {
+    path: '/outpatient',
+    component: Home,
+    name: '门诊人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '门诊人员',
+    },
+    children: [
+      {
+        path: '/outpatient/UserInfo',
+        component: UserInfo,
+        name: '门诊人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '门诊人员主页',
+        },
+      },
+      {
+        path: '/outpatient/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const pharmacyRoutes = [
+  {
+    path: '/pharmacy',
+    component: Home,
+    name: '药房人员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '药房人员',
+    },
+    children: [
+      {
+        path: '/pharmacy/UserInfo',
+        component: UserInfo,
+        name: '药房人员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '药房人员主页',
+        },
+      },
+      {
+        path: '/pharmacy/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+]
+
+export const registerAndChargeRoutes = [
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '挂号收费员',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '挂号收费员',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/UserInfo',
+        component: UserInfo,
+        name: '挂号收费员主页',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '挂号收费员主页',
+        },
+      },
+      {
+        path: '/registerAndCharge/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ]
+  },
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '费用查询',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '费用查询',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/FeeSearch',
+        component: FeeSearch,
+        name: '费用查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '费用查询',
+        },
+      },
+    ]
+  }
 ]
 
 export default routes;

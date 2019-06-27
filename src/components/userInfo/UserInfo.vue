@@ -1,6 +1,12 @@
 <template>
+  <el-container>
+    <el-aside width="350px">
+      <div style="margin: 15%">
+              <img :src=this.user.photoLocation style="width: 200px; height: 200px;">
+      </div>
+    </el-aside>
+    <el-main>
   <el-form >
-
     <el-row type="flex" class="row-bg" >
       <el-col :span="8">
         <div>
@@ -38,13 +44,24 @@
         </el-form-item>
       </el-col>
     </el-row>
+<!--    <el-row>-->
+<!--      <el-col :span="8" align="right">-->
+<!--        <el-form-item>-->
+<!--          <el-button type="primary" @click="reload">&nbsp;&nbsp;刷新&nbsp;&nbsp;</el-button>-->
+<!--        </el-form-item>-->
+<!--      </el-col>-->
+<!--    </el-row>-->
   </el-form>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
     export default {
+      inject:['reload'],
       data() {
         return {
+          // photoLocation:photoloca,
           // labelPosition: 'top',
           user:{
             id:'',
@@ -71,6 +88,7 @@
         }
       },
       mounted() {
+        // this.reload();
         var user = sessionStorage.getItem('user');
         // var routes = sessionStorage.getItem('route')
         // if(routes){
@@ -80,6 +98,7 @@
         if (user) {
           user = JSON.parse(user);
           this.user = user;
+          this.user.photoLocation = "http://localhost:8081/hospital/images/"+user.photoLocation;
         }
       }
     }

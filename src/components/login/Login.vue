@@ -77,7 +77,7 @@
               let resu = res.data;
               this.result = resu;
               if (this.result.status === 'OK') {
-                alert("成功,用户ID是"+this.result.data)
+                alert(this.result.data.realName+"，  欢迎！  ")
                 sessionStorage.setItem('user', JSON.stringify(this.result.data));
                 //管理员
                 if(this.result.data.typeID === 112){
@@ -105,6 +105,59 @@
                   }
                   this.$router.push({ path: '/finance/UserInfo' });
                 }
+                //挂号收费员
+                else if(this.result.data.typeID === 107){
+                  this.$router.addRoutes(router.registerAndChargeRoutes);
+                  sessionStorage.setItem('route',JSON.stringify(router.registerAndChargeRoutes));
+                  var num=0;
+                  for(var a in router.registerAndChargeRoutes){
+                    num++;
+                  }
+                  for(var i=0;i<num;i++){
+                    this.$router.options.routes.push(router.registerAndChargeRoutes.pop());
+                  }
+                  this.$router.push({ path: '/registerAndCharge/UserInfo' });
+                }
+                //门诊
+                else if(this.result.data.typeID === 108){
+                  this.$router.addRoutes(router.outpatientRoutes);
+                  sessionStorage.setItem('route',JSON.stringify(router.outpatientRoutes));
+                  var num=0;
+                  for(var a in router.outpatientRoutes){
+                    num++;
+                  }
+                  for(var i=0;i<num;i++){
+                    this.$router.options.routes.push(router.outpatientRoutes.pop());
+                  }
+                  this.$router.push({ path: '/outpatient/UserInfo' });
+                }
+                //医技
+                else if(this.result.data.typeID === 109){
+                  this.$router.addRoutes(router.medicalTechRoutes);
+                  sessionStorage.setItem('route',JSON.stringify(router.medicalTechRoutes));
+                  var num=0;
+                  for(var a in router.medicalTechRoutes){
+                    num++;
+                  }
+                  for(var i=0;i<num;i++){
+                    this.$router.options.routes.push(router.medicalTechRoutes.pop());
+                  }
+                  this.$router.push({ path: '/medicalTech/UserInfo' });
+                }
+                //药房
+                else if(this.result.data.typeID === 110){
+                  this.$router.addRoutes(router.pharmacyRoutes);
+                  sessionStorage.setItem('route',JSON.stringify(router.pharmacyRoutes));
+                  var num=0;
+                  for(var a in router.pharmacyRoutes){
+                    num++;
+                  }
+                  for(var i=0;i<num;i++){
+                    this.$router.options.routes.push(router.pharmacyRoutes.pop());
+                  }
+                  this.$router.push({ path: '/pharmacy/UserInfo' });
+                }
+
               }else if (this.result.status === 'NG'){
                 alert("用户名密码错误！")
               }
