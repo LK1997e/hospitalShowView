@@ -13,7 +13,7 @@
                  class = "regForm">
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "就诊卡" prop = "isHaveCard">
                         <el-radio-group v-model = "regForm.isHaveCard">
                             <el-radio label = "1">有</el-radio>
@@ -24,12 +24,12 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "患者名字" prop = "patientName">
                         <el-input v-model = "regForm.patientName"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "性别" prop = "gender">
                         <el-radio-group v-model = "regForm.gender">
                             <el-radio label = "1">男</el-radio>
@@ -40,12 +40,12 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "身份证号" prop = "identityCardNo">
                         <el-input v-model = "regForm.identityCardNo"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "出生日期" prop = "birthday">
                         <el-date-picker type = "date" placeholder = "选择日期" v-model = "regForm.birthday"
                                         style = "width: 100%;"></el-date-picker>
@@ -54,7 +54,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 600px;" :span = "11">
                     <el-form-item label = "家庭住址" prop = "familyAddress">
                         <el-input v-model = "regForm.familyAddress"></el-input>
                     </el-form-item>
@@ -62,7 +62,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "就诊卡密码" prop = "passwd">
                         <el-input v-model = "regForm.passwd" show-password></el-input>
                     </el-form-item>
@@ -70,23 +70,36 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
-                    <el-form-item label = "挂号级别" prop = "registeredLevelID">
-                        <el-select v-model = "regForm.registeredLevelID" clearable placeholder = "请选择">
-                            <el-option>test</el-option>
+                <el-col style = "width: 300px" :span = "11">
+                    <el-form-item ref = "deptID" label = "挂号科室" prop = "departmentID">
+                        <el-select v-model = "regForm.departmentID" @click.native = "getDeptList"
+                                   @change = "handlerChange" filterable
+                                   :filter-method = "deptSearchValuesFilter"
+                                   clearable placeholder = "请选择">
+                            <el-option
+                                    v-for = "item in deptIDAndNameSearchOptions"
+                                    :key = "item.id"
+                                    :label = "item.name"
+                                    :value = "item.id">
+                                <span style = "float: left">{{ item.name }}</span>
+                                <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span = "11">
-                    <el-form-item label = "挂号科室" prop = "departmentID">
-                        <el-select v-model = "regForm.departmentID" @change = "getDeptList" filterable
-                                   filter-method = "deptSearchValuesFilter" clearable
-                                   placeholder = "请选择">
+                <el-col ref = "regLevelID" style = "width: 300px" :span = "11">
+                    <el-form-item label = "挂号级别" prop = "registeredLevelID">
+                        <el-select v-model = "regForm.registeredLevelID" @click.native = "getRegLevelList"
+                                   @change = "handlerChange" filterable
+                                   :filter-method = "regLevelSearchValuesFilter"
+                                   clearable placeholder = "请选择">
                             <el-option
-                                    v-for = "item in deptIDAndNameSearchValues"
-                                    :label = "item.deptName"
-                                    :value = "item.deptID">
-                                <span>{{ item.deptName }}</span>
+                                    v-for = "item in regLevelSearchOptions"
+                                    :key = "item.id"
+                                    :label = "item.name"
+                                    :value = "item.id">
+                                <span style = "float: left">{{ item.name }}</span>
+                                <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -94,53 +107,79 @@
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
-                    <el-form-item label = "看诊医生" prop = "doctorID">
-                        <el-select v-model = "regForm.doctorID" clearable placeholder = "请选择">
-                            <el-option>test</el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span = "11">
-                    <el-form-item label = "看诊时间" prop = "seeDoctorDate">
-                        <el-date-picker type = "date" placeholder = "选择日期" v-model = "regForm.seeDoctorDate"
+                <el-col style = "width: 300px" :span = "11">
+                    <el-form-item ref = "seeDoctorDate" label = "看诊时间" prop = "seeDoctorDate">
+                        <el-date-picker type = "date" v-model = "regForm.seeDoctorDate"
+                                        @change = "handlerChange" placeholder = "选择日期"
                                         style = "width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
-            </el-form-item>
-
-            <el-form-item>
-                <el-col :span = "11">
-                    <el-form-item label = "挂号来源" prop = "regSourceID">
-                        <el-select v-model = "regForm.regSourceID" clearable placeholder = "请选择">
-                            <el-option>test</el-option>
+                <el-col style = "width: 300px" :span = "11">
+                    <el-form-item label = "看诊医生" prop = "doctorID">
+                        <el-select v-model = "regForm.doctorID" @click.native = "getOnDutyDoctor" filterable
+                                   :filter-method = "doctorSearchValuesFilter"
+                                   clearable placeholder = "请选择">
+                            <el-option
+                                    v-for = "item in onDutyDoctorOptions"
+                                    :key = "item.id"
+                                    :label = "item.name"
+                                    :value = "item.id">
+                                <span>{{ item.name }}</span>
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span = "11">
+            </el-form-item>
+
+            <el-form-item>
+                <el-col style = "width: 300px" :span = "11">
+                    <el-form-item label = "挂号来源" prop = "registrationSourceID">
+                        <el-select v-model = "regForm.registrationSourceID" @click.native = "getRegSource" filterable
+                                   :filter-method = "regSourceFilter" clearable placeholder = "请选择">
+                            <el-option
+                                    v-for = "item in regSourceOptions"
+                                    :key = "item.id"
+                                    :label = "item.name"
+                                    :value = "item.id">
+                                <span style = "float: left">{{ item.name }}</span>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "收费类别" prop = "payID">
-                        <el-select v-model = "regForm.payID" clearable placeholder = "请选择">
-                            <el-option>test</el-option>
+                        <el-select v-model = "regForm.payID" @click.native = "getPayCategory" filterable
+                                   :filter-method = "payCategoryFilter" clearable placeholder = "请选择">
+                            <el-option
+                                    v-for = "item in payCategoryOptions"
+                                    :key = "item.id"
+                                    :label = "item.name"
+                                    :value = "item.id">
+                                <span style = "float: left">{{ item.name }}</span>
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
             </el-form-item>
 
             <el-form-item>
-                <el-col :span = "11">
+                <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "挂号费用" prop = "expense">
-                        <el-input v-model = "regForm.expense" clearable = "" placeholder = "请输入费用">
+                        <el-input :disabled = "true" v-model = "regForm.expense" clearable placeholder = "挂号费用">
                             <template slot = "append">￥</template>
                         </el-input>
                     </el-form-item>
                 </el-col>
             </el-form-item>
 
-            <el-form-item align = "center">
-                <el-button type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
-                <el-button @click = "resetForm('regForm')">重置</el-button>
+            <el-form-item>
+                <el-col style = "width: 600px" :span = "11">
+                    <el-form-item align = "right">
+                        <el-button type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
+                        <el-button @click = "resetForm('regForm')">重置</el-button>
+                    </el-form-item>
+                </el-col>
             </el-form-item>
-
         </el-form>
     </el-container>
 
@@ -148,7 +187,14 @@
 
 <script>
 
-  import {getDeptList} from '../../api/registerApi'
+  import {
+    calculateRegFee,
+    getDeptList,
+    getDoctor,
+    getPayCategory,
+    getRegLevelList,
+    getRegSource,
+  } from '../../api/registerApi'
 
   export default {
 
@@ -179,12 +225,12 @@
           registeredLevelID: '',
           //科室ID
           departmentID: '',
-          //医生ID
-          doctorID: '',
           //看诊时间
           seeDoctorDate: '',
+          //医生ID
+          doctorID: '',
           //挂号来源ID
-          regSourceID: '',
+          registrationSourceID: '',
           //收费类别ID
           payID: '',
           //费用
@@ -196,6 +242,22 @@
         deptIDAndNameSearchValues: [],
         //存放入选择列表的临床科室名称或编号
         deptIDAndNameSearchOptions: [],
+
+        //所有挂号级别
+        regLevelSearchValues: [],
+        regLevelSearchOptions: [],
+
+        //符合所选科室和日期的排班医生
+        onDutyDoctorValues: [],
+        onDutyDoctorOptions: [],
+
+        //存放挂号来源
+        regSourceValues: [],
+        regSourceOptions: [],
+
+        //存放收费类别
+        payCategoryValues: [],
+        payCategoryOptions: [],
 
         rules: {
           isHaveCard: [
@@ -227,20 +289,17 @@
           departmentID: [
             {required: true, message: '请选择', trigger: 'change'},
           ],
-          doctorID: [
-            {required: true, message: '请选择', trigger: 'change'},
-          ],
           seeDoctorDate: [
             {type: 'date', required: true, message: '请选择日期', trigger: 'change'},
           ],
-          regSourceID: [
+          doctorID: [
+            {required: true, message: '请选择', trigger: 'change'},
+          ],
+          registrationSourceID: [
             {required: true, message: '请选择', trigger: 'change'},
           ],
           payID: [
             {required: true, message: '请选择', trigger: 'change'},
-          ],
-          expense: [
-            {required: true, message: '请输入', trigger: 'blur'},
           ],
         },
       }
@@ -254,6 +313,87 @@
             let data = res.data
             if (data.status === 'OK') {
               this.deptIDAndNameSearchValues = data.data
+              this.deptIDAndNameSearchOptions = data.data
+            } else {
+              alert(data.msg)
+            }
+          }
+        })
+      },
+
+      getRegLevelList() {
+        getRegLevelList().then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.regLevelSearchValues = data.data
+              this.regLevelSearchOptions = data.data
+            } else {
+              alert(data.msg)
+            }
+          }
+        })
+      },
+
+      handlerChange() {
+        this.regForm.doctorID = ''
+        this.onDutyDoctorValues = []
+        this.onDutyDoctorOptions = []
+      },
+
+      getOnDutyDoctor() {
+
+        let params = {
+          levelNameID: this.regForm.registeredLevelID,
+          deptID: this.regForm.departmentID,
+          date: this.regForm.seeDoctorDate,
+        }
+        if (params.deptID == null || params.deptID === '') {
+          //挂号科室不能为空
+          this.regForm.deptID = null
+        } else if (params.levelNameID === null || params.levelNameID === '') {
+          //挂号级别不能为空
+          this.regForm.registeredLevelID = null
+        } else if (params.date == null || params.date === '') {
+          //看诊时间不能为空
+          this.regForm.date = null
+        } else {
+          getDoctor(params).then((res) => {
+            if (res.status === 200) {
+              let data = res.data
+              if (data.status === 'OK') {
+                this.onDutyDoctorValues = data.data
+                this.onDutyDoctorOptions = data.data
+              } else {
+                alert(data.msg)
+              }
+            }
+          })
+        }
+      },
+
+      getRegSource() {
+        getRegSource().then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.regSourceValues = data.data
+              this.regSourceOptions = data.data
+            } else {
+              alert(data.msg)
+            }
+          }
+        })
+      },
+
+      getPayCategory() {
+
+        getPayCategory().then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.payCategoryValues = data.data
+              this.payCategoryOptions = data.data
             } else {
               alert(data.msg)
             }
@@ -267,6 +407,30 @@
             : this.deptIDAndNameSearchValues
       },
 
+      regLevelSearchValuesFilter(val) {
+        this.regLevelSearchOptions = val
+            ? this.regLevelSearchValues.filter(this.createFilter(val))
+            : this.regLevelSearchValues
+      },
+
+      doctorSearchValuesFilter(val) {
+        this.onDutyDoctorOptions = val
+            ? this.onDutyDoctorValues.filter(this.createFilter(val))
+            : this.onDutyDoctorValues
+      },
+
+      regSourceFilter(val) {
+        this.regSourceOptions = val
+            ? this.regSourceValues.filter(this.createFilter(val))
+            : this.regSourceValues
+      },
+
+      payCategoryFilter(val) {
+        this.payCategoryOptions = val
+            ? this.payCategoryValues.filter(this.createFilter(val))
+            : this.payCategoryValues
+      },
+
       createFilter(queryString) {
         return (item) => {
           return (item.name.toLowerCase().indexOf(queryString.toLowerCase()) >= 0 ||
@@ -274,9 +438,27 @@
         }
       },
 
+      calculateRegFee() {
+        let params = {
+          regLevelID: this.regForm.registeredLevelID,
+          payCategoryID: this.regForm.payID,
+        }
+        calculateRegFee(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.regForm.expense = data.data
+            } else {
+              alert(data.msg)
+            }
+          }
+        })
+      },
+
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.calculateRegFee()
             alert('submit!')
           } else {
             console.log('error submit!!')
@@ -285,11 +467,16 @@
         })
       },
       resetForm(formName) {
+        this.onDutyDoctorValues = []
+        this.onDutyDoctorOptions = []
         this.$refs[formName].resetFields()
       },
     },
     mounted() {
       this.getDeptList()
+      this.getRegLevelList()
+      this.getRegSource()
+      this.getPayCategory()
     },
   }
 </script>
