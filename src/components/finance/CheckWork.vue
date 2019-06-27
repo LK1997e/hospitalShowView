@@ -14,12 +14,12 @@
       <el-row class="row-bg show-shadow">
 
 
-        <el-col
+        <el-col :span="20"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
           <el-row>
-            <el-col :span="1" class="el-col-display">医生姓名</el-col>
-            <el-col :span="4">
+            <el-col :span="1.2" class="el-col-display">医生姓名</el-col>
+            <el-col :span="3.8">
 
 
             <el-select  style="float: left;margin-left: 8px" @change="deptSearchChange"
@@ -35,9 +35,9 @@
               </el-option>
             </el-select>
             </el-col>
-            <el-col :span="1" class="el-col-display">科室名称</el-col>
+            <el-col :span="1.2" class="el-col-display">科室名称</el-col>
 
-            <el-col :span="4">
+            <el-col :span="3.8">
             <el-select  style="float: left;margin-left: 8px" @change="deptSearchChange"
                        v-model="list.deptName" filterable :filter-method="deptSearchValuesFilter" clearable
                        placeholder="请选择">
@@ -51,8 +51,8 @@
               </el-option>
             </el-select>
             </el-col>
-            <el-col :span="1" class="el-col-display">开始日期</el-col>
-            <el-col :span="4">
+            <el-col :span="1.2" class="el-col-display">开始日期</el-col>
+            <el-col :span="3.8">
               <el-date-picker
                 v-model="list.dateStart"
                 type="date"
@@ -62,8 +62,8 @@
                 @change="deptSearchChange">
               </el-date-picker>
             </el-col>
-            <el-col :span="1" class="el-col-display">结束日期</el-col>
-            <el-col :span="4">
+            <el-col :span="1.2" class="el-col-display">结束日期</el-col>
+            <el-col :span="3.8">
               <el-date-picker
                 v-model="list.dateEnd"
                 type="date"
@@ -78,14 +78,14 @@
         </el-col>
 
 
-        <el-col span="12"
+        <el-col :span="4"
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
           <el-divider content-position="left">管理操作</el-divider>
-          <el-col span="5" class="el-col-display">
-<!--            <el-button icon="el-icon-edit" @click.native.prevent="（批量核对正确事件）" type="text"-->
-<!--                       size="small">-->
-<!--              批量核对正确-->
-<!--            </el-button>-->
+          <el-col :span="10" class="el-col-display">
+            <el-link  icon="el-icon-edit" @click.native.prevent="updateByChoose" type="text"
+                       size="small">
+              批量核对正确
+            </el-link>
           </el-col>
 
 
@@ -122,7 +122,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column type="selection" prop="feeID">
+            <el-table-column type="selection" prop="id">
 
             </el-table-column>
             <el-table-column label="编号" prop="feeID">
@@ -143,10 +143,10 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="props">
-<!--                <el-button icon="el-icon-edit" @click.native.prevent="（核对正确事件）" type="text"-->
-<!--                           size="small">-->
-<!--                  核对正确-->
-<!--                </el-button>-->
+                <el-button icon="el-icon-edit" @click.native.prevent="handleUpdate(props.row.feeID)" type="text"
+                           size="small">
+                  核对正确
+                </el-button>
               </template>
             </el-table-column>
 
@@ -177,7 +177,7 @@
 <style>
   .el-col-display {
     float: left;
-    margin-left: 46px;
+    margin-left: 30px;
     margin-top: 6px;
     height: 40px
   }
@@ -217,6 +217,8 @@
   import {
     checkWorkGetList,
     userGetALLNamesAndIDs,
+    updateByID,
+    updateByChooses,
   } from '../../api/checkWorkApi';
 
   import Qs from 'qs';
@@ -372,7 +374,7 @@
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
-          this.checkList.push({"id": item.id});
+          this.checkList.push( item.feeID);
         });
       },
       handleSizeChange(val) {
@@ -382,6 +384,73 @@
       handleCurrentChange(val) {
         this.pageParams.pageNum=val;
         this.getCheckWorkList();
+      },
+      handleUpdate(val) {
+
+        let feeID = {'feeID': val};
+        this.$confirm('确认核对正确？')
+          .then(_ => {
+            updateByID(feeID).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                    this.freshInfo();
+                  } else if (data.status === 'WARN') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      updateByChoose() {
+        this.$confirm('确认批量核对正确？')
+          .then(_ => {
+            let params = {"id": this.checkList};
+            updateByChooses(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                    this.freshInfo();
+                  } else if (data.status === 'WARN') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      //刷新页面信息
+      freshInfo() {
+        this.getCheckWorkList();
+        this.getAllDeptNamesAndCodes();
+        this.getAllUserNamesAndCodes();
       },
 
     },

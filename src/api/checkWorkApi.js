@@ -26,3 +26,12 @@ export const checkWorkGetList = (realName,deptName,dateStart,dateEnd,pageNum,pag
 export const userGetALLNamesAndIDs=_=>{
   return axios.post(`${hospital}/user/findAllUserNamesAndIDs`);
 };
+
+export const updateByID=params=>{
+  params=Qs.stringify(params);
+  return axios.post(`${hospital}/Checkwork/updateById`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+};
+
+export const updateByChooses=params=>{
+  return axios.post(`${hospital}/Checkwork/updateByChoose`,params)
+};

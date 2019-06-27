@@ -114,6 +114,7 @@
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :before-remove="handleBeforeRemove"
+      :limit="1"
       :with-credentials="true"
     >
       <i class="el-icon-plus"></i>
@@ -140,6 +141,7 @@
         // labelPosition: 'top',
         dialogVisible:false,
         dialogImageUrl:'',
+        photolocation:'',
         updateForm:{
           updateUserInfoForm: {
             userName: '',
@@ -150,6 +152,9 @@
             oldPasswd: '',
             newPasswd: '',
             newPasswd2: '',
+          },
+          updatePic:{
+            photoLocation:'',
           },
 
         },
@@ -222,7 +227,10 @@
                     user.userName = this.updateForm.updateUserInfoForm.userName;
                     user.realName = this.updateForm.updateUserInfoForm.realName;
                     user.contact = this.updateForm.updateUserInfoForm.contact;
+                    if((this.photoLocation !== null)&&(this.photoLocation !== ''))
+                      user.photoLocation = this.photoLocation;
                     sessionStorage.setItem('user', JSON.stringify(user));
+                    this.reload();
                   }
                 }else{
                   alert("用户名重复，更新失败")
@@ -258,7 +266,10 @@
                           user.userName = this.updateForm.updateUserInfoForm.userName;
                           user.realName = this.updateForm.updateUserInfoForm.realName;
                           user.contact = this.updateForm.updateUserInfoForm.contact;
+                          if((this.photoLocation !== null)&&(this.photoLocation !== ''))
+                            user.photoLocation = this.photoLocation;
                           sessionStorage.setItem('user', JSON.stringify(user));
+                          this.reload();
                         }
                       }else{
                         alert("用户名重复，更新失败")
@@ -299,7 +310,8 @@
         console.log(file);
         console.log(fileList);
         this.result=response;
-        alert(JSON.stringify(file));
+        this.photoLocation = this.result.data;
+        // alert(JSON.stringify(file));
       },
       handleBeforeUpload(file) {
         const isJPG = file.type === 'image/jpeg';
@@ -314,7 +326,7 @@
         if (!isLt2M) {
           this.$message.error('上传图片大小不能超过 2MB!');
         }
-        alert(JSON.stringify(file));
+        // alert(JSON.stringify(file));
         return (isJPG || isBMP || isGIF || isPNG) && isLt2M;
       }
     }
