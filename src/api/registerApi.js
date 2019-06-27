@@ -6,6 +6,25 @@ let hospital = 'http://localhost:8081/hospital'
 
 axios.defaults.withCredentials = true
 
+//提交挂号信息
+export const register = (isHaveCard, patientName, identityCardNo, gender,
+                         birthday, familyAddress, passwd, registeredLevelID,
+                         departmentID, doctorID, seeDoctorDate, regSourceID,
+                         payID, expense) => {
+
+  let params = 'isHaveCard=' + isHaveCard + '&patientName=' + patientName +
+      '&identityCardNo=' + identityCardNo + '&gender=' + gender + '&birthday=' +
+      birthday + '&familyAddress=' + familyAddress + '&passwd=' + passwd +
+      '&registeredLevelID=' + registeredLevelID + '&departmentID=' +
+      departmentID + '&doctorID=' + doctorID + '&seeDoctorDate=' + seeDoctorDate +
+      '&regSourceID=' + regSourceID + '&payID=' + payID + '&expense=' + expense
+
+  return axios.post(
+      `${hospital}/register/reg`, params,
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+
+}
+
 //从后台获取临床科室列表
 export const getDeptList = () => {
 

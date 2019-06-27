@@ -47,8 +47,8 @@
                 </el-col>
                 <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "出生日期" prop = "birthday">
-                        <el-date-picker type = "date" placeholder = "选择日期" v-model = "regForm.birthday"
-                                        style = "width: 100%;"></el-date-picker>
+                        <el-date-picker v-model = "regForm.birthday" value-format = "yyyy-MM-dd"
+                                        placeholder = "选择日期" style = "width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-form-item>
@@ -109,7 +109,7 @@
             <el-form-item>
                 <el-col style = "width: 300px" :span = "11">
                     <el-form-item ref = "seeDoctorDate" label = "看诊时间" prop = "seeDoctorDate">
-                        <el-date-picker type = "date" v-model = "regForm.seeDoctorDate"
+                        <el-date-picker v-model = "regForm.seeDoctorDate" value-format = "yyyy-MM-dd"
                                         @change = "handlerChange" placeholder = "选择日期"
                                         style = "width: 100%;"></el-date-picker>
                     </el-form-item>
@@ -148,8 +148,8 @@
                 </el-col>
                 <el-col style = "width: 300px" :span = "11">
                     <el-form-item label = "收费类别" prop = "payID">
-                        <el-select v-model = "regForm.payID" @click.native = "getPayCategory" filterable
-                                   :filter-method = "payCategoryFilter" clearable placeholder = "请选择">
+                        <el-select v-model = "regForm.payID" @click.native = "getPayCategory"
+                                   filterable :filter-method = "payCategoryFilter" clearable placeholder = "请选择">
                             <el-option
                                     v-for = "item in payCategoryOptions"
                                     :key = "item.id"
@@ -175,7 +175,7 @@
             <el-form-item>
                 <el-col style = "width: 600px" :span = "11">
                     <el-form-item align = "right">
-                        <el-button type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
+                        <el-button id = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
                         <el-button @click = "resetForm('regForm')">重置</el-button>
                     </el-form-item>
                 </el-col>
@@ -194,6 +194,7 @@
     getPayCategory,
     getRegLevelList,
     getRegSource,
+    register,
   } from '../../api/registerApi'
 
   export default {
@@ -234,7 +235,7 @@
           //收费类别ID
           payID: '',
           //费用
-          expense: '',
+          expense: 0,
 
         },
 
@@ -259,6 +260,8 @@
         payCategoryValues: [],
         payCategoryOptions: [],
 
+        regFormCopy: this.regForm,
+
         rules: {
           isHaveCard: [
             {required: true, message: '请选择', trigger: 'change'},
@@ -274,7 +277,7 @@
             {required: true, message: '请选择', trigger: 'change'},
           ],
           birthday: [
-            {type: 'date', required: true, message: '请选择日期', trigger: 'change'},
+            {required: true, message: '请选择日期', trigger: 'change'},
           ],
           familyAddress: [
             {required: true, message: '请输入家庭住址', trigger: 'blur'},
@@ -290,7 +293,7 @@
             {required: true, message: '请选择', trigger: 'change'},
           ],
           seeDoctorDate: [
-            {type: 'date', required: true, message: '请选择日期', trigger: 'change'},
+            {required: true, message: '请选择日期', trigger: 'change'},
           ],
           doctorID: [
             {required: true, message: '请选择', trigger: 'change'},
@@ -300,6 +303,9 @@
           ],
           payID: [
             {required: true, message: '请选择', trigger: 'change'},
+          ],
+          expense: [
+            {required: true, message: '请计算挂号费用'},
           ],
         },
       }
@@ -438,7 +444,7 @@
         }
       },
 
-      calculateRegFee() {
+      register() {
         let params = {
           regLevelID: this.regForm.registeredLevelID,
           payCategoryID: this.regForm.payID,
@@ -448,6 +454,37 @@
             let data = res.data
             if (data.status === 'OK') {
               this.regForm.expense = data.data
+
+              this.submit()
+
+            } else {
+              alert(data.msg)
+            }
+          }
+        })
+      },
+
+      submit() {
+        register(
+            this.regForm.isHaveCard,
+            this.regForm.patientName,
+            this.regForm.identityCardNo,
+            this.regForm.gender,
+            this.regForm.birthday,
+            this.regForm.familyAddress,
+            this.regForm.passwd,
+            this.regForm.registeredLevelID,
+            this.regForm.departmentID,
+            this.regForm.doctorID,
+            this.regForm.seeDoctorDate,
+            this.regForm.registrationSourceID,
+            this.regForm.payID,
+            this.regForm.expense,
+        ).then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.regFormCopy = this.regForm
             } else {
               alert(data.msg)
             }
@@ -456,11 +493,14 @@
       },
 
       submitForm(formName) {
+
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.calculateRegFee()
+            this.register()
             alert('submit!')
+            document.getElementById('submit').setAttribute(disabled, 'true')
           } else {
+
             console.log('error submit!!')
             return false
           }
