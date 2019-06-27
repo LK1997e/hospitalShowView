@@ -64,32 +64,39 @@
         <el-col :span="12"
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
           <el-divider content-position="left">管理操作</el-divider>
-          <el-col :span="4" class="el-col-display">
+          <el-col :span="3" class="el-col-display">
             <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
                      @click="handleAdd">添加
             </el-link>
           </el-col>
-          <el-col :span="4" class="el-col-display">
+          <el-col :span="3" class="el-col-display">
 
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-remove="true"
-              :before-remove="beforeRemove"
+              name="file"
+              action="http://localhost:8081/hospital/department/upload"
+              :http-request="myUpload"
+              :on-success="handleAvatarSuccess"
               :before-upload="handleBeforeUpload"
+
             >
-              <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入</el-link>
+              <el-link icon="el-icon-upload" style="font-size: 16px;color: #50bfff">导入信息</el-link>
 
             </el-upload>
 
           </el-col>
-          <el-col :span="4" class="el-col-display">
-            <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki"
-                     @click="getDownloadXLSX">导出
+          <el-col :span="3" class="el-col-display">
+            <el-link icon="el-icon-s-promotion" style="font-size: 16px;color: darkkhaki"
+                     @click="getDownloadXLS">导出信息
             </el-link>
           </el-col>
-          <el-col :span="4" class="el-col-display">
+          <el-col :span="3" class="el-col-display">
             <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
                      @click="deleteByChoose">批量删除
+            </el-link>
+          </el-col>
+          <el-col :span="3" class="el-col-display">
+            <el-link icon="el-icon-download" style="font-size: 16px;color: #41cde5"
+                     @click="getDownloadXLSTemplate">下载模板
             </el-link>
           </el-col>
 
@@ -326,8 +333,10 @@
     deptDeleteByChooses,
     deptInfoUpdate,
     deptInfoAdd,
-    downloadXLSX,
-    createXLSX
+    downloadXLS,
+    createXLS,
+    uploadXLS,
+    createXLSTemplate
   } from '../../api/departmentApi';
   import Qs from 'qs';
 
@@ -423,7 +432,9 @@
           ]
 
 
-        }
+        },
+        //是否显示上传列表
+        whetherShowList:false
 
 
       }
@@ -775,14 +786,14 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      //导出XLSX文件
-      getDownloadXLSX() {
-        createXLSX().then((res) => {
+      //导出科室信息的XLS文件
+      getDownloadXLS() {
+        createXLS().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              let params={fileName:data.data};
-              downloadXLSX(params).then((res) => {
+              let params={fileName:data.data,pos:'static/basicXLS'};
+              downloadXLS(params).then((res) => {
                 if (!res) {
                   return
                 }
@@ -805,18 +816,58 @@
           }
         })
       },
+      //导出XLS模板文件
+      getDownloadXLSTemplate() {
+        createXLSTemplate().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              let params={fileName:data.data,pos:'static/basicXLSTemplate'};
+              downloadXLS(params).then((res) => {
+                if (!res) {
+                  return
+                }
+                let url = window.URL.createObjectURL(res.data)
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('download', params.fileName);
+                document.body.appendChild(link)
+                link.click();
+              })
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+        })
+      },
+      //上传之前
       handleBeforeUpload(file) {
+        this.whetherShowList=true;
         const isXLS = file.type === 'application/vnd.ms-excel';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
-        if (!isJPG) {
-          this.$message.error('导入文件必须是xls或xlsx格式!');
+        if (!isXLS) {
+          this.$message.error('导入文件必须是xls格式!');
         }
         if (!isLt2M) {
           this.$message.error('导入文件大小不能超过 2MB!');
         }
         alert(JSON.stringify(file));
         return (isXLS) && isLt2M;
+      },
+      myUpload(content) {
+            console.log('myUpload...');
+            uploadXLS(content);
+         },
+      handleAvatarSuccess(file){
+        this.whetherShowList=false;
+        console.log(file);
       }
 
 

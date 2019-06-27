@@ -52,14 +52,47 @@ export const deptInfoAdd=params=>{
   params=Qs.stringify(params);
   return axios.post(`${hospital}/department/add`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 };
-export const createXLSX=_=>{
-  return axios.post(`${hospital}/department/createXLSX`)
+export const createXLS=_=>{
+  return axios.post(`${hospital}/department/createXLS`)
 };
-export const downloadXLSX=params=>{
+export const createXLSTemplate=_=>{
+  return axios.post(`${hospital}/department/createTemplate`)
+};
+export const downloadXLS=params=>{
   params=Qs.stringify(params);
-  return axios.post(`${hospital}/download/downloadXLSX`,params,
+  return axios.post(`${hospital}/fileManage/downloadXLS`,params,
     {headers: {'Content-Type': 'application/x-www-form-urlencoded'},responseType:'blob'});
 };
+
+export const uploadXLS=content=>{
+  alert(content.action);
+  alert(content.file);
+  let params=new FormData();
+  params.append('file',content.file);
+  axios({
+    method: 'post',
+    url: content.action,
+    timeout: 20000,
+    data: params,
+    headers:{'Content-Type':'multipart/form-data'}
+     }).then(res => {
+        content.onSuccess('配时文件上传成功')
+   }).catch(error => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      content.onError('配时文件上传失败(' + error.response.status + ')，' + error.response.data);
+      } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      content.onError('配时文件上传失败，服务器端无响应');
+     } else {
+      // Something happened in setting up the request that triggered an Error
+      content.onError('配时文件上传失败，请求封装失败');
+     }
+  });
+}
 
 
 
