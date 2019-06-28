@@ -22,12 +22,12 @@ router.beforeEach((to, from, next) => {
   // if(from.path !== '/loginCheck'){
   //   location.reload();
   // }
-  if (to.path === '/loginCheck') {
+  if (to.path === '/login') {
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('route');
+    // sessionStorage.removeItem('route');
   }
   let user = JSON.parse(sessionStorage.getItem('user'));
-  let route = JSON.parse(sessionStorage.getItem('route'));
+  // let route = JSON.parse(sessionStorage.getItem('route'));
 
 
   if (!user && to.path !== '/login') {
