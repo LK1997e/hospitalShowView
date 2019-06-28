@@ -212,11 +212,11 @@
 
 <script>
   import {
-    deptGetALLNamesAndCodes,
+    deptGetAllNamesAndCodes,
   } from '../../api/departmentApi';
   import {
     checkWorkGetList,
-    userGetALLNamesAndIDs,
+    userGetAllNamesAndIDs,
     updateByID,
     updateByChooses,
   } from '../../api/checkWorkApi';
@@ -321,7 +321,7 @@
       },
       //获得所有科室名称和编号
       getAllDeptNamesAndCodes() {
-        deptGetALLNamesAndCodes().then((res) => {
+        deptGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -336,7 +336,7 @@
       },
       //获得所有医生姓名和编号
       getAllUserNamesAndCodes() {
-        userGetALLNamesAndIDs().then((res) => {
+        userGetAllNamesAndIDs().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {

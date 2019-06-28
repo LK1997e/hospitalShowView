@@ -134,6 +134,8 @@
         </el-col>
         <hr>
 
+
+
         <div class="block"  style="text-align: center">
           <el-pagination
             @size-change="handleSizeChange"
@@ -189,7 +191,6 @@
         fMedItemSearchOptions: [],
 
         inspectFormViewList: [],
-
 
 
       }

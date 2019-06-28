@@ -23,7 +23,7 @@ export const checkWorkGetList = (realName,deptName,dateStart,dateEnd,pageNum,pag
   return axios.post(`${hospital}/Checkwork/findByInfo`, params);
 };
 
-export const userGetALLNamesAndIDs=_=>{
+export const userGetAllNamesAndIDs=_=>{
   return axios.post(`${hospital}/user/findAllUserNamesAndIDs`);
 };
 

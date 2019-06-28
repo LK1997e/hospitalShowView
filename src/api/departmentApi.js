@@ -17,15 +17,15 @@ export const  departmentGetList = (listParams) =>
     `${hospital}/department/list`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 };
 
-export const deptGetALLNamesAndCodes=_=>{
+export const deptGetAllNamesAndCodes=_=>{
   return axios.post(`${hospital}/department/findAllDeptNamesAndCodes`);
 };
 
-export const deptTypeGetALLNamesAndCodes=_=>{
+export const deptTypeGetAllNamesAndCodes=_=>{
   return axios.post(`${hospital}/department/findAllDeptTypeNamesAndCodes`);
 };
 
-export const deptCategoryGetALLNamesAndCodes=_=>{
+export const deptCategoryGetAllNamesAndCodes=_=>{
   return axios.post(`${hospital}/department/findAllDeptCategoryNamesAndCodes`);
 };
 

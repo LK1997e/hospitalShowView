@@ -324,9 +324,9 @@
 <script>
   import {
     departmentGetList,
-    deptGetALLNamesAndCodes,
-    deptCategoryGetALLNamesAndCodes,
-    deptTypeGetALLNamesAndCodes,
+    deptGetAllNamesAndCodes,
+    deptCategoryGetAllNamesAndCodes,
+    deptTypeGetAllNamesAndCodes,
     deptGetByNameOrCode,
     deptDeleteByID,
     deptDeleteByChooses,
@@ -493,7 +493,7 @@
       },
       //获得所有科室名称和编号
       getAllDeptNamesAndCodes() {
-        deptGetALLNamesAndCodes().then((res) => {
+        deptGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -513,7 +513,7 @@
       },
       //获得所有科室类型名称和编号
       getAllDeptTypeNamesAndCodes() {
-        deptTypeGetALLNamesAndCodes().then((res) => {
+        deptTypeGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -533,7 +533,7 @@
       },
       //获得所有科室分类名称和编号
       getAllDeptCategoryNamesAndCodes() {
-        deptCategoryGetALLNamesAndCodes().then((res) => {
+        deptCategoryGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
