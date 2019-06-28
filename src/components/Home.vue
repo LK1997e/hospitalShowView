@@ -12,7 +12,7 @@
             <el-col :span = 4 class = "userinfo">
                 <el-dropdown trigger = "hover">
 					<span class = "el-dropdown-link userinfo-inner">
-            <img :src = this.user.photoLocation/>
+            <img :src = this.user.photoLocation>
             {{this.user.sysUserName}}
           </span>
                     <el-dropdown-menu slot = "dropdown">
@@ -163,7 +163,8 @@
         this.user.sysUserName = user.name
         // this.sysUserAvatar = user.avatar || '';
         //使用图床上的图片作为头像
-        this.user.photoLocation = 'https://s2.ax1x.com/2019/06/28/ZKOmQK.th.jpg'  //"http://localhost:8081/hospital/images/"+user.photoLocation;
+        this.user.photoLocation = 'https://s2.ax1x.com/2019/06/28/ZKOmQK.th.jpg'
+        //"http://localhost:8081/hospital/images/"+user.photoLocation;
       }
     },
   }
