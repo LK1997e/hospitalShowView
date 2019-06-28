@@ -111,8 +111,7 @@
         if (user) {
           user = JSON.parse(user);
           this.user = user;
-          //使用图床上的图片作为头像
-          this.user.photoLocation =  "https://s2.ax1x.com/2019/06/28/ZKOmQK.th.jpg"  //"http://localhost:8081/hospital/images/"+user.photoLocation;
+          this.user.photoLocation =  "http://localhost:8081/hospital/images/"+user.photoLocation;
         }
       }
     }
