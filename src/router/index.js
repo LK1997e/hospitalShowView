@@ -12,6 +12,7 @@ import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
 import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
+import ECharts from '@/components/finance/echarts'
 import Register from '../components/registerAndCharge/Register'
 
 Vue.use(Router)
@@ -176,7 +177,15 @@ export const financeRoutes = [
           name: '工作量统计',
         },
       },
-
+      {
+        path: '/finance/WorkloadStatisticsCharts',
+        component: ECharts,
+        name: '超级牛的表格',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '超级牛的表格',
+        },
+      },
     ],
   },
 

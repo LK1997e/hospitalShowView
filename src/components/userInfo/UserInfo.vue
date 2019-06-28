@@ -62,9 +62,11 @@
     export default {
       inject:['reload'],
       data() {
+
         return {
           // photoLocation:photoloca,
           // labelPosition: 'top',
+
           user:{
             id:'',
             userName:'',
