@@ -36,10 +36,10 @@ export const expenseclassFind=(code,name,pageNum,pageSize)=>{
 };
 
 export const createXLS=_=>{
-  return axios.post(`${hospital}/department/createXLS`)
+  return axios.post(`${hospital}/expenseclass/createXLS`)
 };
 export const createXLSTemplate=_=> {
-  return axios.post(`${hospital}/department/createTemplate`)
+  return axios.post(`${hospital}/expenseclass/createTemplate`)
 };
 
 export const downloadXLS=params=>{

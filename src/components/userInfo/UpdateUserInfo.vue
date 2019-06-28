@@ -191,7 +191,24 @@
       }
     },
     mounted() {
-      var user = sessionStorage.getItem('user');
+      if(this.$route.path === '/finance/UpdateUserInfo'){
+        var user = sessionStorage.getItem('financeUser');
+      }
+      if(this.$route.path === '/admin/UpdateUserInfo'){
+        var user = sessionStorage.getItem('adminUser');
+      }
+      if(this.$route.path === '/registerAndCharge/UpdateUserInfo'){
+        var user = sessionStorage.getItem('registerAndChargeUser');
+      }
+      if(this.$route.path === '/outpatient/UpdateUserInfo'){
+        var user = sessionStorage.getItem('outpatientUser');
+      }
+      if(this.$route.path === '/medicalTech/UpdateUserInfo'){
+        var user = sessionStorage.getItem('medicalTechUser');
+      }
+      if(this.$route.path === '/pharmacy/UpdateUserInfo'){
+        var user = sessionStorage.getItem('pharmacyUser');
+      }
       if (user) {
         user = JSON.parse(user);
         this.userview = user;
@@ -221,7 +238,24 @@
                 if (this.result.status === 'OK') {
                   alert("信息更新成功！")
                   //更新session
-                  var user = sessionStorage.getItem('user');
+                  if(this.$route.path === '/finance/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('financeUser');
+                  }
+                  if(this.$route.path === '/admin/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('adminUser');
+                  }
+                  if(this.$route.path === '/registerAndCharge/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('registerAndChargeUser');
+                  }
+                  if(this.$route.path === '/outpatient/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('outpatientUser');
+                  }
+                  if(this.$route.path === '/medicalTech/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('medicalTechUser');
+                  }
+                  if(this.$route.path === '/pharmacy/UpdateUserInfo'){
+                    var user = sessionStorage.getItem('pharmacyUser');
+                  }
                   if (user) {
                     user = JSON.parse(user);
                     user.userName = this.updateForm.updateUserInfoForm.userName;
@@ -230,6 +264,24 @@
                     if((this.photoLocation !== null)&&(this.photoLocation !== ''))
                       user.photoLocation = this.photoLocation;
                     sessionStorage.setItem('user', JSON.stringify(user));
+                    if(this.$route.path === '/finance/UpdateUserInfo'){
+                      sessionStorage.setItem('financeUser', JSON.stringify(user));
+                    }
+                    if(this.$route.path === '/admin/UpdateUserInfo'){
+                      sessionStorage.setItem('adminUser', JSON.stringify(user));
+                    }
+                    if(this.$route.path === '/registerAndCharge/UpdateUserInfo'){
+                      sessionStorage.setItem('registerAndChargeUser', JSON.stringify(user));
+                    }
+                    if(this.$route.path === '/outpatient/UpdateUserInfo'){
+                      sessionStorage.setItem('outpatientUser', JSON.stringify(user));
+                    }
+                    if(this.$route.path === '/medicalTech/UpdateUserInfo'){
+                      sessionStorage.setItem('medicalTechUser', JSON.stringify(user));
+                    }
+                    if(this.$route.path === '/pharmacy/UpdateUserInfo'){
+                      sessionStorage.setItem('pharmacyUser', JSON.stringify(user));
+                    }
                     this.reload();
                   }
                 }else{
@@ -260,7 +312,24 @@
                       if (this.result.status === 'OK') {
                         alert("信息更新成功！")
                         //更新session
-                        var user = sessionStorage.getItem('user');
+                        if(this.$route.path === '/finance/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('financeUser');
+                        }
+                        if(this.$route.path === '/admin/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('adminUser');
+                        }
+                        if(this.$route.path === '/registerAndCharge/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('registerAndChargeUser');
+                        }
+                        if(this.$route.path === '/outpatient/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('outpatientUser');
+                        }
+                        if(this.$route.path === '/medicalTech/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('medicalTechUser');
+                        }
+                        if(this.$route.path === '/pharmacy/UpdateUserInfo'){
+                          var user = sessionStorage.getItem('pharmacyUser');
+                        }
                         if (user) {
                           user = JSON.parse(user);
                           user.userName = this.updateForm.updateUserInfoForm.userName;
@@ -269,6 +338,24 @@
                           if((this.photoLocation !== null)&&(this.photoLocation !== ''))
                             user.photoLocation = this.photoLocation;
                           sessionStorage.setItem('user', JSON.stringify(user));
+                          if(this.$route.path === '/finance/UpdateUserInfo'){
+                            sessionStorage.setItem('financeUser', JSON.stringify(user));
+                          }
+                          if(this.$route.path === '/admin/UpdateUserInfo'){
+                            sessionStorage.setItem('adminUser', JSON.stringify(user));
+                          }
+                          if(this.$route.path === '/registerAndCharge/UpdateUserInfo'){
+                            sessionStorage.setItem('registerAndChargeUser', JSON.stringify(user));
+                          }
+                          if(this.$route.path === '/outpatient/UpdateUserInfo'){
+                            sessionStorage.setItem('outpatientUser', JSON.stringify(user));
+                          }
+                          if(this.$route.path === '/medicalTech/UpdateUserInfo'){
+                            sessionStorage.setItem('medicalTechUser', JSON.stringify(user));
+                          }
+                          if(this.$route.path === '/pharmacy/UpdateUserInfo'){
+                            sessionStorage.setItem('pharmacyUser', JSON.stringify(user));
+                          }
                           this.reload();
                         }
                       }else{

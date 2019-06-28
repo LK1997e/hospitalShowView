@@ -88,13 +88,24 @@
         }
       },
       mounted() {
-        // this.reload();
-        var user = sessionStorage.getItem('user');
-        // var routes = sessionStorage.getItem('route')
-        // if(routes){
-        //   routes = JSON.parse(routes);
-        //   this.$router.addRoutes(routes);
-        // }
+        if(this.$route.path === '/finance/UserInfo'){
+          var user = sessionStorage.getItem('financeUser');
+        }
+        if(this.$route.path === '/admin/UserInfo'){
+          var user = sessionStorage.getItem('adminUser');
+        }
+        if(this.$route.path === '/registerAndCharge/UserInfo'){
+          var user = sessionStorage.getItem('registerAndChargeUser');
+        }
+        if(this.$route.path === '/outpatient/UserInfo'){
+          var user = sessionStorage.getItem('outpatientUser');
+        }
+        if(this.$route.path === '/medicalTech/UserInfo'){
+          var user = sessionStorage.getItem('medicalTechUser');
+        }
+        if(this.$route.path === '/pharmacy/UserInfo'){
+          var user = sessionStorage.getItem('pharmacyUser');
+        }
         if (user) {
           user = JSON.parse(user);
           this.user = user;
