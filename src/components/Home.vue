@@ -278,7 +278,7 @@
 				.content-wrapper {
 					background-color: #fff;
 					box-sizing: content-box;
-					width: 1600px;
+					width: 100%;
 				}
 			}
 		}

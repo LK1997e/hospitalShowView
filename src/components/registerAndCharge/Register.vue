@@ -1,189 +1,204 @@
 <template>
     <el-container>
 
-        <el-header style = "background:#41cde5;">
-            <el-row style = "top: 17px;" class = "row-bg">
+        <el-header style = "line-height: 60px;background:#41cde5;">
+            <el-row type = "flex" align = "middle" class = "row-bg">
                 <el-col style = "text-align: center;" span = "2" class = "grid-content">
                     <span style = "font-size:20px;color: white;">挂号</span>
                 </el-col>
             </el-row>
         </el-header>
 
-        <el-form :model = "regForm" :rules = "rules" ref = "regForm" label-position = "left" label-width = "100px"
-                 class = "regForm">
+        <el-main style = "border: 1px solid #49cde5;">
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "就诊卡" prop = "isHaveCard">
-                        <el-radio-group v-model = "regForm.isHaveCard">
-                            <el-radio label = "1">有</el-radio>
-                            <el-radio label = "0">无</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "患者名字" prop = "patientName">
-                        <el-input v-model = "regForm.patientName"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "性别" prop = "gender">
-                        <el-radio-group v-model = "regForm.gender">
-                            <el-radio label = "1">男</el-radio>
-                            <el-radio label = "0">女</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+            <el-form :model = "regForm" :rules = "rules" ref = "regForm" label-position = "left" label-width = "100px"
+                     class = "regForm">
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "身份证号" prop = "identityCardNo">
-                        <el-input v-model = "regForm.identityCardNo"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "出生日期" prop = "birthday">
-                        <el-date-picker v-model = "regForm.birthday" value-format = "yyyy-MM-dd"
-                                        placeholder = "选择日期" style = "width: 100%;"></el-date-picker>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "就诊卡" prop = "isHaveCard">
+                            <el-radio-group v-model = "regForm.isHaveCard">
+                                <el-radio label = "1">有</el-radio>
+                                <el-radio label = "0">无</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 600px;" :span = "11">
-                    <el-form-item label = "家庭住址" prop = "familyAddress">
-                        <el-input v-model = "regForm.familyAddress"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "患者名字" prop = "patientName">
+                            <el-input v-model = "regForm.patientName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span = "8">
+                        <el-form-item label = "性别" prop = "gender">
+                            <el-radio-group v-model = "regForm.gender">
+                                <el-radio label = "1">男</el-radio>
+                                <el-radio label = "0">女</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "就诊卡密码" prop = "passwd">
-                        <el-input v-model = "regForm.passwd" show-password></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "身份证号" prop = "identityCardNo">
+                            <el-input v-model = "regForm.identityCardNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span = "8">
+                        <el-form-item label = "出生日期" prop = "birthday">
+                            <el-date-picker v-model = "regForm.birthday" value-format = "yyyy-MM-dd"
+                                            placeholder = "选择日期" style = "width: 100%;"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item ref = "deptID" label = "挂号科室" prop = "departmentID">
-                        <el-select v-model = "regForm.departmentID" @click.native = "getDeptList"
-                                   @change = "handlerChange" filterable
-                                   :filter-method = "deptSearchValuesFilter"
-                                   clearable placeholder = "请选择">
-                            <el-option
-                                    v-for = "item in deptIDAndNameSearchOptions"
-                                    :key = "item.id"
-                                    :label = "item.name"
-                                    :value = "item.id">
-                                <span style = "float: left">{{ item.name }}</span>
-                                <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col ref = "regLevelID" style = "width: 300px" :span = "11">
-                    <el-form-item label = "挂号级别" prop = "registeredLevelID">
-                        <el-select v-model = "regForm.registeredLevelID" @click.native = "getRegLevelList"
-                                   @change = "handlerChange" filterable
-                                   :filter-method = "regLevelSearchValuesFilter"
-                                   clearable placeholder = "请选择">
-                            <el-option
-                                    v-for = "item in regLevelSearchOptions"
-                                    :key = "item.id"
-                                    :label = "item.name"
-                                    :value = "item.id">
-                                <span style = "float: left">{{ item.name }}</span>
-                                <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "家庭住址" prop = "familyAddress">
+                            <el-input v-model = "regForm.familyAddress"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span = "8">
+                        <el-form-item label = "就诊卡密码" prop = "passwd">
+                            <el-input v-model = "regForm.passwd" show-password></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item ref = "seeDoctorDate" label = "看诊时间" prop = "seeDoctorDate">
-                        <el-date-picker v-model = "regForm.seeDoctorDate" value-format = "yyyy-MM-dd"
-                                        @change = "handlerChange" placeholder = "选择日期"
-                                        style = "width: 100%;"></el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "看诊医生" prop = "doctorID">
-                        <el-select v-model = "regForm.doctorID" @click.native = "getOnDutyDoctor" filterable
-                                   :filter-method = "doctorSearchValuesFilter"
-                                   clearable placeholder = "请选择">
-                            <el-option
-                                    v-for = "item in onDutyDoctorOptions"
-                                    :key = "item.id"
-                                    :label = "item.name"
-                                    :value = "item.id">
-                                <span>{{ item.name }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item ref = "deptID" label = "挂号科室" prop = "departmentID">
+                            <el-select style = "width: 100%" v-model = "regForm.departmentID"
+                                       @click.native = "getDeptList"
+                                       @change = "handlerChange" filterable
+                                       :filter-method = "deptSearchValuesFilter"
+                                       clearable placeholder = "请选择">
+                                <el-option
+                                        v-for = "item in deptIDAndNameSearchOptions"
+                                        :key = "item.id"
+                                        :label = "item.name"
+                                        :value = "item.id">
+                                    <span style = "float: left">{{ item.name }}</span>
+                                    <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col ref = "regLevelID" :span = "8">
+                        <el-form-item label = "挂号级别" prop = "registeredLevelID">
+                            <el-select style = "width: 100%" v-model = "regForm.registeredLevelID"
+                                       @click.native = "getRegLevelList"
+                                       @change = "handlerChange" filterable
+                                       :filter-method = "regLevelSearchValuesFilter"
+                                       clearable placeholder = "请选择">
+                                <el-option
+                                        v-for = "item in regLevelSearchOptions"
+                                        :key = "item.id"
+                                        :label = "item.name"
+                                        :value = "item.id">
+                                    <span style = "float: left">{{ item.name }}</span>
+                                    <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "挂号来源" prop = "registrationSourceID">
-                        <el-select v-model = "regForm.registrationSourceID" @click.native = "getRegSource" filterable
-                                   :filter-method = "regSourceFilter" clearable placeholder = "请选择">
-                            <el-option
-                                    v-for = "item in regSourceOptions"
-                                    :key = "item.id"
-                                    :label = "item.name"
-                                    :value = "item.id">
-                                <span style = "float: left">{{ item.name }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "收费类别" prop = "payID">
-                        <el-select v-model = "regForm.payID" @click.native = "getPayCategory"
-                                   filterable :filter-method = "payCategoryFilter" clearable placeholder = "请选择">
-                            <el-option
-                                    v-for = "item in payCategoryOptions"
-                                    :key = "item.id"
-                                    :label = "item.name"
-                                    :value = "item.id">
-                                <span style = "float: left">{{ item.name }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item ref = "seeDoctorDate" label = "看诊时间" prop = "seeDoctorDate">
+                            <el-date-picker style = "width: 100%;" v-model = "regForm.seeDoctorDate"
+                                            value-format = "yyyy-MM-dd"
+                                            @change = "handlerChange" placeholder = "选择日期"
+                            ></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span = "8">
+                        <el-form-item label = "看诊医生" prop = "doctorID">
+                            <el-select style = "width: 100%" v-model = "regForm.doctorID"
+                                       @click.native = "getOnDutyDoctor" filterable
+                                       :filter-method = "doctorSearchValuesFilter"
+                                       clearable placeholder = "请选择">
+                                <el-option
+                                        v-for = "item in onDutyDoctorOptions"
+                                        :key = "item.id"
+                                        :label = "item.name"
+                                        :value = "item.id">
+                                    <span>{{ item.name }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 300px" :span = "11">
-                    <el-form-item label = "挂号费用" prop = "expense">
-                        <el-input :disabled = "true" v-model = "regForm.expense" clearable placeholder = "挂号费用">
-                            <template slot = "append">￥</template>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "挂号来源" prop = "registrationSourceID">
+                            <el-select style = "width: 100%" v-model = "regForm.registrationSourceID"
+                                       @click.native = "getRegSource"
+                                       filterable
+                                       :filter-method = "regSourceFilter" clearable placeholder = "请选择">
+                                <el-option
+                                        v-for = "item in regSourceOptions"
+                                        :key = "item.id"
+                                        :label = "item.name"
+                                        :value = "item.id">
+                                    <span style = "float: left">{{ item.name }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span = "8">
+                        <el-form-item label = "收费类别" prop = "payID">
+                            <el-select style = "width: 100%" v-model = "regForm.payID" @click.native = "getPayCategory"
+                                       filterable :filter-method = "payCategoryFilter" clearable placeholder = "请选择">
+                                <el-option
+                                        v-for = "item in payCategoryOptions"
+                                        :key = "item.id"
+                                        :label = "item.name"
+                                        :value = "item.id">
+                                    <span style = "float: left">{{ item.name }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
-            <el-form-item>
-                <el-col style = "width: 600px" :span = "11">
-                    <el-form-item align = "right">
-                        <el-button id = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
-                        <el-button @click = "resetForm('regForm')">重置</el-button>
-                    </el-form-item>
-                </el-col>
-            </el-form-item>
-        </el-form>
+                <el-row :gutter = "20">
+                    <el-col :span = "8">
+                        <el-form-item label = "挂号费用" prop = "expense">
+                            <el-input :disabled = "true" v-model = "regForm.expense" clearable placeholder = "挂号费用">
+                                <template slot = "append">￥</template>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-form-item>
+                    <el-col :span = "8">
+                        <el-form-item align = "right">
+                            <el-button id = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
+                            <el-button @click = "resetForm('regForm')">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+            </el-form>
+
+        </el-main>
+
+
     </el-container>
 
 </template>
+
+<style>
+
+
+</style>
 
 <script>
 
