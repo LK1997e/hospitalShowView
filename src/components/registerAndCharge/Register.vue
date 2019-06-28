@@ -181,7 +181,7 @@
                 <el-form-item>
                     <el-col :span = "8">
                         <el-form-item align = "right">
-                            <el-button id = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
+                            <el-button ref = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
                             <el-button @click = "resetForm('regForm')">重置</el-button>
                         </el-form-item>
                     </el-col>
@@ -274,8 +274,6 @@
         //存放收费类别
         payCategoryValues: [],
         payCategoryOptions: [],
-
-        regFormCopy: this.regForm,
 
         rules: {
           isHaveCard: [
@@ -470,7 +468,7 @@
             if (data.status === 'OK') {
               this.regForm.expense = data.data
 
-              this.submit()
+              this.submit(data.data)
 
             } else {
               alert(data.msg)
@@ -479,7 +477,8 @@
         })
       },
 
-      submit() {
+      submit(expense) {
+
         register(
             this.regForm.isHaveCard,
             this.regForm.patientName,
@@ -494,14 +493,24 @@
             this.regForm.seeDoctorDate,
             this.regForm.registrationSourceID,
             this.regForm.payID,
-            this.regForm.expense,
+            expense,
         ).then((res) => {
           if (res.status === 200) {
             let data = res.data
             if (data.status === 'OK') {
-              this.regFormCopy = this.regForm
+
+              this.$notify({
+                title: '成功',
+                message: '挂号成功！费用为: ' + expense + '￥',
+                type: 'success',
+                showClose: false,
+              })
+
             } else {
-              alert(data.msg)
+              this.$notify({
+                title: '失败',
+                message: data.msg,
+              })
             }
           }
         })
@@ -511,13 +520,11 @@
 
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.register()
-            alert('submit!')
-            document.getElementById('submit').setAttribute(disabled, 'true')
-          } else {
 
+            this.register()
+
+          } else {
             console.log('error submit!!')
-            return false
           }
         })
       },
