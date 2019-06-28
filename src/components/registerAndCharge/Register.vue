@@ -283,7 +283,7 @@
           ],
           patientName: [
             {required: true, message: '请输入患者名字', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'},
+            {min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur'},
           ],
           identityCardNo: [
             {required: true, message: '请输入身份证号', trigger: 'blur'},
