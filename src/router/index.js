@@ -14,6 +14,9 @@ import Expenseclass from '@/components/finance/Expenseclass'
 import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
 import ECharts from '@/components/finance/echarts'
 import Register from '../components/registerAndCharge/Register'
+import SearchPatient from '@/components/outpatient/SearchPatient'
+import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
+import ApplyInspection from '@/components/outpatient/ApplyInspection'
 
 Vue.use(Router)
 Vue.use(Vuex)
@@ -255,12 +258,21 @@ export const outpatientRoutes = [
     },
     children: [
       {
-        path: '/outpatient/UserInfo',
-        component: UserInfo,
-        name: '门诊人员主页',
+        path: '/outpatient/SearchPatient',
+        component: SearchPatient,
+        name: '患者列表',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '门诊人员主页',
+          name: '患者列表',
+        },
+      },
+      {
+        path: '/outpatient/UserInfo',
+        component: UserInfo,
+        name: '个人信息',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '个人信息',
         },
       },
       {
@@ -272,6 +284,15 @@ export const outpatientRoutes = [
           name: '修改个人信息',
         },
       },
+      {
+        path: '/outpatient/MedicalRecHome',
+        component:MedicalRecHome,
+        name: '病历首页编辑',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '病历首页编辑',
+        },
+      }
     ],
   },
 ]
