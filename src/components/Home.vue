@@ -69,6 +69,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span=24 class="content-wrapper">
+                        <el-divider></el-divider>
 						<transition name="fade" mode="out-in">
 							<router-view></router-view>
 						</transition>

@@ -9,11 +9,18 @@ import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
 import InspectionSearch from '@/components/medicalTech/inspection/InspectionSearch'
 import InspectionCheck from '@/components/medicalTech/inspection/InspectionCheck'
+import InspectionExcute from '@/components/medicalTech/inspection/InspectionExcute'
 import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
 import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
-import User from '@/components/basic/User'
+import Pharmacy from '@/components/pharmacy/Pharmacy'
+import ECharts from '@/components/finance/echarts'
+import Register from '../components/registerAndCharge/Register'
+import SearchPatient from '@/components/outpatient/SearchPatient'
+import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
+
+
 Vue.use(Router)
 Vue.use(Vuex)
 
@@ -81,16 +88,7 @@ export const adminRoutes = [
         meta: {
           name: '部门管理',
         },
-      }, {
-        path: '/baseInfoManage/userManage',
-        component: User,
-        iconCls: 'el-icon-message',
-        name: '用户管理',
-        meta: {
-          name: '用户管理',
-        },
       },
-
     ]
   },
 
@@ -248,6 +246,15 @@ export const medicalTechRoutes = [
         meta: {
           name: '检查检验审核',
         },
+      },
+      {
+        path: '/medicalTech/inspectionExcute',
+        component: InspectionExcute,
+        name: '检查检验执行',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '检查检验执行',
+        },
       }
     ]
   }
@@ -264,6 +271,15 @@ export const outpatientRoutes = [
       name: '门诊人员',
     },
     children: [
+      {
+        path: '/outpatient/SearchPatient',
+        component: SearchPatient,
+        name: '患者列表',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '患者列表',
+        },
+      },
       {
         path: '/outpatient/UserInfo',
         component: UserInfo,
@@ -282,7 +298,16 @@ export const outpatientRoutes = [
           name: '修改个人信息',
         },
       },
-    ]
+      {
+        path: '/outpatient/MedicalRecHome',
+        component:MedicalRecHome,
+        name: '病历首页编辑',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '病历首页编辑',
+        },
+      }
+    ],
   },
 ]
 
@@ -316,6 +341,26 @@ export const pharmacyRoutes = [
       },
     ]
   },
+  {
+    path: '/pharmacy',
+    component: Home,
+    name: '药房管理',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '药房管理',
+    },
+    children: [
+      {
+        path: '/pharmacy/UserInfo',
+        component: Pharmacy,
+        name: '药房',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '药房',
+        },
+      }
+    ]
+  }
 ]
 
 export const registerAndChargeRoutes = [
@@ -344,6 +389,26 @@ export const registerAndChargeRoutes = [
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
+        },
+      },
+    ],
+  },
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '工作',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '工作',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/Register',
+        component: Register,
+        name: '挂号',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '挂号',
         },
       },
     ]
