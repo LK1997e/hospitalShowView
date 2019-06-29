@@ -17,7 +17,9 @@
 
       <el-col :span="24"
               style="padding-bottom: 10px;border-right: solid 1px #eee">
+
         <el-divider content-position="left">筛选查询</el-divider>
+
         <el-col :span="2" class="el-col-display">项目名称</el-col>
 
 
@@ -107,17 +109,21 @@
 
             <template slot-scope="props">
               <template v-if="condition.mark==='144'">
-                <el-button icon="el-icon-delete" @click.native.prevent="handleExcute(props.row.id)" type="text"
-                           size="small" style="color: #2266e6">开始处置
+                <router-link :to="{ name: '检查检验执行', params: { inspectionDetailsID: props.row.inspectionDetailsID}}">
+                <el-button icon="el-icon-delete"  type="text"
+                           size="small" style="color: #2266e6">开始执行
                 </el-button>
+                </router-link>
               </template>
               <template v-else-if="condition.mark==='142'">
-                <el-button icon="el-icon-delete" @click.native.prevent="handleChecked(props.row.id)" type="text"
-                           size="small" style="color: #2266e6">开始审核
-                </el-button>
+                <router-link :to="{ name: '检查检验审核', params: { inspectionDetailsID: props.row.inspectionDetailsID}}">
+                  <el-button icon="el-icon-delete"  type="text"
+                             size="small" style="color: #2266e6">开始审核
+                  </el-button>
+                </router-link>
               </template>
               <template v-else-if="condition.mark==='137'">
-                <el-button icon="el-icon-delete" @click.native.prevent="handleRegistered(props.row.id)" type="text"
+                <el-button icon="el-icon-delete" @click.native.prevent="handleRegistered(props.row.inspectionDetailsID)" type="text"
                            size="small" style="color: #2266e6">开始登记
                 </el-button>
               </template>
@@ -164,7 +170,8 @@
 <script>
   import {
     InspectSearchFMedItem,
-    Inspectformview
+    Inspectformview,
+    RegisterInspectionDetails
   } from '../../../api/inspectionApi';
   import Qs from 'qs';
 
@@ -209,14 +216,11 @@
               pageSize: this.pageParams.pageSize
           }
         );
-        alert(params);
         Inspectformview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              alert(data.status);
               this.inspectFormViewList = data.data.list;
-              alert(data.data.list);
               this.pageParams.total = data.data.total;
             } else {
               alert(data.msg);
@@ -276,6 +280,25 @@
       handleDateChange(){
         this.pageParams.pageNum=1;
         this.getInspectFormViewList();
+      },
+      handleRegistered(propRow){
+        let params='inspectionDetailsID='+propRow;
+            RegisterInspectionDetails(params).then((res) => {
+              if (res.status === 200) {
+                let data = res.data;
+                if (data.status === 'OK') {
+                  this.$message({
+                    message: data.msg,
+                    type: 'success'
+                  });
+                } else {
+                  this.$message({
+                    message: data.msg,
+                    type: 'warning'
+                  });
+                }
+              }
+            });
       }
     },
     mounted() {
