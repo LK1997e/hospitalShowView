@@ -69,7 +69,6 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span=24 class="content-wrapper">
-                        <el-divider></el-divider>
 						<transition name="fade" mode="out-in">
 							<router-view></router-view>
 						</transition>
@@ -244,50 +243,44 @@
 						display:none;
 					}
 
-                }
-            }
-
-            .menu-collapsed {
-                flex: 0 0 60px;
-                width: 60px;
-            }
-
-            .menu-expanded {
-                flex: 0 0 230px;
-                width: 230px;
-            }
-
-            .content-container {
-                // background: #f1f2f7;
-                flex: 1;
-                // position: absolute;
-                // right: 0px;
-                // top: 0px;
-                // bottom: 0px;
-                // left: 230px;
-                overflow-y: scroll;
-                padding: 20px;
-
-                .breadcrumb-container {
-                    //margin-bottom: 15px;
-                    .title {
-                        width: 200px;
-                        float: left;
-                        color: #475669;
-                    }
-
-                    .breadcrumb-inner {
-                        float: left;
-                        font-size: 20px;
-                    }
-                }
-
-                .content-wrapper {
-                    background-color: #fff;
-                    box-sizing: content-box;
-                    width: 100%;
-                }
-            }
-        }
-    }
+				}
+			}
+			.menu-collapsed{
+				flex:0 0 60px;
+				width: 60px;
+			}
+			.menu-expanded{
+				flex:0 0 230px;
+				width: 230px;
+			}
+			.content-container {
+				// background: #f1f2f7;
+				flex:1;
+				// position: absolute;
+				// right: 0px;
+				// top: 0px;
+				// bottom: 0px;
+				// left: 230px;
+				overflow-y: scroll;
+				padding: 20px;
+				.breadcrumb-container {
+					//margin-bottom: 15px;
+					.title {
+						width: 200px;
+						float: left;
+						color: #475669;
+					}
+					.breadcrumb-inner {
+						float: left;
+						font-size: 20px;
+					}
+				}
+				.content-wrapper {
+					background-color: #fff;
+					box-sizing: content-box;
+					width: 100%;
+				}
+			}
+		}
+	}
 </style>

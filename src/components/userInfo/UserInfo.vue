@@ -62,11 +62,9 @@
     export default {
       inject:['reload'],
       data() {
-
         return {
           // photoLocation:photoloca,
           // labelPosition: 'top',
-
           user:{
             id:'',
             userName:'',
@@ -113,7 +111,8 @@
         if (user) {
           user = JSON.parse(user);
           this.user = user;
-          this.user.photoLocation =  "http://localhost:8081/hospital/images/"+user.photoLocation;
+          //使用图床上的图片作为头像
+          this.user.photoLocation = "http://localhost:8081/hospital/images/"+user.photoLocation;
         }
       }
     }
