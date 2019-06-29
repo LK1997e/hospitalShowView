@@ -43,7 +43,7 @@
             <el-divider  >病史内容</el-divider>
           </el-header>
           <div>
-            <el-form :label-position="left" label-width="80px" :model="medicalRecordHomePart1">
+            <el-form :label-position="left" label-width="80px" :model="medicalRecordHome">
 
 
               <el-row class="row-bg" >
@@ -52,7 +52,7 @@
                     <el-form-item label="主诉" property="chiefComplaint">
                       <el-input type="textarea"
                                 ref="chiefComplaint"
-                                v-model="medicalRecordHomePart1.chiefComplaint"
+                                v-model="medicalRecordHome.chiefComplaint"
                                 name="chiefComplaint"
                                 placeholder="主诉">
                       </el-input>
@@ -66,7 +66,7 @@
                     <el-form-item label="现病史" property="currentMedicalHistory">
                       <el-input type="textarea"
                                 ref="currentMedicalHistory"
-                                v-model="medicalRecordHomePart1.currentMedicalHistory"
+                                v-model="medicalRecordHome.currentMedicalHistory"
                                 name="currentMedicalHistory"
                                 placeholder="现病史">
                       </el-input>
@@ -78,7 +78,7 @@
                     <el-form-item label="目前治疗情况" property="currentTreatmentSituation">
                       <el-input type="textarea"
                                 ref="currentTreatmentSituation"
-                                v-model="medicalRecordHomePart1.currentTreatmentSituation"
+                                v-model="medicalRecordHome.currentTreatmentSituation"
                                 name="currentTreatmentSituation"
                                 placeholder="目前治疗情况">
                       </el-input>
@@ -90,7 +90,7 @@
                     <el-form-item label="既往史" property="pastMedicalHistory">
                       <el-input type="textarea"
                                 ref="pastMedicalHistory"
-                                v-model="medicalRecordHomePart1.pastMedicalHistory"
+                                v-model="medicalRecordHome.pastMedicalHistory"
                                 name="pastMedicalHistory"
                                 placeholder="既往史">
                       </el-input>
@@ -102,7 +102,7 @@
                     <el-form-item label="过敏史" property="allergies">
                       <el-input type="textarea"
                                 ref="allergies"
-                                v-model="medicalRecordHomePart1.allergies"
+                                v-model="medicalRecordHome.allergies"
                                 name="allergies"
                                 placeholder="过敏史">
                       </el-input>
@@ -120,7 +120,7 @@
             <el-divider  >检查及结果</el-divider>
           </el-header>
           <div>
-            <el-form :label-position="left" label-width="80px" :model="medicalRecordHomePart2">
+            <el-form :label-position="left" label-width="80px" :model="medicalRecordHome">
 
 
               <el-row class="row-bg" >
@@ -129,7 +129,7 @@
                     <el-form-item label="体格检查" property="physicalExamination">
                       <el-input type="textarea"
                                 ref="physicalExamination"
-                                v-model="medicalRecordHomePart2.physicalExamination"
+                                v-model="medicalRecordHome.physicalExamination"
                                 name="physicalExamination"
                                 placeholder="体格检查">
                       </el-input>
@@ -143,7 +143,7 @@
                     <el-form-item label="辅助检查" property="currentMedicalHistory">
                       <el-input type="textarea"
                                 ref="currentMedicalHistory"
-                                v-model="medicalRecordHomePart2.currentMedicalHistory"
+                                v-model="medicalRecordHome.currentMedicalHistory"
                                 name="currentMedicalHistory"
                                 placeholder="辅助检查">
                       </el-input>
@@ -161,15 +161,18 @@
         //提交之后进入诊断界面
         //应该也是能改的
 
-        <el-button type="primary" @click="add('medicalRecordHome')">提交</el-button>
+        <el-button type="primary" @click="add()">提交</el-button>
 
         <el-button @click="resetForm()">重置</el-button>
-        <el-button @click="tempStore()">暂存</el-button>
+        <el-button @click="tempStore('this.medicalRecordHome')">暂存</el-button>
 
-        <el-button @click="save_Template()">存为模板</el-button>
+        <el-button @click="save_Template('this.medicalRecHomeTemplate')">存为模板</el-button>
 
+
+        <!-- 做一个框显示所有的模板，写法跟推荐选择框一样-->
         <el-button @click="use_Template()">使用模板</el-button>
-        <el-button @click="searchHistoryRec()">找该患者的历史病历</el-button>
+        <el-button @click="use_CommonDiagnosis()">使用常用诊断</el-button>
+        <el-button @click="searchHistoryRec(this.indexPatient.patientID)">找该患者的历史病历</el-button>
 
 
 
@@ -189,14 +192,18 @@
 
 <script>
   import {
-    findPatient,
-    listPatientNoDiagnosis
+
+    add,tempStore,use_Template,use_CommonDiagnosis,searchHistoryRec
+
   } from '../../api/outPatientApi/medicalRecHomeApi';
+  import Qs from 'qs';
   export default {
     name: "MedicalRecHome",
     data() {
       return {
+        medicalRecHomeTemplate : {},
         medicalRecordHomePart1 :{},
+        medicalRecordHome :{},
         medicalRecordHomePart2 :{},
         indexPatientID:'',
         indexMedicalRecID:'',
@@ -209,14 +216,37 @@
 
     },
     methods: {
-      //取患者信息
-      getPatient(){
 
-      },
-      //添加
-      add(){
+      add() {
 
+        this.$confirm('确认提交？')
+          .then(_ => {
+            add(this.medicalRecordHome).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                  } else if (data.status === 'WARN') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
       },
+
       //重置表单
 
       resetForm() {
@@ -244,12 +274,14 @@
 
       },
 
-      mounted(){
-        alert("11");
-        this.indexPatientID = this.$route.query.patientID;
-        this.indexMedicalRecID = this.$route.query.medicalRecID;
 
-      }
+
+    },
+    mounted(){
+      alert("11");
+      this.indexPatient = this.$route.query.indexPatient;
+      this.medicalRecordHome.medicalRecId = indexPatient.medicalRecID;
+
 
     }
   }

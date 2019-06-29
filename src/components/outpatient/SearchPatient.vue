@@ -298,10 +298,9 @@
       goMedicalRecHome(){
         this.$router.push({
           path: '/outPatient/MedicalRecHome',
-          name: 'MedicalRecHome',
+
           query: {
-            medicalRecID: this.indexPatient.medicalRecID,
-            patientID : this.indexPatient.patientID
+            indexPatient : this.indexPatient,
 
         }
       })
