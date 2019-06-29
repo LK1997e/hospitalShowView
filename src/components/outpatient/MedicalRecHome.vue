@@ -210,11 +210,11 @@
     },
     methods: {
       //取患者信息
-      getPatient(){
+      getPatient() {
 
       },
       //添加
-      add(){
+      add() {
 
       },
       //重置表单
@@ -224,26 +224,26 @@
         this.$refs[medicalRecordHomePart2].resetFields();
       },
 
-      tempStore(){
+      tempStore() {
 
       },
-      use_TempStore(){
+      use_TempStore() {
 
       },
       //存为模板
-      save_Template(){
+      save_Template() {
 
       },
       //使用组套(可以弄一个检索框，根据组套的名字使用)
-      use_Template(){
+      use_Template() {
 
       },
 
       //在显示病人信息那块加一个查找历史病例
-      searchHistoryRec(){
+      searchHistoryRec() {
 
       },
-
+    },
       mounted(){
         alert("11");
         this.indexPatientID = this.$route.query.patientID;
@@ -251,7 +251,7 @@
 
       }
 
-    }
+
   }
 </script>
 <style>

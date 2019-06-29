@@ -183,7 +183,7 @@
 
 <script>
   import {
-    deptGetALLNamesAndCodes,
+    deptGetAllNamesAndCodes,
   } from '../../api/departmentApi';
   import {
     workloadStatisticsGetList,
@@ -290,7 +290,7 @@
       },
       //获得所有科室名称和编号
       getAllDeptNamesAndCodes() {
-        deptGetALLNamesAndCodes().then((res) => {
+        deptGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {

@@ -107,75 +107,115 @@
           <hr>
 
           <el-col :span="24"
-                  style=" padding-bottom: 10px;border-left: solid 1px #eee">
-
+                               style=" padding-bottom: 10px;border-left: solid 1px #eee">
+          <el-header>
             <el-divider content-position="left">项目药品操作</el-divider>
-            <el-col :span="4" class="el-col-display">
-              <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki"
-                       @click="approvedDrugs">批准药品
-              </el-link>
-            </el-col>
+          </el-header>
+          <el-col :span="4" class="el-col-display">
+            <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki"
+                     @click="approvedDrugs">批准药品
+            </el-link>
+          </el-col>
 
-            <el-col :span="4" class="el-col-display">
-              <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
-                       @click="addDrugs">添加药品
-              </el-link>
-            </el-col>
+          <el-col :span="4" class="el-col-display">
+            <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
+                     @click="addDrugs">添加药品
+            </el-link>
+          </el-col>
 
 
-            <el-col :span="4" class="el-col-display">
-              <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
-                       @click="deleteDrugs">删除药品
-              </el-link>
-            </el-col>
+          <el-col :span="4" class="el-col-display">
+            <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
+                     @click="deleteDrugsList">批量删除药品
+            </el-link>
+          </el-col>
+
+        </el-col>
+
+          <el-col :span="22" :offset="1" class="grid-content">
+            <el-table
+              ref="multipleTable"
+              :data="inpectMedList"
+              style="width: 100%"
+              @selection-change="handleMedSelectionChange">
+
+              <el-table-column type="selection" prop="medMatListID">
+              </el-table-column>
+              <el-table-column label="编号" prop="medMatListID">
+              </el-table-column>
+              <el-table-column label="药品名称" prop="drugsName">
+              </el-table-column>
+              <el-table-column label="药品编码" prop="drugsCode">
+              </el-table-column>
+              <el-table-column label="药品规格" prop="drugsFormat">
+              </el-table-column>
+              <el-table-column label="用量" prop="dosage">
+              </el-table-column>
+              <el-table-column label="操作1">
+                <template slot-scope="props">
+                  <el-button icon="el-icon-edit" @click.native.prevent="editDrugs(props.row)" type="text"
+                             size="small">
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作2">
+                <template slot-scope="props">
+                  <el-button icon="el-icon-delete" @click.native.prevent="deleteDrugs(props.row)" type="text"
+                             size="small" style="color: #e64242">
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
 
           </el-col>
 
 
-          <el-table
-            ref="multipleTable"
-            :data="inpectMedList"
-            style="width: 100%"
-            @selection-change="handleSelectionChange">
-
-            <el-table-column type="selection" prop="medMatListID">
-            </el-table-column>
-            <el-table-column label="编号" prop="medMatListID">
-            </el-table-column>
-            <el-table-column label="药品名称" prop="drugsName">
-            </el-table-column>
-            <el-table-column label="药品编码" prop="drugsCode">
-            </el-table-column>
-            <el-table-column label="药品规格" prop="drugsFormat">
-            </el-table-column>
-            <el-table-column label="用量" prop="dosage">
-            </el-table-column>
-            <el-table-column label="操作1">
-              <template slot-scope="props">
-                <el-button icon="el-icon-edit" @click.native.prevent="editDrugs(props.row.medMatListID)" type="text"
-                           size="small">
-                  编辑
-                </el-button>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作2">
-              <template slot-scope="props">
-                <el-button icon="el-icon-delete" @click.native.prevent="deleteDrugs(props.row.medMatListID)" type="text"
-                           size="small" style="color: #e64242">
-                  删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
 
 
-          <el-dialog :visible.sync="addDrugDialogFormVisible" width="30%">
+          <el-dialog title="修改项目药品信息" :visible.sync="editDrugDialogFormVisible" width="30%">
+            <el-form :model="editDrugForm" :rules="rules" ref="editDrugForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="药品搜索" prop="medicinesMaterialsID">
+                <el-select  style="float: left;width: 250px"
+                            filterable :filter-method="DrugsSearchValuesFilter"
+                            v-model="editDrugForm.medicinesMaterialsID"
+                            clearable placeholder="请选择" value="">
+                  <el-option
+                    v-for="item in DrugOptions"
+                    :key="item.id"
+                    :label="item.drugsName"
+                    :value="item.id">
+                    <span style="float: left">{{ item.drugsName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="药品剂量" prop="dosage">
+                <el-input v-model="editDrugForm.dosage" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitDrugForm('editDrugForm')">修改</el-button>
+                <el-button @click="resetDrugForm('editDrugForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
+
+
+
+
+
+
+
+
+          <el-dialog  title="添加项目药品信息" :visible.sync="addDrugDialogFormVisible" width="30%">
             <el-form :model="addDrugForm" :rules="rules" ref="addDrugForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="药品搜索" prop="medicinesMaterialsID">
                 <el-select  style="float: left;width: 250px"
-                            filterable :filter-method="DrugsSearchValuesFilter" @change="setDrugs"
-                           v-model="addDrugForm.medicinesMaterialsID"
-                           clearable placeholder="请选择">
+                            filterable :filter-method="DrugsSearchValuesFilter"
+                            v-model="addDrugForm.medicinesMaterialsID"  @change="setDrugs"
+                            clearable placeholder="请选择">
                   <el-option
                     v-for="item in DrugOptions"
                     :key="item.id"
@@ -195,12 +235,152 @@
             </el-form>
           </el-dialog>
 
-s
+
+          <el-col :span="24"
+                  style=" padding-bottom: 10px;border-left: solid 1px #eee">
+            <el-header>
+              <el-divider content-position="left">项目材料操作</el-divider>
+            </el-header>
+            <el-col :span="4" class="el-col-display">
+              <el-link icon="el-icon-download" style="font-size: 16px;color: darkkhaki"
+                       @click="approvedMat">批准材料
+              </el-link>
+            </el-col>
+
+            <el-col :span="4" class="el-col-display">
+              <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
+                       @click="addMat">添加材料
+              </el-link>
+            </el-col>
+
+
+            <el-col :span="4" class="el-col-display">
+              <el-link icon="el-icon-delete-solid" style="font-size: 16px;color: #e64242"
+                       @click="deleteMatList">批量删除材料
+              </el-link>
+            </el-col>
+
+          </el-col>
+
+          <el-col :span="22" :offset="1" class="grid-content">
+            <el-table
+              ref="multipleTable"
+              :data="inpectMatList"
+              style="width: 100%"
+              @selection-change="handleMatSelectionChange">
+
+              <el-table-column type="selection" prop="medMatListID">
+              </el-table-column>
+              <el-table-column label="编号" prop="medMatListID">
+              </el-table-column>
+              <el-table-column label="材料名称" prop="name">
+              </el-table-column>
+              <el-table-column label="材料编码" prop="code">
+              </el-table-column>
+              <el-table-column label="材料规格" prop="format">
+              </el-table-column>
+              <el-table-column label="用量" prop="dosage">
+              </el-table-column>
+              <el-table-column label="操作1">
+                <template slot-scope="props">
+                  <el-button icon="el-icon-edit" @click.native.prevent="editMat(props.row)" type="text"
+                             size="small">
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作2">
+                <template slot-scope="props">
+                  <el-button icon="el-icon-delete" @click.native.prevent="deleteMat(props.row)" type="text"
+                             size="small" style="color: #e64242">
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+
+          </el-col>
+
+
+
+
+          <el-dialog title="修改项目材料信息" :visible.sync="editMatDialogFormVisible" width="30%">
+            <el-form :model="editMatForm" :rules="rules" ref="editMatForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="材料搜索" prop="medicinesMaterialsID">
+                <el-select  style="float: left;width: 250px"
+                            filterable :filter-method="matSearchValuesFilter"
+                            v-model="editMatForm.medicinesMaterialsID"
+                            clearable placeholder="请选择" value="">
+                  <el-option
+                    v-for="item in MatOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="材料剂量" prop="dosage">
+                <el-input v-model="editMatForm.dosage" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitMatForm('editMatForm')">修改</el-button>
+                <el-button @click="resetMatForm('editMatForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
+
+
+          <el-dialog  title="添加项目材料信息" :visible.sync="addMatDialogFormVisible" width="30%">
+            <el-form :model="addMatForm" :rules="rules" ref="addMatForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="材料搜索" prop="medicinesMaterialsID">
+                <el-select  style="float: left;width: 250px"
+                            filterable :filter-method="matSearchValuesFilter"
+                            v-model="addMatForm.medicinesMaterialsID"  @change="setMat"
+                            clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in MatOptions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="材料剂量" prop="dosage">
+                <el-input v-model="addMatForm.dosage" style="width: 280px"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitMatForm('addMatForm')">添加</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
+
         </el-container>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <el-col :span="2" :offset="11" class="grid-content">
+          <el-button type="primary" @click="approveInspect">完成审核</el-button>
+        </el-col>
+        <br>
+        <br>
+        <br>
+        <br>
 
       </el-row>
 
+
     </el-main>
+
+
+
   </el-container>
 
 </template>
@@ -208,7 +388,7 @@ s
 
 <script>
   import {
-    InspectReview,InspectMatReview,InspectMedReview,DeleteMedMat,DeleteMedMatByList,SearchDrugs,SearchMaterials,InsertMedMat,ApproveMat,ApproveMed,UpdateMedMat
+    InspectReview,InspectMatReview,InspectMedReview,DeleteMedMat,DeleteMedMatByList,SearchDrugs,SearchMaterials,InsertMedMat,ApproveMat,ApproveMed,UpdateMedMat,ApproveInspectionDetails
   } from '../../../api/inspectionApi';
   import Qs from 'qs';
 
@@ -217,7 +397,7 @@ s
     data() {
       return {
         condition: {
-          inspectionDetailsID: '1'
+          inspectionDetailsID: ''
         },
         medicalRecHome: {
           cheifComplaint: '',
@@ -246,10 +426,11 @@ s
         inpectMedList:[],
         DrugList:[],
         DrugOptions:[],
-        MaterialsList:[],
-        MaterialsOptions:[],
+        MatList:[],
+        MatOptions:[],
 
-        checkList: [],
+        drugCheckList: [],
+        matCheckList: [],
 
         addDrugDialogFormVisible: false,
         addMatDialogFormVisible: false,
@@ -259,7 +440,7 @@ s
 
 
         addDrugForm:{
-          itemsType :'',
+          itemsType : 129,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -267,15 +448,32 @@ s
         },
         editDrugForm:{
           id:'',
-          itemsType :'',
+          itemsType : 129,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
           matOrMedType:'0'
         },
+
+        addMatForm:{
+          itemsType : 130,
+          itemsDetailID:'',
+          medicinesMaterialsID:'',
+          dosage:'',
+          matOrMedType:'1'
+        },
+        editMatForm:{
+          id:'',
+          itemsType : 130,
+          itemsDetailID:'',
+          medicinesMaterialsID:'',
+          dosage:'',
+          matOrMedType:'1'
+        },
+
         rules: {
           medicinesMaterialsID: [
-            {required: true, message: '请输入药品名称', trigger: 'blur'},
+            {required: true, message: '请输入名称', trigger: 'blur'},
           ],
           dosage: [
             {required: true, message: '请输入剂量', trigger: 'blur'},
@@ -285,6 +483,7 @@ s
     },
     methods: {
       getInspectReviewList() {
+        this.condition.inspectionDetailsID = this.$route.params.inspectionDetailsID;
         InspectReview("inspectionDetailsID=" + this.condition.inspectionDetailsID).then((res) => {
           if (res.status === 200) {
             let data = res.data;
@@ -298,6 +497,8 @@ s
                 let tempData = this.inspectReviewList[0];
                 this.getmedicalRecHome(tempData);
                 this.getPatient(tempData);
+                this.getMed(tempData.inspectiondetailsId);
+                this.getMat(tempData.inspectiondetailsId);
               }
             } else {
             }
@@ -314,7 +515,6 @@ s
         this.medicalRecHome.initialDiagnosis = data.initialDiagnosis;
         this.medicalRecHome.inspectRecommend = data.inspectRecommend;
         this.medicalRecHome.attention = data.attention;
-
       },
       getPatient(data) {
         this.patient.patientId = data.patientId;
@@ -325,45 +525,135 @@ s
         this.patient.patientBirthday = data.patientBirthday;
         this.patient.patientFamilyAddress = data.patientFamilyAddress;
       },
-      getMed(){
-        let params="itemsDetails="+this.inspectReviewList[0].inspectionDetailsID;
+      getMed(id){
+        let params="itemsDetailID="+id;
         InspectMedReview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.DrugList = data.data;
+              this.inpectMedList = data.data;
             } else {
               alert(data.msg);
             }
           }
         });
       },
-      handleSelectionChange(items) {
-        this.checkList = [];
+      handleMedSelectionChange(items) {
+        this.drugCheckList = [];
         items.forEach((item) => {
-          this.checkList.push(item.id);
+          this.drugCheckList.push(item.medMatListID);
         });
       },
       approvedDrugs() {
+        this.$confirm('确认通过批准？')
+          .then(_ => {
+            let params = {id: this.drugCheckList};
+            ApproveMed(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshDrugInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+
       },
       addDrugs() {
         this.addDrugDialogFormVisible = true;
-        this.addDrugForm.itemsType = '';
         this.addDrugForm.itemsDetailID = '';
         this.addDrugForm.medicinesMaterialsID = '';
         this.addDrugForm.dosage = '';
       },
-      deleteDrugs() {
+      editDrugs(propRow){
+        this.editDrugDialogFormVisible = true;
+        this.editDrugForm.id=propRow.medMatListID;
+        this.editDrugForm.itemsDetailID = propRow.itemsDetailID;
+        this.editDrugForm.medicinesMaterialsID = propRow.medicinesMaterialsID;
+        this.editDrugForm.dosage = propRow.dosage;
+      },
+      deleteDrugs(propRow) {
+        let params = 'medMatListID='+propRow.medMatListID;
+        this.$confirm('确认删除？')
+          .then(_ => {
+            DeleteMedMat(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshDrugInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
       },
       deleteDrugsList() {
+        this.$confirm('确认批量删除？')
+          .then(_ => {
+
+            let params = {"id": this.drugCheckList};
+            DeleteMedMatByList(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshDrugInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+
       },
       setDrugs(){
-        this.addDrugForm.itemsDetailID=this.inspectReviewList[0].inspectionDetailsID;
-        this.addDrugForm.itemsType=this.inspectReviewList[0].type;
-        alert(this.inspectReviewList[0].inspectionDetailsID);
-        alert(this.inspectReviewList[0].type);
-        alert(this.addDrugForm.itemsDetailID);
-        alert(this.addDrugForm.itemsType);
+        this.addDrugForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
+      },
+      freshDrugInfo(){
+        this.getMed(this.inspectReviewList[0].inspectiondetailsId);
       },
       getDrugs(params){
         SearchDrugs().then((res) => {
@@ -392,7 +682,7 @@ s
             if (formName === 'editDrugForm')
               this.$confirm('确认修改项目药品信息？')
                 .then(_ => {
-                  deptInfoUpdate(this.editDrugForm).then((res) => {
+                  UpdateMedMat(this.editDrugForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -400,7 +690,7 @@ s
                             message: data.msg,
                             type: 'success'
                           });
-                          this.freshInfo();
+                          this.freshDrugInfo();
                         } else if (data.status === 'NG') {
                           this.$message({
                             message: data.msg,
@@ -452,13 +742,255 @@ s
         });
       },
       //重置表单
-      resetForm(formName) {
+      resetDrugForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+
+      getMat(id){
+        let params="itemsDetailID="+id;
+        InspectMatReview(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.inpectMatList = data.data;
+            } else {
+              alert(data.msg);
+            }
+          }
+        });
+      },
+      handleMatSelectionChange(items) {
+        this.matCheckList = [];
+        items.forEach((item) => {
+          this.matCheckList.push(item.medMatListID);
+        });
+      },
+      approvedMat() {
+        this.$confirm('确认通过批准？')
+          .then(_ => {
+            let params = {id: this.matCheckList};
+            ApproveMat(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshMatInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+
+      },
+      addMat() {
+        this.addMatDialogFormVisible = true;
+        this.addMatForm.itemsDetailID = '';
+        this.addMatForm.medicinesMaterialsID = '';
+        this.addMatForm.dosage = '';
+      },
+      editMat(propRow){
+        this.editMatDialogFormVisible = true;
+        this.editMatForm.id=propRow.medMatListID;
+        this.editMatForm.itemsDetailID = propRow.itemsDetailID;
+        this.editMatForm.medicinesMaterialsID = propRow.medicinesMaterialsID;
+        this.editMatForm.dosage = propRow.dosage;
+      },
+      deleteMat(propRow) {
+        let params = 'medMatListID='+propRow.medMatListID;
+        this.$confirm('确认删除？')
+          .then(_ => {
+            DeleteMedMat(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshMatInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+      },
+      deleteMatList() {
+        this.$confirm('确认批量删除？')
+          .then(_ => {
+
+            let params = {"id": this.matCheckList};
+            DeleteMedMatByList(params).then((res) => {
+                if (res.status === 200) {
+                  let data = res.data;
+                  if (data.status === 'OK') {
+                    this.freshMatInfo();
+                    this.$message({
+                      message: data.msg,
+                      type: 'success'
+                    });
+
+                  } else if (data.status === 'NG') {
+                    this.$message({
+                      message: data.msg,
+                      type: 'warning'
+                    });
+                  } else {
+                    this.$message.error(data.msg);
+                  }
+                }
+              }
+            )
+
+          })
+          .catch(_ => {
+          });
+
+      },
+      setMat(){
+        this.addMatForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
+      },
+      freshMatInfo(){
+        this.getMat(this.inspectReviewList[0].inspectiondetailsId);
+      },
+      getMaterials(params){
+        SearchMaterials().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.MatList = data.data;
+              this.MatOptions=data.data;
+            } else {
+              alert(data.msg);
+            }
+          }
+        });
+      },
+      matSearchValuesFilter(val) {
+        this.MatOptions = val ? this.MatList.filter(this.createMatFilter(val)) : this.MatList;
+      },
+
+      createMatFilter(queryString) {
+        return (item) => {
+          return (item.name.toLowerCase().indexOf(queryString.toLowerCase()) >= 0 || item.code.toLowerCase().indexOf(queryString.toLowerCase()) >= 0);
+        };
+      }, submitMatForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (formName === 'editMatForm')
+              this.$confirm('确认修改项目材料信息？')
+                .then(_ => {
+                  UpdateMedMat(this.editMatForm).then((res) => {
+                      if (res.status === 200) {
+                        let data = res.data;
+                        if (data.status === 'OK') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'success'
+                          });
+                          this.freshMatInfo();
+                        } else if (data.status === 'NG') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'warning'
+                          });
+                        } else {
+                          this.$message.error(data.msg);
+                        }
+
+                      }
+                    }
+                  )
+
+                })
+                .catch(_ => {
+                });
+            else if (formName === 'addMatForm')
+              this.$confirm('确认添加项目材料信息？')
+                .then(_ => {
+                  InsertMedMat(this.addMatForm).then((res) => {
+                      if (res.status === 200) {
+                        let data = res.data;
+                        if (data.status === 'OK') {
+                          this.freshMatInfo();
+                          this.$message({
+                            message: data.msg,
+                            type: 'success'
+                          });
+                        } else if (data.status === 'NG') {
+                          this.$message({
+                            message: data.msg,
+                            type: 'warning'
+                          });
+                        } else {
+                          this.$message.error(data.msg);
+                        }
+                      }
+                    }
+                  )
+
+                })
+                .catch(_ => {
+                });
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      //重置表单
+      resetMatForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+
+      approveInspect(){
+        ApproveInspectionDetails("inspectionDetailsID=" + this.condition.inspectionDetailsID).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.$message({
+                message: data.msg,
+                type: 'success'
+              });
+            } else {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }
+          }
+        });
+      },
+
     },
     mounted() {
       this.getInspectReviewList();
       this.getDrugs();
+      this.getMaterials();
     }
   }
 </script>
