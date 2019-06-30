@@ -287,11 +287,11 @@
       init(){
         alert("11");
         //this.indexPatient = this.$route.query.indexPatient;
-        var index = sessionStorage.getItem('patient');
+        var index = JSON.parse(sessionStorage.getItem('patient'));
 
         this.indexPatient = index;
         console.log(this.indexPatient);
-        console.log(this.indexPatient.patientName);
+        console.log(this.indexPatient.patientID);
         this.medicalRecordHome.medicalRecId = indexPatient.medicalRecID;
       }
 

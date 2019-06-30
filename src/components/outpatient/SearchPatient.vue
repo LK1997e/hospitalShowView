@@ -199,6 +199,7 @@
         listPatientNoDiagnosis(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
+           // alert("1");
             if (data.status === 'OK') {
               this.searchValue = '';
 
@@ -209,30 +210,12 @@
               this.patientRecList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
-              console.log(patientRecList.length);
+
+              console.log(this.patientRecList.length);
             } else {
               alert(data.msg);
             }
           }
-
-
-
-
-        });
-      },
-      //获取所有的可检索字段
-      listSearchValue() {
-        listSearchValue().then((res) => {
-          if (res.status === 200) {
-            let data = res.data;
-            if (data.status === 'OK') {
-              this.patientSearchValues = data.data;
-              this.patientSearchOptions = data.data;
-            } else {
-              alert(data.msg);
-            }
-          }
-
         });
       },
 
@@ -246,7 +229,7 @@
           pageNum: this.pageParams.pageNum,
           pageSize: this.pageParams.pageSize
         };
-        if( nameOrMedicalRecNo === ''){
+        if( this.nameOrMedicalRecNo === ''){
           this.listPatientNoDiagnosis();
         }else{
           findPatient(params).then((res) => {
@@ -257,10 +240,10 @@
               if (data.status === 'OK') {
                 this.searchValue = '';
                 this.patientRecList = data.data.list;
-                this.patientRecListOptions = data.data.list;
+               // this.patientRecListOptions = data.data.list;
                 this.pageParams.pages = data.data.pages;
                 this.pageParams.total = data.data.total;
-                console.log(patientRecList.length);
+                console.log(this.patientRecList.length);
 
 
               } else {
@@ -303,18 +286,19 @@
       },
       //去选中病人的信息
       getInfo(val){
-        indexPatient = this.patientRecListValues[val];
+        this.indexPatient = this.patientRecListValues[val];
+
 
       },
       goMedicalRecHome(){
-        this.$router.push({
+        /*this.$router.push({
           path: '/outPatient/MedicalRecHome',
 
           query: {
             indexPatient : this.indexPatient,
 
           }
-        });
+        });*/
         sessionStorage.setItem('patient', JSON.stringify(this.indexPatient));
         alert(this.indexPatient.patientID);
         console.log(sessionStorage.getItem('patient'));
