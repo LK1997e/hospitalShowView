@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header style="background:#41cde5;">
-      <el-col :span="2" class="grid-content">
+      <el-col span="2" class="grid-content">
         <span style="font-size:20px;color: white;">病人查找</span>
       </el-col>
 
@@ -9,7 +9,7 @@
     <el-main style="border: 1px solid #49cde5;">
       <el-row class="row-bg">
 
-        <el-col class="grid-content" :span="6" :offset="1">
+        <el-col class="grid-content" span="6" offset="1">
           <el-select v-model="searchValue" @change="findPatient"
                      filterable :filter-method="findPatientValuesFilter" clearable placeholder="病历编码或病人姓名">
             <el-option
@@ -298,13 +298,15 @@
       goMedicalRecHome(){
         this.$router.push({
           path: '/outPatient/MedicalRecHome',
-          name: '病历首页编辑',
-          query: {
-            medicalRecID: this.indexPatient.medicalRecID,
-            patientID : this.indexPatient.patientID
 
-        }
-      })
+          query: {
+            indexPatient : this.indexPatient,
+
+          }
+        });
+        sessionStorage.setItem('patient', Qs.stringify(this.indexPatient));
+        alert(this.indexPatient.patientID);
+        console.log(sessionStorage.getItem('patient'));
       }
     },
     mounted() {
