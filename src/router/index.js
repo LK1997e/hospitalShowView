@@ -24,7 +24,7 @@ import ECharts from '@/components/finance/echarts'
 import Register from '../components/registerAndCharge/Register'
 import SearchPatient from '@/components/outpatient/SearchPatient'
 import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
-
+import ApplyInspection from '@/components/outpatient/ApplyInspection'
 
 Vue.use(Router)
 Vue.use(Vuex)

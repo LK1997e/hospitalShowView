@@ -8,6 +8,24 @@
       <el-table-column property="medicalRecID" label="地址"></el-table-column>
     </el-table>
   </el-dialog>
+
+
+
+
+
+    <!-- 一个查找全部项目的搜索框-->
+    <!-- 找常用检查的带建议搜索框-->
+    <!-- 找组套的搜索框-->
+    <!-- 表格（放该病人的InspectionDetails）-->
+
+
+
+    <!-- 提示框，显示该项目的详细信息-->
+
+
+
+
+
   </el-container>
 </template>
 
@@ -27,13 +45,14 @@
     saveTemplate,
     saveTemplateDetails,
     use_Check,
-    lookInspectionRes
+    lookInspectionRes,
+    listInspection
   } from '../../api/outPatientApi/applyInspectionApi';
     export default {
       name: "ApplyInspection",
       data() {
         return {
-          medicalRecHomeTemplate: {},
+
           indexPatient :{
             medicalRecID : '',
             medicalRecordNo : '',
@@ -59,7 +78,53 @@
             this.indexPatient = indexPatient;
             console.log(this.indexPatient);
             console.log(this.indexPatient.patientID);
-          }
+          },
+          newInspection(){
+
+          },
+          addInspectionDetailsList(){
+
+          },
+          addInspectionDetails(){
+
+          },
+          searchInspection(){
+
+          },
+          tempStore(){
+
+          },
+          drawInspectionDetails(){
+
+          },
+          addProjectFee(){
+
+          },
+          deleteInspectionDetails(){
+
+          },
+          abolishInspectionDetails(){
+
+          },
+          useCommonInspection(){
+
+          },
+          saveTemplate(){
+
+          },
+          saveTemplateDetails(){
+
+          },
+          use_Check(){
+
+          },
+          lookInspectionRes(){
+
+          },
+          listInspection(){
+
+          },
+
 
         },
         mounted()

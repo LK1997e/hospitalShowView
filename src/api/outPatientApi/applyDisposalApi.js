@@ -70,4 +70,12 @@ export const useCommonDisposal =  (listParams) =>
     `${hospital}/ApplyDisposal/useCommonDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
+export const listDisposal =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/listDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+
 

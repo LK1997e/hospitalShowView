@@ -92,3 +92,10 @@ export const use_Check =  (listParams) =>
   return axios.post(
     `${hospital}/ApplyPrescription/use_Check`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
+export const listDrugs =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyPrescription/listDrugs`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
