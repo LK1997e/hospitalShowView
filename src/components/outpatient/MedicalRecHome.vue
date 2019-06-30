@@ -208,7 +208,18 @@
         indexPatientID:'',
         indexMedicalRecID:'',
 
-        indexPatient :{},//被选中的病人
+        indexPatient :{
+          medicalRecID : '',
+          medicalRecordNo : '',
+          diagnosisStatus :'',
+          patientID : '',
+          patientName :'',
+          IdentityCardNo : '',
+          age : '',
+          gender :'',
+          birthday :'',
+          familyAddress:'',
+        },//被选中的病人
         input: '',
         textarea: ''
 
@@ -273,19 +284,23 @@
       searchHistoryRec(){
 
       },
+      init(){
+        alert("11");
+        //this.indexPatient = this.$route.query.indexPatient;
+        var index = sessionStorage.getItem('patient');
+
+        this.indexPatient = index;
+        console.log(this.indexPatient);
+        console.log(this.indexPatient.patientName);
+        this.medicalRecordHome.medicalRecId = indexPatient.medicalRecID;
+      }
 
 
 
     },
     mounted(){
-      alert("11");
-      //this.indexPatient = this.$route.query.indexPatient;
-      var indexPatient = sessionStorage.getItem('patient');
+      this.init();
 
-      this.indexPatient = indexPatient;
-      console.log(this.indexPatient);
-      console.log(this.indexPatient.patientName);
-      this.medicalRecordHome.medicalRecId = indexPatient.medicalRecID;
 
 
     }

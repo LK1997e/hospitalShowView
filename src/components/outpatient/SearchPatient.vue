@@ -167,7 +167,18 @@
         patientRecList :[],
         patientRecListValues :[],
         patientRecListOptions :[],
-        indexPatient : {},//被选中的病人
+        indexPatient : {
+          medicalRecID : '',
+          medicalRecordNo : '',
+          diagnosisStatus :'',
+          patientID : '',
+          patientName :'',
+          IdentityCardNo : '',
+          age : '',
+          gender :'',
+          birthday :'',
+          familyAddress:'',
+        },//被选中的病人
         currentRow: null,
         state1: '',
         state2: ''
@@ -304,7 +315,7 @@
 
           }
         });
-        sessionStorage.setItem('patient', Qs.stringify(this.indexPatient));
+        sessionStorage.setItem('patient', JSON.stringify(this.indexPatient));
         alert(this.indexPatient.patientID);
         console.log(sessionStorage.getItem('patient'));
       }
