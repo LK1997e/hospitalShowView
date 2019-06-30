@@ -100,4 +100,10 @@ export const lookInspectionRes =  (listParams) =>
   return axios.post(
     `${hospital}/ApplyInspection/lookInspectionRes`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
+export const listInspection =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyInspection/listInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
 
