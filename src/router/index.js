@@ -292,7 +292,17 @@ export const outpatientRoutes = [
         meta: {
           name: '病历首页编辑',
         },
-      }
+
+      },
+      {
+        path: '/outpatient/ApplyInspection',
+        component: ApplyInspection,
+        name: '申请检查项目',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '申请检查项目',
+        },
+      },
     ],
   },
 ]

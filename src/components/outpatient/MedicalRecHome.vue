@@ -15,7 +15,7 @@
             <el-divider >患者简要信息</el-divider>
           </el-header>
           <div>
-            <el-form  :inline="true" :model="indexPatient"label-width="80px">
+            <el-form  :inline="true" :model="this.indexPatient"label-width="80px">
 
               <el-form-item label="姓名" property="patientName">
                 <el-input v-model="indexPatient.patientName" readonly></el-input>
@@ -208,7 +208,18 @@
         indexPatientID:'',
         indexMedicalRecID:'',
 
-        indexPatient :{},//被选中的病人
+        indexPatient :{
+          medicalRecID : '',
+          medicalRecordNo : '',
+          diagnosisStatus :'',
+          patientID : '',
+          patientName :'',
+          IdentityCardNo : '',
+          age : '',
+          gender :'',
+          birthday :'',
+          familyAddress:'',
+        },//被选中的病人
         input: '',
         textarea: ''
 
@@ -279,7 +290,12 @@
     },
     mounted(){
       alert("11");
-      this.indexPatient = this.$route.query.indexPatient;
+      //this.indexPatient = this.$route.query.indexPatient;
+      var indexPatient = sessionStorage.getItem('patient');
+
+      this.indexPatient = indexPatient;
+      console.log(this.indexPatient);
+      console.log(this.indexPatient.patientName);
       this.medicalRecordHome.medicalRecId = indexPatient.medicalRecID;
 
 
