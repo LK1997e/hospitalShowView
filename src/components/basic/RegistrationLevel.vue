@@ -156,8 +156,8 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="挂号级别费用" prop="regLevFee">
-                <el-input-number v-model.number="editDetailsForm.regLevFee" :precision="2" style="width: 250px" :step="0.1"></el-input-number>
-              </el-form-item>
+              <el-input-number v-model.number="editDetailsForm.regLevFee" :precision="2" style="width: 250px" :step="0.1" :min="0"></el-input-number>
+            </el-form-item>
 
               <el-form-item>
                 <el-button type="primary" @click="submitForm('editDetailsForm')">立即修改</el-button>

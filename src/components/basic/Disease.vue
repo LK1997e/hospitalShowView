@@ -2,23 +2,15 @@
   <el-container style="margin-top: 6px">
     <el-header style="background:#41cde5;">
 
-
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
-          <span style="font-size:20px;color: white;">科室管理</span>
+          <span style="font-size:20px;color: white;">诊断目录管理</span>
         </el-col>
         <el-col class="grid-content" :span="6" :offset="16">
-          <el-select v-model="searchValue" @change="deptSearchChange"
-                     filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
-            <el-option
-              v-for="item in deptSearchOptions"
-              :key="item.code"
-              :label="item.name"
-              :value="item.name">
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-            </el-option>
-          </el-select>
+          <el-input v-model="searchValue" @keyup.enter.native="diseaseSearchChange" @change="searchValueChange"
+                    style="width:250px"
+                    clearable placeholder="请输入疾病名称或编号查询">
+          </el-input>
         </el-col>
 
       </el-row>
@@ -32,25 +24,12 @@
         <el-col :span="12"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col :span="2" class="el-col-display">科室分类</el-col>
-          <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
-                     v-model="listParam.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
-                     clearable placeholder="请选择">
-            <el-option
-              v-for="item in deptCategoryOptions"
-              :key="item.code"
-              :label="item.name"
-              :value="item.id">
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
-            </el-option>
-          </el-select>
-          <el-col :span="2" class="el-col-display">科室类型</el-col>
-          <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
-                     v-model="listParam.typeID" filterable :filter-method="deptTypeSearchValuesFilter" clearable
+          <el-col :span="4" class="el-col-display">疾病分类类别</el-col>
+          <el-select style="float: left;margin-left: 8px" @change="getDiseaseCategoriesByDicaTypeID"
+                     v-model="listParam.dicaTypeID" filterable :filter-method="dicaTypeSearchValuesFilter" clearable
                      placeholder="请选择">
             <el-option
-              v-for="item in deptTypeOptions"
+              v-for="item in dicaTypeOptions"
               :key="item.code"
               :label="item.name"
               :value="item.id">
@@ -58,6 +37,19 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
             </el-option>
           </el-select>
+          <el-col :span="2" class="el-col-display">疾病分类</el-col>
+          <el-select style="float: left;margin-left: 8px" @change="handleDicaTypeOrDiseaseCategoryChange"
+                     v-model="listParam.diseaseCategoryID"
+                     clearable placeholder="请选择">
+            <el-option
+              v-for="item in diseaseCategoryOptions"
+              :key="item.code"
+              :label="item.name"
+              :value="item.id">
+              <span style="float: left">{{ item.name }}</span>
+            </el-option>
+          </el-select>
+
         </el-col>
 
 
@@ -73,7 +65,7 @@
 
             <el-upload
               name="file"
-              action="http://localhost:8081/hospital/department/upload"
+              action="http://localhost:8081/hospital/disease/upload"
               :http-request="myUpload"
               :before-upload="handleBeforeUpload"
 
@@ -107,11 +99,11 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="left">科室列表</el-divider>
+            <el-divider content-position="left">疾病列表</el-divider>
           </el-header>
           <el-table
             ref="multipleTable"
-            :data="departmentList"
+            :data="diseaseList"
             style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column type="expand">
@@ -138,13 +130,16 @@
             </el-table-column>
             <el-table-column label="编号" prop="id">
             </el-table-column>
-            <el-table-column label="科室编码" prop="deptCode">
+            <el-table-column label="疾病助记编码" prop="code">
             </el-table-column>
-            <el-table-column label="科室名称" prop="deptName">
+            <el-table-column label="疾病名称" prop="name">
             </el-table-column>
-            <el-table-column label="科室分类" prop="deptCategory">
+            <el-table-column label="国际ICD编码" prop="diseaseIcd">
             </el-table-column>
-            <el-table-column label="科室类别" prop="deptType">
+            <el-table-column label="疾病所属分类">
+              <template slot-scope="props">
+                {{props.row.dicaTypeName+'/'+props.row.diseaseCategoryName}}
+              </template>
             </el-table-column>
             <el-table-column label="操作1">
               <template slot-scope="props">
@@ -182,20 +177,25 @@
           </div>
 
 
-          <el-dialog title="修改科室信息" :visible.sync="editDialogFormVisible" width="30%">
-            <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="科室名称" prop="deptName">
-                <el-input v-model="editForm.deptName" style="width: 280px"></el-input>
+          <el-dialog title="修改疾病信息" :visible.sync="editDialogFormVisible" width="40%">
+            <el-form :model="editForm" :rules="rules" ref="editForm" label-width="150px" class="demo-ruleForm">
+              <el-form-item label="疾病名称" prop="name">
+                <el-input v-model="editForm.name" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室编号" prop="deptCode">
-                <el-input v-model="editForm.deptCode" style="width: 280px"></el-input>
+              <el-form-item label="疾病助记编号" prop="code">
+                <el-input v-model="editForm.code" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室分类" prop="deptCategoryID">
+              <el-form-item label="国际Icd编码" prop="diseaseIcd">
+                <el-input v-model="editForm.diseaseIcd" style="width: 280px"></el-input>
+              </el-form-item>
+
+
+              <el-form-item label="疾病分类类别" prop="dicaType">
                 <el-select style="float: left;width: 250px"
-                           v-model="editForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
+                           v-model="editForm.dicaType" filterable :filter-method="dicaTypeSearchValuesFilter"
                            clearable placeholder="请选择">
                   <el-option
-                    v-for="item in deptCategoryOptions"
+                    v-for="item in dicaTypeOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -204,21 +204,22 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="科室类别" prop="deptTypeID" width="30%">
+
+              <el-form-item label="疾病分类" prop="diseaseCatagoryId">
                 <el-select style="float: left;width: 250px"
-                           v-model="editForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
-                           clearable
-                           placeholder="请选择">
+                           v-model="editForm.diseaseCatagoryId" filterable
+                           clearable placeholder="请选择">
                   <el-option
-                    v-for="item in deptTypeOptions"
+                    v-for="item in diseaseCategoryAllOptions"
                     :key="item.code"
                     :label="item.name"
-                    :value="item.id">
+                    :value="item.id"
+                   v-if="item.code==editForm.dicaType">
                     <span style="float: left">{{ item.name }}</span>
-                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
+
               <el-form-item>
                 <el-button type="primary" @click="submitForm('editForm')">立即修改</el-button>
                 <el-button @click="resetForm('editForm')">重置</el-button>
@@ -227,20 +228,25 @@
 
           </el-dialog>
 
-          <el-dialog title="添加科室信息" :visible.sync="addDialogFormVisible" width="30%">
-            <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="科室名称" prop="deptName">
-                <el-input v-model="addForm.deptName" style="width: 280px"></el-input>
+          <!--添加疾病信息-->
+          <el-dialog title="添加疾病信息" :visible.sync="addDialogFormVisible" width="40%">
+            <el-form :model="addForm" :rules="rules" ref="addForm" label-width="150px" class="demo-ruleForm">
+              <el-form-item label="疾病名称" prop="name">
+                <el-input v-model="addForm.name" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室编号" prop="deptCode">
-                <el-input v-model="addForm.deptCode" style="width: 280px"></el-input>
+              <el-form-item label="疾病助记编号" prop="code">
+                <el-input v-model="addForm.code" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室分类" prop="deptCategoryID">
+              <el-form-item label="国际Icd编码" prop="diseaseIcd">
+                <el-input v-model="addForm.diseaseIcd" style="width: 280px"></el-input>
+              </el-form-item>
+
+              <el-form-item label="疾病分类类别" prop="dicaType">
                 <el-select style="float: left;width: 250px"
-                           v-model="addForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
+                           v-model="addForm.dicaType" filterable :filter-method="dicaTypeSearchValuesFilter"
                            clearable placeholder="请选择">
                   <el-option
-                    v-for="item in deptCategoryOptions"
+                    v-for="item in dicaTypeOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -249,26 +255,28 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="科室类别" prop="deptTypeID">
+
+              <el-form-item label="疾病分类" prop="diseaseCatagoryId">
                 <el-select style="float: left;width: 250px"
-                           v-model="addForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
-                           clearable
-                           placeholder="请选择">
+                           v-model="addForm.diseaseCatagoryId" filterable
+                           clearable placeholder="请选择">
                   <el-option
-                    v-for="item in deptTypeOptions"
+                    v-for="item in diseaseCategoryAllOptions"
                     :key="item.code"
                     :label="item.name"
-                    :value="item.id">
+                    :value="item.id"
+                    v-if="item.code==addForm.dicaType">
                     <span style="float: left">{{ item.name }}</span>
-                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                   </el-option>
                 </el-select>
               </el-form-item>
+
               <el-form-item>
-                <el-button type="primary" @click="submitForm('addForm')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('addForm')">立即新建</el-button>
                 <el-button @click="resetForm('addForm')">重置</el-button>
               </el-form-item>
             </el-form>
+
           </el-dialog>
 
 
@@ -323,47 +331,42 @@
 
 <script>
   import {
-    departmentGetList,
-    deptGetAllNamesAndCodes,
-    deptCategoryGetAllNamesAndCodes,
-    deptTypeGetAllNamesAndCodes,
-    deptGetByNameOrCode,
-    deptDeleteByID,
-    deptDeleteByChooses,
-    deptInfoUpdate,
-    deptInfoAdd,
+    diseaseGetList,
+    dicaTypeGetAllNamesAndCodes,
+    diseaseGetByNameOrCode,
+    diseaseDeleteByID,
+    diseaseDeleteByChooses,
+    diseaseInfoUpdate,
+    diseaseInfoAdd,
     downloadXLS,
     createXLS,
     uploadXLS,
-    createXLSTemplate
-  } from '../../api/departmentApi';
-  import Qs from 'qs';
+    createXLSTemplate,
+    diseaseCategoryGetAllNamesAndCodes,
+    diseaseCategoryGetByDicaTypeID
+  } from '../../api/diseaseApi';
 
   export default {
-    name: "Department",
+    name: "Disease",
     data() {
       return {
         //判断是否需要copy
         checkIfCopy: 0,
-        //所有科室的名称或编号
-        deptSearchValues: [],
-        //存放入选择列表的科室名称或编号
-        deptSearchOptions: [],
-        //所有科室分类的名称或编号
-        deptCategoryValues: [],
-        //存放入选择列表的科室分类名称或编号
-        deptCategoryOptions: [],
-        //所有科室类型的名称或编号
-        deptTypeValues: [],
-        //存放入选择列表的科室分类名称或编号
-        deptTypeOptions: [],
-
+        //所有疾病分类的名称或编号
+        diseaseCategoryValues: [],
+        //存放入选择列表的疾病分类名称或编号
+        diseaseCategoryOptions: [],
+        //所有疾病分类类别的名称或编号
+        dicaTypeIDValues: [],
+        //存放入选择列表的疾病分类名称或编号
+        dicaTypeOptions: [],
+        diseaseCategoryAllOptions:[],
 
         listParam: {
-          //选择的科室分类id
-          deptCategoryID: '',
-          //选择的科室类别id
-          typeID: ''
+          //选择的疾病分类id
+          diseaseCategoryID: '',
+          //选择的疾病类别id
+          dicaTypeID: ''
 
         },
         pageParams: {
@@ -374,66 +377,68 @@
           //总条数
           total: 0,
         },
-        //存放科室列表
-        departmentList: [],
+        //存放疾病列表
+        diseaseList: [],
         //copy部分
         copy: {
-          departmentListCopy: [],
+          diseaseListCopy: [],
           pageNumCopy: '',
           totalCopy: '',
-          //复制的科室分类id
-          deptCategoryIDCopy: undefined,
-          //复制的科室类别id
-          typeIDCopy: undefined
+          //复制的疾病分类id
+          diseaseCategoryIdCopy: undefined,
+          //复制的疾病类别id
+          dicaTypeIDCopy: undefined
 
         },
 
-        //科室搜索的名称或编号
+        //疾病搜索的名称或编号
         searchValue: '',
-        //选中的科室id
+        //选中的疾病id
         checkList: [],
-        //添加科室的对话框是否显示
+        //添加疾病的对话框是否显示
         addDialogFormVisible: false,
-        //修改科室的对话框是否显示
+        //修改疾病的对话框是否显示
         editDialogFormVisible: false,
-        //添加科室的内容
+        //添加疾病的内容
         addForm: {
-          deptName: '',
-          deptCode: '',
-          deptTypeID: '',
-          deptCategoryID: ''
+          name: '',
+          code: '',
+          diseaseIcd: '',
+          diseaseCatagoryId: '',
+          dicaType: ''
         },
-        //修改科室的内容
+        //修改疾病的内容
         editForm: {
           id: '',
-          deptName: '',
-          deptCode: '',
-          deptTypeID: '',
-          deptCategoryID: ''
-
+          name: '',
+          code: '',
+          diseaseIcd: '',
+          diseaseCatagoryId: '',
+          dicaType: '',
         },
-        //修改科室规则
+        //修改疾病规则
         rules: {
-          deptName: [
-            {required: true, message: '请输入科室名称', trigger: 'blur'},
+          name: [
+            {required: true, message: '请输入疾病名称', trigger: 'blur'},
             {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
 
           ],
-          deptCode: [
-            {required: true, message: '请输入科室编号', trigger: 'blur'},
+          code: [
+            {required: true, message: '请输入疾病编号', trigger: 'blur'},
             {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
           ],
-          deptCategoryID: [
-            {required: true, message: '请选择科室分类', trigger: 'change'}
+          diseaseIcd: [
+            {required: true, message: '请输入疾病国际Icd编码', trigger: 'blur'},
+            {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
           ],
-          deptTypeID: [
-            {required: true, message: '请选择科室类别', trigger: 'change'}
+          dicaType: [
+            {required: true, message: '请选择疾病分类类别', trigger: 'change'}
+          ],
+          diseaseCategoryId: [
+            {required: true, message: '请选择疾病分类', trigger: 'change'}
           ]
-
-
         },
-        //是否显示上传列表
-        whetherShowList: false,
+
         //导入条件选定
         uploadXLSCondition: {
           //遇到错误继续执行
@@ -447,20 +452,22 @@
 
     },
     methods: {
-      //获得所有科室列表
-      getDepartmentList() {
+      //获得所有疾病列表
+
+      getDiseaseList() {
+
         let params = {
-          deptCategoryID: this.listParam.deptCategoryID,
-          typeID: this.listParam.typeID,
+          diseaseCategoryID: this.listParam.diseaseCategoryID,
+          dicaTypeID: this.listParam.dicaTypeID,
           pageNum: this.pageParams.pageNum,
           pageSize: this.pageParams.pageSize
         };
-        departmentGetList(params).then((res) => {
+        diseaseGetList(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
               this.searchValue = '';
-              this.departmentList = data.data.list;
+              this.diseaseList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
               this.copyInfo();
@@ -477,28 +484,30 @@
       },
       //复制信息
       copyInfo() {
-        this.copy.departmentListCopy = this.departmentList;
+        this.copy.diseaseListCopy = this.diseaseList;
         this.copy.pageNumCopy = this.pageParams.pageNum;
         this.copy.totalCopy = this.pageParams.total;
-        this.copy.deptCategoryIDCopy = this.listParam.deptCategoryID;
-        this.copy.typeIDCopy = this.listParam.typeID;
+        this.copy.diseaseCategoryIdCopy = this.listParam.diseaseCategoryID;
+        this.copy.dicaTypeIDCopy = this.listParam.dicaTypeID;
       },
       //返回复制信息
       returnCopyInfo() {
-        this.departmentList = this.copy.departmentListCopy;
+        this.diseaseList = this.copy.diseaseListCopy;
         this.pageParams.pageNum = this.copy.pageNumCopy;
         this.pageParams.total = this.copy.totalCopy;
-        this.listParam.deptCategoryID = this.copy.deptCategoryIDCopy;
-        this.listParam.typeID = this.copy.typeIDCopy;
+        this.listParam.diseaseCategoryID = this.copy.diseaseCategoryIdCopy;
+        this.listParam.dicaTypeID = this.copy.dicaTypeIDCopy;
       },
-      //获得所有科室名称和编号
-      getAllDeptNamesAndCodes() {
-        deptGetAllNamesAndCodes().then((res) => {
+
+
+      //获得所有疾病分类类别名称和编号
+      getAllDicaTypeNamesAndCodes() {
+        dicaTypeGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.deptSearchValues = data.data;
-              this.deptSearchOptions = data.data;
+              this.dicaTypeIDValues = data.data;
+              this.dicaTypeOptions = data.data;
             } else if (data.status === 'WARN') {
               this.$message({
                 message: data.msg,
@@ -511,34 +520,15 @@
 
         });
       },
-      //获得所有科室类型名称和编号
-      getAllDeptTypeNamesAndCodes() {
-        deptTypeGetAllNamesAndCodes().then((res) => {
+      //获得所有疾病分类名称和编号
+      getAllDiseaseCategoryAndCodes() {
+        diseaseCategoryGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.deptTypeValues = data.data;
-              this.deptTypeOptions = data.data;
-            } else if (data.status === 'WARN') {
-              this.$message({
-                message: data.msg,
-                type: 'warning'
-              });
-            } else {
-              this.$message.error(data.msg);
-            }
-          }
-
-        });
-      },
-      //获得所有科室分类名称和编号
-      getAllDeptCategoryNamesAndCodes() {
-        deptCategoryGetAllNamesAndCodes().then((res) => {
-          if (res.status === 200) {
-            let data = res.data;
-            if (data.status === 'OK') {
-              this.deptCategoryValues = data.data;
-              this.deptCategoryOptions = data.data;
+              this.diseaseCategoryValues = data.data;
+              this.diseaseCategoryOptions = data.data;
+              this.diseaseCategoryAllOptions=data.data;
             } else if (data.status === 'WARN') {
               this.$message({
                 message: data.msg,
@@ -554,46 +544,48 @@
 
         });
       },
+      searchValueChange() {
+        if (this.searchValue === '') {
+          this.returnCopyInfo();
+          this.checkIfCopy = 0;
+        }
+      },
 
-      deptSearchValuesFilter(val) {
-        this.deptSearchOptions = val ? this.deptSearchValues.filter(this.createFilter(val)) : this.deptSearchValues;
+
+      dicaTypeSearchValuesFilter(val) {
+        this.dicaTypeOptions = val ? this.dicaTypeIDValues.filter(this.createFilter(val)) : this.dicaTypeIDValues;
       },
-      deptTypeSearchValuesFilter(val) {
-        this.deptTypeOptions = val ? this.deptTypeValues.filter(this.createFilter(val)) : this.deptTypeValues;
-      },
-      deptCategorySearchValuesFilter(val) {
-        this.deptCategoryOptions = val ? this.deptCategoryValues.filter(this.createFilter(val)) : this.deptCategoryValues;
-      },
+
+
 
       createFilter(queryString) {
         return (item) => {
           return (item.name.toLowerCase().indexOf(queryString.toLowerCase()) >= 0 || item.code.toLowerCase().indexOf(queryString.toLowerCase()) >= 0);
         };
       },
-//根据名称或编号查找科室信息
-      deptSearchChange(val) {
-        if (val === '') {
+//根据名称或编号查找疾病信息
+      diseaseSearchChange() {
+        if (this.searchValue === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;
         } else {
-
           if (this.checkIfCopy === 0) {
             this.copyInfo();
             this.checkIfCopy = this.checkIfCopy + 1;
           }
-          this.listParam.typeID = '';
-          this.listParam.deptCategoryID = '';
+          this.listParam.dicaTypeID = '';
+          this.listParam.diseaseCategoryID = '';
           this.pageParams.pageNum = 1;
           let params = {
             nameOrCode: this.searchValue,
             pageNum: this.pageParams.pageNum,
             pageSize: this.pageParams.pageSize
           };
-          deptGetByNameOrCode(params).then((res) => {
+          diseaseGetByNameOrCode(params).then((res) => {
               if (res.status === 200) {
                 let data = res.data;
                 if (data.status === 'OK') {
-                  this.departmentList = data.data.list;
+                  this.diseaseList = data.data.list;
                   this.pageParams.total = data.data.total;
                 } else if (data.status === 'WARN') {
                   this.$message({
@@ -608,10 +600,8 @@
           );
 
         }
-
-
       },
-      //科室的选择发生改变
+      //疾病的选择发生改变
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
@@ -621,24 +611,25 @@
       //处理页大小改变
       handleSizeChange(val) {
         this.pageParams.pageSize = val;
-        this.getDepartmentList();
+        this.getDiseaseList();
       },
       //处理当前页改变
       handleCurrentChange(val) {
         this.pageParams.pageNum = val;
-        this.getDepartmentList();
+        this.getDiseaseList();
       },
-      //处理选择科室类型或科室分类发生改变
-      handleDeptTypeOrDeptCategoryChange() {
+      //处理选择的疾病分类类别或疾病分类发生改变
+      handleDicaTypeOrDiseaseCategoryChange() {
         this.pageParams.pageNum = 1;
-        this.getDepartmentList();
+        this.searchValue = '';
+        this.getDiseaseList();
       },
       //删除对象
       handleDelete(val) {
         let id = {'id': val};
         this.$confirm('确认删除？')
           .then(_ => {
-            deptDeleteByID(id).then((res) => {
+            diseaseDeleteByID(id).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -666,20 +657,17 @@
       //刷新页面信息
       freshInfo() {
         if (this.searchValue === '') {
-          this.getDepartmentList();
+          this.getDiseaseList();
         } else {
-          this.deptSearchChange(this.searchValue);
+          this.diseaseSearchChange(this.searchValue);
         }
-        this.getAllDeptNamesAndCodes();
-        this.getAllDeptTypeNamesAndCodes();
-        this.getAllDeptCategoryNamesAndCodes();
       },
-      //删除所选科室
+      //删除所选疾病
       deleteByChoose() {
         this.$confirm('确认批量删除？')
           .then(_ => {
             let params = {"id": this.checkList};
-            deptDeleteByChooses(params).then((res) => {
+            diseaseDeleteByChooses(params).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -705,31 +693,64 @@
           .catch(_ => {
           });
       },
+      //根据疾病分类类别获得疾病分类
+      getDiseaseCategoriesByDicaTypeID() {
+        if (this.listParam.dicaTypeID === '')
+          this.getAllDiseaseCategoryAndCodes();
+        else {
+          let params = {"id": this.listParam.dicaTypeID};
+          diseaseCategoryGetByDicaTypeID(params).then((res) => {
+              if (res.status === 200) {
+                let data = res.data;
+                if (data.status === 'OK') {
+                  this.diseaseCategoryOptions = data.data;
+                  this.diseaseCategoryValues = data.data;
+                  this.listParam.deptCategoryID='';
+                  this.freshInfo();
+
+                } else if (data.status === 'WARN') {
+                  this.$message({
+                    message: data.msg,
+                    type: 'warning'
+                  });
+                } else {
+                  this.$message.error(data.msg);
+                }
+              }
+            }
+          ).catch(_ => {
+          });
+        }
+        this.handleDicaTypeOrDiseaseCategoryChange();
+      },
       //点击编辑
       handleEdit(propRow) {
         this.editForm.id = propRow.id;
-        this.editForm.deptName = propRow.deptName;
-        this.editForm.deptCode = propRow.deptCode;
-        this.editForm.deptCategoryID = propRow.deptCategoryID;
-        this.editForm.deptTypeID = propRow.deptTypeID;
+        this.editForm.name = propRow.name;
+        this.editForm.code = propRow.code;
+        this.editForm.diseaseIcd=propRow.diseaseIcd;
+        this.editForm.dicaType = propRow.dicaTypeID;
+        this.editForm.diseaseCatagoryId = propRow.diseaseCategoryId;
         this.editDialogFormVisible = true;
       },
-      //点击添加科室
+      //点击添加疾病
       handleAdd() {
+        this.editForm.id = '';
+        this.editForm.name = '';
+        this.editForm.code = '';
+        this.editForm.diseaseIcd='';
+        this.editForm.dicaType = '';
+        this.editForm.diseaseCatagoryId = '';
         this.addDialogFormVisible = true;
-        this.addForm.deptName = '';
-        this.addForm.deptCode = '';
-        this.addForm.deptCategoryID = '';
-        this.addForm.deptTypeID = '';
       },
       //提交（编辑表单）或（添加表单）
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (formName === 'editForm')
-              this.$confirm('确认修改科室信息？')
+              this.$confirm('确认修改疾病信息？')
                 .then(_ => {
-                  deptInfoUpdate(this.editForm).then((res) => {
+                  diseaseInfoUpdate(this.editForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -755,9 +776,9 @@
                 .catch(_ => {
                 });
             else if (formName === 'addForm')
-              this.$confirm('确认添加科室信息？')
+              this.$confirm('确认添加疾病信息？')
                 .then(_ => {
-                  deptInfoAdd(this.addForm).then((res) => {
+                  diseaseInfoAdd(this.addForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -792,7 +813,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      //导出科室信息的XLS文件
+      //导出疾病信息的XLS文件
       getDownloadXLS() {
         createXLS().then((res) => {
           if (res.status === 200) {
@@ -877,7 +898,7 @@
             this.uploadXLSCondition.errorHappenContinue = false;
           });
         }).then(_ => {
-          this.$confirm('科室信息重复是否覆盖？').then(_ => {
+          this.$confirm('疾病信息重复是否覆盖？').then(_ => {
             this.uploadXLSCondition.repeatCoverage = true;
           }).catch(_ => {
             this.uploadXLSCondition.repeatCoverage = false;
@@ -909,18 +930,12 @@
         })
       },
 
-      handleAvatarSuccess(file) {
-        this.whetherShowList = false;
-        console.log(file);
-      }
-
 
     },
     mounted() {
-      this.getDepartmentList();
-      this.getAllDeptNamesAndCodes();
-      this.getAllDeptTypeNamesAndCodes();
-      this.getAllDeptCategoryNamesAndCodes();
+      this.getDiseaseList();
+      this.getAllDicaTypeNamesAndCodes();
+      this.getAllDiseaseCategoryAndCodes();
     }
   }
 </script>

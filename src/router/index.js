@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Vuex from 'vuex'
-import Department from '@/components/basic/Department'
+import Department from '@/components/Basic/Department'
+import User from '@/components/Basic/User'
+import SettlementCategory from '@/components/Basic/SettlementCategory'
+import RegistrationLevel from '@/components/Basic/RegistrationLevel'
+import FMedItem from '@/components/Basic/FMedItem'
+import Disease from '@/components/Basic/Disease'
 import Home from '@/components/Home'
 import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
@@ -88,6 +93,57 @@ export const adminRoutes = [
         meta: {
           name: '部门管理',
         },
+
+      },
+      {
+        path: '/baseInfoManage/userManage',
+        component: User,
+        iconCls: 'el-icon-message',
+        name: '用户管理',
+        meta: {
+          name: '用户管理',
+        },
+
+      },
+      {
+        path: '/baseInfoManage/setCatManage',
+        component: SettlementCategory,
+        iconCls: 'el-icon-message',
+        name: '结算类别管理',
+        meta: {
+          name: '结算类别管理',
+        },
+
+      },
+      {
+        path: '/baseInfoManage/regLevManage',
+        component: RegistrationLevel,
+        iconCls: 'el-icon-message',
+        name: '挂号级别管理',
+        meta: {
+          name: '挂号级别管理',
+        },
+
+      },
+      {
+        path: '/baseInfoManage/fMedItemManage',
+        component: FMedItem,
+        iconCls: 'el-icon-message',
+        name: '非药品项目管理',
+        meta: {
+          name: '非药品项目管理',
+        },
+
+      },
+      {
+        path: '/baseInfoManage/diseaseManage',
+        component: Disease,
+        iconCls: 'el-icon-message',
+        name: '诊断目录管理',
+        meta: {
+          name: '诊断目录管理',
+        },
+
       },
     ]
   },
