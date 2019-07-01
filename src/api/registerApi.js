@@ -16,7 +16,8 @@ export const register = (isHaveCard, patientName, identityCardNo, gender,
       '&identityCardNo=' + identityCardNo + '&gender=' + gender + '&birthday=' +
       birthday + '&familyAddress=' + familyAddress + '&passwd=' + passwd +
       '&registeredLevelID=' + registeredLevelID + '&departmentID=' +
-      departmentID + '&doctorID=' + doctorID + '&seeDoctorDate=' + seeDoctorDate +
+      departmentID + '&doctorID=' + doctorID + '&seeDoctorDate=' +
+      seeDoctorDate +
       '&regSourceID=' + regSourceID + '&payID=' + payID + '&expense=' + expense
 
   return axios.post(
@@ -35,7 +36,7 @@ export const getDeptList = () => {
 //从后台获取挂号级别列表
 export const getRegLevelList = () => {
 
-  return axios.post(`${hospital}/registrationLevel/list`)
+  return axios.post(`${hospital}/registrationLevel//findAllRegLevNamesAndCodes`)
 
 }
 
@@ -67,5 +68,14 @@ export const calculateRegFee = (listParams) => {
   listParams = Qs.stringify(listParams)
 
   return axios.post(`${hospital}/register/calculateExpanse`, listParams,
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+}
+
+//从后台获取所有挂号信息
+export const getRegInfoList = (listParams) => {
+
+  listParams=Qs.stringify(listParams);
+
+  return axios.post(`${hospital}/register/allInfo`, listParams,
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 }

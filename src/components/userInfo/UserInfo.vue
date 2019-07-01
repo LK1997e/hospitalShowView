@@ -1,10 +1,10 @@
 <template>
   <el-container>
     <el-aside width="350px">
-      <div style="margin: 15%">
-              <img :src=this.user.photoLocation style="width: 200px; height: 200px;">
-      </div>
-    </el-aside>
+    <div style="margin: 15%">
+      <img :src=this.user.photoLocation style="width: 200px; height: 200px;">
+    </div>
+  </el-aside>
     <el-main>
   <el-form >
     <el-row type="flex" class="row-bg" >

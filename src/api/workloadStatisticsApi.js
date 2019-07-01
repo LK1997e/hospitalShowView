@@ -26,3 +26,11 @@ export const workloadStatisticsGetList = (realName,deptName,dateStart,dateEnd,pa
 export const userGetALLNamesAndIDs=_=>{
   return axios.post(`${hospital}/user/findAllUserNamesAndIDs`);
 };
+
+export const departmentWorkCharts =_=>{
+  return axios.post(`${hospital}/WorkloadStatistics/departmentWorkCharts`);
+};
+
+export const userWorkCharts =_=>{
+  return axios.post(`${hospital}/WorkloadStatistics/userWorkCharts`);
+};

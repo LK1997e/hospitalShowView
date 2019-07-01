@@ -1,5 +1,6 @@
 <template>
-  <el-form :model="loginCheckForm"  ref="loginCheckForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <div id="logo">
+  <el-form :model="loginCheckForm"  ref="loginCheckForm" label-position="left" label-width="0px" class="demo-ruleForm login-container" style="margin-top: 200px">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="userName">
       <el-input
@@ -25,6 +26,7 @@
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
+  </div>
 </template>
 
 <script>
@@ -175,6 +177,13 @@
 </script>
 
 <style lang="scss" scoped>
+  #logo{
+    background: url("../../../static/hospital.jpg");
+    background-size: 100% 100%;
+    height: 100%;
+    position: fixed;
+    width: 100%
+  }
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
