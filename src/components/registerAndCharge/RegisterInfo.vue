@@ -109,7 +109,24 @@
                         <el-table-column label = "挂号费用" prop = "expense">
                         </el-table-column>
 
+                        <el-table-column label = "操作">
+                            <template slot-scope = "props">
+                                <el-button icon = "el-icon-edit" @click = "confirm(props.row.id)"
+                                           type = "text" size = "small"
+                                           v-if = "props.row.isSeenDoctor === '0' && props.row.regStatus === '1'">
+                                    退号
+                                </el-button>
+                                <el-button icon = "el-icon-edit" type = "text" size = "small" disabled = "true"
+                                           v-else>
+                                    退号
+                                </el-button>
+                            </template>
+                        </el-table-column>
+
                     </el-table>
+
+                    <hr>
+
                 </el-container>
             </el-row>
 
@@ -121,7 +138,7 @@
 
 <script>
 
-  import {getRegInfo, getRegInfoList, getTodayWorkload} from '../../api/registerApi'
+  import {getRegInfo, getRegInfoList, getTodayWorkload, retreat} from '../../api/registerApi'
 
   export default {
     name: 'RegisterInfo',
@@ -133,6 +150,9 @@
         todayWorkload: '',
         //存放挂号信息列表
         regInfoList: [],
+
+        //退号的对话框是否显示
+        retreatDialogFormVisible: false,
 
         pageParams: {
           //第几页
@@ -321,7 +341,41 @@
           }
         })
       },
-    },
+
+      //退号
+      retreat(regInfoID) {
+        retreat(regInfoID).then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.$message({
+                type: 'success',
+                message: '退号成功!',
+              })
+            }
+          } else {
+            this.$message.error('退号失败!')
+          }
+        })
+      },
+
+      confirm(val) {
+
+        this.$confirm('退号操作无法撤销, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          this.retreat(val)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退号',
+          })
+        })
+      },
+
+    },//method end
 
     mounted() {
       this.getRegInfoList()

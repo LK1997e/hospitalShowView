@@ -1,8 +1,9 @@
 <template>
+
     <el-container>
 
         <el-header style = "line-height: 60px;background:#41cde5;">
-            <el-row type = "flex" align = "middle" class = "row-bg">
+            <el-row type = "flex" align = "middle" style = "height: 60px;" class = "row-bg">
                 <el-col style = "text-align: center;" span = "2" class = "grid-content">
                     <span style = "font-size:20px;color: white;">挂号</span>
                 </el-col>
@@ -500,18 +501,13 @@
             let data = res.data
             if (data.status === 'OK') {
 
-              this.$notify({
-                title: '成功',
+              this.$message({
                 message: '挂号成功！费用为: ' + expense + '￥',
                 type: 'success',
-                showClose: false,
               })
 
             } else {
-              this.$notify({
-                title: '失败',
-                message: data.msg,
-              })
+              this.$message.error('挂号失败!' + data.msg)
             }
           }
         })

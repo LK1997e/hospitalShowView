@@ -94,3 +94,13 @@ export const getTodayWorkload = () => {
 
   return axios.post(`${hospital}/register/todayWorkload`)
 }
+
+//退号
+export const retreat = (regInfoID) => {
+
+  let params = 'regInfoID=' + regInfoID
+
+  return axios.post(`${hospital}/register/retreat`, params,
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+
+}
