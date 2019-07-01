@@ -26,6 +26,7 @@ import Register from '../components/registerAndCharge/Register'
 import SearchPatient from '@/components/outpatient/SearchPatient'
 import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
 import ApplyInspection from '@/components/outpatient/ApplyInspection'
+import RegisterInfo from '../components/registerAndCharge/RegisterInfo'
 
 Vue.use(Router)
 Vue.use(Vuex)
@@ -495,6 +496,15 @@ export const registerAndChargeRoutes = [
           name: '挂号',
         },
       },
+      {
+        path: '/reg/RegInfo',
+        component: RegisterInfo,
+        name: '挂号列表',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '挂号列表',
+        },
+      }
     ]
   },
   {
