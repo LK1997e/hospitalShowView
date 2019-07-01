@@ -479,6 +479,7 @@
       },
 //根据名称或编号查找结算类别信息
       setCatSearchChange(val) {
+        this.getAllSetCatNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;

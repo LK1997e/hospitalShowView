@@ -4,7 +4,7 @@
 
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
-          <span style="font-size:20px;color: white;">排班规则管理</span>
+          <span style="font-size:20px;color: white;">排班信息管理</span>
         </el-col>
       </el-row>
 
@@ -16,6 +16,11 @@
           <el-divider content-position="left">管理操作</el-divider>
           <el-col :span="3" class="el-col-display">
             <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
+                     @click="generate">生成信息
+            </el-link>
+          </el-col>
+          <el-col :span="3" class="el-col-display">
+            <el-link icon="el-icon-circle-plus" style="font-size: 16px;color: #11b95c"
                      @click="handleAdd">添加
             </el-link>
           </el-col>
@@ -23,7 +28,7 @@
 
             <el-upload
               name="file"
-              action="http://localhost:8081/hospital/scheduleRule/upload"
+              action="http://localhost:8081/hospital/schedule/upload"
               :http-request="myUpload"
               :before-upload="handleBeforeUpload"
 
@@ -60,18 +65,29 @@
         <el-col :span="24"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col :span="1" class="el-col-display">排班日</el-col>
+          <el-col :span="1" class="el-col-display">开始日期</el-col>
           <el-col :span="4">
-            <el-select style="float: left;margin-left: 8px" @change="handleWeekOrDoctorChange" filterable
-                       v-model="listParam.week" clearable placeholder="请选择">
-              <el-option key="星期日" label="星期日" :value="0"></el-option>
-              <el-option key="星期一" label="星期一" :value="1"></el-option>
-              <el-option key="星期二" label="星期二" :value="2"></el-option>
-              <el-option key="星期三" label="星期三" :value="3"></el-option>
-              <el-option key="星期四" label="星期四" :value="4"></el-option>
-              <el-option key="星期五" label="星期五" :value="5"></el-option>
-              <el-option key="星期六" label="星期六" :value="6"></el-option>
-            </el-select>
+            <el-date-picker
+              style="float: left;margin-left: 8px" @change="handleDateOrDoctorChange"
+              v-model="listParam.startDate"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+              >
+            </el-date-picker>
+          </el-col>
+          <el-col :span="1" class="el-col-display">结束日期</el-col>
+          <el-col :span="4">
+            <el-date-picker
+              style="float: left;margin-left: 8px" @change="handleDateOrDoctorChange"
+              v-model="listParam.endDate"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
           </el-col>
           <el-col :span="1" class="el-col-display">排班科室</el-col>
           <el-col :span="4">
@@ -90,7 +106,7 @@
           </el-col>
           <el-col :span="1" class="el-col-display">排班医生</el-col>
           <el-col :span="4">
-            <el-select style="float: left;margin-left: 8px" @change="handleWeekOrDoctorChange"
+            <el-select style="float: left;margin-left: 8px" @change="handleDateOrDoctorChange"
                        v-model="listParam.doctorID" filterable
                        clearable placeholder="请选择">
               <el-option
@@ -111,11 +127,11 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="left">排班规则列表</el-divider>
+            <el-divider content-position="left">排班信息列表</el-divider>
           </el-header>
           <el-table
             ref="multipleTable"
-            :data="scheduleRuleList"
+            :data="scheduleList"
             style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column type="expand">
@@ -142,10 +158,8 @@
             </el-table-column>
             <el-table-column label="编号" prop="id">
             </el-table-column>
-            <el-table-column label="排班日">
-              <template slot-scope="props">
-                {{weekDay[props.row.week]}}
-              </template>
+            <el-table-column label="排班日期" prop="onDutyDate">
+
             </el-table-column>
             <el-table-column label="排班科室" prop="deptName">
             </el-table-column>
@@ -157,6 +171,9 @@
             </el-table-column>
             <el-table-column label="排班限额" prop="limitNumber">
             </el-table-column>
+            <el-table-column label="剩余号数" prop="remainingAmount">
+            </el-table-column>
+
             <el-table-column label="操作1">
               <template slot-scope="props">
                 <el-button icon="el-icon-edit" @click.native.prevent="handleEdit(props.row)" type="text"
@@ -193,20 +210,18 @@
           </div>
 
 
-          <el-dialog title="修改排班规则信息" :visible.sync="editDialogFormVisible" width="40%">
+          <el-dialog title="修改排班信息信息" :visible.sync="editDialogFormVisible" width="40%">
             <el-form :model="editForm" :rules="rules" ref="editForm" label-width="150px" class="demo-ruleForm">
-              <el-form-item label="排班日" prop="week">
-                <el-select style="float: left;width: 250px"
-                           v-model="editForm.week" filterable
-                           clearable placeholder="请选择">
-                  <el-option key="星期日" label="星期日" :value="0"></el-option>
-                  <el-option key="星期一" label="星期一" :value="1"></el-option>
-                  <el-option key="星期二" label="星期二" :value="2"></el-option>
-                  <el-option key="星期三" label="星期三" :value="3"></el-option>
-                  <el-option key="星期四" label="星期四" :value="4"></el-option>
-                  <el-option key="星期五" label="星期五" :value="5"></el-option>
-                  <el-option key="星期六" label="星期六" :value="6"></el-option>
-                </el-select>
+              <el-form-item label="排班日期" prop="onDutyDate">
+                <el-date-picker
+                  style="float: left;width: 250px"
+                  v-model="editForm.onDutyDate"
+                  type="date"
+                  placeholder="选择日期"
+                  format="yyyy 年 MM 月 dd 日"
+                  value-format="yyyy-MM-dd"
+                  :picker-options="pickerOptions0">
+                </el-date-picker>
               </el-form-item>
               <el-form-item label="排班科室" prop="deptID">
                 <el-select style="float: left;width: 250px" @change="getDoctorsByDeptID('1')"
@@ -281,21 +296,19 @@
 
           </el-dialog>
 
-          <!--添加排班规则信息-->
-          <el-dialog title="添加排班规则信息" :visible.sync="addDialogFormVisible" width="40%">
+          <!--添加排班信息信息-->
+          <el-dialog title="添加排班信息信息" :visible.sync="addDialogFormVisible" width="40%">
             <el-form :model="addForm" :rules="rules" ref="addForm" label-width="150px" class="demo-ruleForm">
-              <el-form-item label="排班日" prop="week">
-                <el-select style="float: left;width: 250px"
-                           v-model="addForm.week" filterable
-                           clearable placeholder="请选择">
-                  <el-option key="星期日" label="星期日" :value="0"></el-option>
-                  <el-option key="星期一" label="星期一" :value="1"></el-option>
-                  <el-option key="星期二" label="星期二" :value="2"></el-option>
-                  <el-option key="星期三" label="星期三" :value="3"></el-option>
-                  <el-option key="星期四" label="星期四" :value="4"></el-option>
-                  <el-option key="星期五" label="星期五" :value="5"></el-option>
-                  <el-option key="星期六" label="星期六" :value="6"></el-option>
-                </el-select>
+              <el-form-item label="排班日期" prop="onDutyDate" :formatter="dateFormat">
+                <el-date-picker
+                  style="float: left;width: 250px"
+                  v-model="addForm.onDutyDate"
+                  type="date"
+                  placeholder="选择日期"
+                  format="yyyy 年 MM 月 dd 日"
+                  value-format="yyyy-MM-dd"
+                  :picker-options="pickerOptions0">
+                </el-date-picker>
               </el-form-item>
               <el-form-item label="排班科室" prop="deptID">
                 <el-select style="float: left;width: 250px" @change="getDoctorsByDeptID('2')"
@@ -421,30 +434,36 @@
 
 <script>
   import {
-    scheduleRuleGetList,
-    scheduleRuleDeleteByID,
-    scheduleRuleDeleteByChooses,
-    scheduleRuleInfoUpdate,
-    scheduleRuleInfoAdd,
+    scheduleGetList,
+    scheduleDeleteByID,
+    scheduleDeleteByChooses,
+    scheduleInfoUpdate,
+    scheduleInfoAdd,
     downloadXLS,
     createXLS,
     uploadXLS,
     createXLSTemplate,
+    generateInfo
+  } from '../../api/scheduleApi';
+  import {deptGetAllNamesAndCodes} from '../../api/departmentApi';
+  import {regLevGetAllNamesAndCodes} from '../../api/registrationLevelApi';
+  import {
     doctorGetAllNamesAndCodes,
     doctorGetByDeptID,
     onDutyTimeGetAllNamesAndCodes
-  } from '../../api/scheduleRuleApi';
-  import {deptGetAllNamesAndCodes} from '../../api/departmentApi';
-  import {regLevGetAllNamesAndCodes} from '../../api/registrationLevelApi';
+  } from '../../api/scheduleRuleApi'
+  import feCha from 'fecha'
 
 
   export default {
-    name: "ScheduleRule",
+    name: "Schedule",
     data() {
       return {
-        //判断是否需要copy
-        checkIfCopy: 0,
-        weekDay: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() < Date.now();
+          }
+        },
         //所有医生的名称或编号
         doctorValues: [],
         //存放入选择列表的医生名称或编号
@@ -470,10 +489,11 @@
         addDoctorValues: [],
 
         listParam: {
-          week: '',
+          startDate: '',
+          endDate: '',
           //选择的医生id
           doctorID: '',
-          //选择的排班规则类别id
+          //选择的排班信息类别id
           deptID: ''
 
         },
@@ -485,37 +505,37 @@
           //总条数
           total: 0,
         },
-        //存放排班规则列表
-        scheduleRuleList: [],
-        //选中的排班规则id
+        //存放排班信息列表
+        scheduleList: [],
+        //选中的排班信息id
         checkList: [],
-        //添加排班规则的对话框是否显示
+        //添加排班信息的对话框是否显示
         addDialogFormVisible: false,
-        //修改排班规则的对话框是否显示
+        //修改排班信息的对话框是否显示
         editDialogFormVisible: false,
-        //添加排班规则的内容
+        //添加排班信息的内容
         addForm: {
-          week: '',
+          onDutyDate: '',
           deptID: '',
           onDutyDoctorID: '',
           levelNameID: '',
           onDutyTimeID: '',
           limitNumber: ''
         },
-        //修改排班规则的内容
+        //修改排班信息的内容
         editForm: {
           id: '',
-          week: '',
+          onDutyDate: '',
           deptID: '',
           onDutyDoctorID: '',
           levelNameID: '',
           onDutyTimeID: '',
           limitNumber: ''
         },
-        //修改排班规则规则
+        //修改排班信息规则
         rules: {
-          week: [
-            {required: true, message: '请选择排班日', trigger: 'change'}
+          onDutyDate: [
+            {required: true, message: '请选择排班日期', trigger: 'change'}
           ],
           deptID: [
             {required: true, message: '请选择排班科室', trigger: 'change'}
@@ -541,30 +561,35 @@
           errorHappenContinue: false,
           //遇到重复的进行覆盖
           repeatCoverage: false
-        }
+        },
 
 
       }
 
     },
     methods: {
-      //获得所有排班规则列表
+      // 日期显示转换
+      dateFormat(row, column, cellValue) {
+        return cellValue ? feCha.format(new Date(cellValue), 'YYYY-MM-DD') : '';
+      },
+      //获得所有排班信息列表
 
-      getScheduleRuleList() {
+      getScheduleList() {
 
         let params = {
           doctorID: this.listParam.doctorID,
           deptID: this.listParam.deptID,
-          week: this.listParam.week,
+          startDate: this.listParam.startDate,
+          endDate:this.listParam.endDate,
           pageNum: this.pageParams.pageNum,
           pageSize: this.pageParams.pageSize
         };
-        scheduleRuleGetList(params).then((res) => {
+        scheduleGetList(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
               this.searchValue = '';
-              this.scheduleRuleList = data.data.list;
+              this.scheduleList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
             } else if (data.status === 'WARN') {
@@ -674,13 +699,32 @@
         });
       },
 
+      //根据排班规则自动生成排班信息
+      generate() {
+        generateInfo().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.$message({
+                message: data.msg,
+                type: 'success'
+              });
+              this.freshInfo();
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
 
-      searchValueChange() {
-        if (this.searchValue === '') {
-          this.returnCopyInfo();
-          this.checkIfCopy = 0;
-        }
+        });
       },
+
+
+
 
       deptSearchValuesFilter(val) {
         this.deptOptions = val ? this.deptValues.filter(this.createFilter(val)) : this.deptValues;
@@ -707,7 +751,7 @@
         };
       },
 
-      //排班规则的选择发生改变
+      //排班信息的选择发生改变
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
@@ -717,21 +761,21 @@
       //处理页大小改变
       handleSizeChange(val) {
         this.pageParams.pageSize = val;
-        this.getScheduleRuleList();
+        this.getScheduleList();
       },
       //处理当前页改变
       handleCurrentChange(val) {
         this.pageParams.pageNum = val;
-        this.getScheduleRuleList();
+        this.getScheduleList();
       },
       refreshByDoctorChange(state) {
         if (state === '1') {
-          if (this.editForm.deptID ==='')
+          if (this.editForm.deptID === '')
             this.getAllDoctorNamesAndCodes('1');
           else
             this.getDoctorsByDeptID('4');
         } else if (state === '2') {
-          if (this.addForm.deptID ==='')
+          if (this.addForm.deptID === '')
             this.getAllDoctorNamesAndCodes('2');
           else
             this.getDoctorsByDeptID('5');
@@ -739,20 +783,20 @@
 
       },
       //处理选择的科室或医生发生改变
-      handleWeekOrDoctorChange() {
+      handleDateOrDoctorChange() {
         if (this.listParam.deptID === '')
           this.getAllDoctorNamesAndCodes('0');
         else
           this.getDoctorsByDeptID('3');
         this.pageParams.pageNum = 1;
-        this.getScheduleRuleList();
+        this.getScheduleList();
       },
       //删除对象
       handleDelete(val) {
         let id = {'id': val};
         this.$confirm('确认删除？')
           .then(_ => {
-            scheduleRuleDeleteByID(id).then((res) => {
+            scheduleDeleteByID(id).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -779,14 +823,14 @@
       },
       //刷新页面信息
       freshInfo() {
-        this.getScheduleRuleList();
+        this.getScheduleList();
       },
-      //删除所选排班规则
+      //删除所选排班信息
       deleteByChoose() {
         this.$confirm('确认批量删除？')
           .then(_ => {
             let params = {"id": this.checkList};
-            scheduleRuleDeleteByChooses(params).then((res) => {
+            scheduleDeleteByChooses(params).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -873,7 +917,7 @@
       //点击编辑
       handleEdit(propRow) {
         this.editForm.id = propRow.id;
-        this.editForm.week = propRow.week;
+        this.editForm.onDutyDate = propRow.onDutyDate;
         this.editForm.deptID = propRow.deptID;
         this.editForm.onDutyDoctorID = propRow.onDutyDoctorID;
         this.editForm.levelNameID = propRow.levelNameID;
@@ -881,9 +925,9 @@
         this.editForm.limitNumber = propRow.limitNumber;
         this.editDialogFormVisible = true;
       },
-      //点击添加排班规则
+      //点击添加排班信息
       handleAdd() {
-        this.addForm.week = '';
+        this.addForm.onDutyDate = '';
         this.addForm.deptID = '';
         this.addForm.onDutyDoctorID = '';
         this.addForm.levelNameID = '';
@@ -896,9 +940,9 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (formName === 'editForm')
-              this.$confirm('确认修改排班规则信息？')
+              this.$confirm('确认修改排班信息信息？')
                 .then(_ => {
-                  scheduleRuleInfoUpdate(this.editForm).then((res) => {
+                  scheduleInfoUpdate(this.editForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -924,9 +968,9 @@
                 .catch(_ => {
                 });
             else if (formName === 'addForm')
-              this.$confirm('确认添加排班规则信息？')
+              this.$confirm('确认添加排班信息信息？')
                 .then(_ => {
-                  scheduleRuleInfoAdd(this.addForm).then((res) => {
+                  scheduleInfoAdd(this.addForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -961,7 +1005,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      //导出排班规则信息的XLS文件
+      //导出排班信息信息的XLS文件
       getDownloadXLS() {
         createXLS().then((res) => {
           if (res.status === 200) {
@@ -1046,7 +1090,7 @@
             this.uploadXLSCondition.errorHappenContinue = false;
           });
         }).then(_ => {
-          this.$confirm('排班规则信息重复是否覆盖？').then(_ => {
+          this.$confirm('排班信息信息重复是否覆盖？').then(_ => {
             this.uploadXLSCondition.repeatCoverage = true;
           }).catch(_ => {
             this.uploadXLSCondition.repeatCoverage = false;
@@ -1081,7 +1125,7 @@
 
     },
     mounted() {
-      this.getScheduleRuleList();
+      this.getScheduleList();
       this.getAllDeptNamesAndCodes();
       this.getAllDoctorNamesAndCodes('0');
       this.getAllDoctorNamesAndCodes('1');

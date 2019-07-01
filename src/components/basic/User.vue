@@ -209,7 +209,7 @@
               <el-form-item label="所属科室" prop="departmentID">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.departmentID" filterable :filter-method="deptSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
                     v-for="item in deptSearchOptions"
                     :key="item.code"
@@ -224,8 +224,7 @@
               <el-form-item label="用户类别" prop="typeID" width="30%">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.typeID" filterable :filter-method="userTypeSearchValuesFilter"
-                           clearable
-                           placeholder="请选择">
+                           clearable  placeholder="请选择" @change="this.getAllUserTypeNamesAndCodes">
                   <el-option
                     v-for="item in userTypeOptions"
                     :key="item.code"
@@ -240,7 +239,7 @@
                             v-if="editForm.typeID===108||editForm.typeID===109">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.rankID" filterable :filter-method="rankSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllUserRankNamesAndCodes">
                   <el-option
                     v-for="item in rankSearchOptions"
                     :key="item.code"
@@ -284,7 +283,7 @@
               <el-form-item label="所属科室" prop="departmentID">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.departmentID" filterable :filter-method="deptSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
                     v-for="item in deptSearchOptions"
                     :key="item.code"
@@ -300,7 +299,7 @@
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.typeID" filterable :filter-method="userTypeSearchValuesFilter"
                            clearable
-                           placeholder="请选择">
+                           placeholder="请选择" @change="this.getAllUserTypeNamesAndCodes">
                   <el-option
                     v-for="item in userTypeOptions"
                     :key="item.code"
@@ -315,7 +314,7 @@
                             v-if="addForm.typeID===108||addForm.typeID===109">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.rankID" filterable :filter-method="rankSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllUserRankNamesAndCodes">
                   <el-option
                     v-for="item in rankSearchOptions"
                     :key="item.code"
@@ -334,7 +333,7 @@
                            clearable placeholder="请选择">
                   <el-option label="是" value="1"></el-option>
                   <el-option label="否" value="0"></el-option>
-                </el-select>
+                  </el-select>
               </el-form-item>
 
 
@@ -695,6 +694,7 @@
 //根据名称或编号查找用户信息
 
       userSearchChange(val) {
+        this.getAllUserNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;
@@ -754,6 +754,8 @@
       },
       //处理选择的渴死类型或所属科室发生改变
       handleDeptOrUserTypeChange() {
+        this.getAllDeptNamesAndCodes();
+        this.getAllUserTypeNamesAndCodes();
         this.pageParams.pageNum = 1;
         this.getUserList();
       },

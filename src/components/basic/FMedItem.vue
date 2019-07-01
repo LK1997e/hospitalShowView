@@ -218,7 +218,7 @@
               <el-form-item label="所属费用科目" prop="expClassID">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.expClassID" filterable :filter-method="expClassSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllExpClassNamesAndCodes">
                   <el-option
                     v-for="item in expClassOptions"
                     :key="item.code"
@@ -233,7 +233,7 @@
               <el-form-item label="执行科室" prop="deptID">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.deptID" filterable :filter-method="departmentSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
                     v-for="item in departmentOptions"
                     :key="item.code"
@@ -249,7 +249,7 @@
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.recordType" filterable :filter-method="fMedItemTypeSearchValuesFilter"
                            clearable
-                           placeholder="请选择">
+                           placeholder="请选择" @change="this.getAllFMedItemTypeNamesAndCodes">
                   <el-option
                     v-for="item in fMedItemTypeOptions"
                     :key="item.code"
@@ -300,7 +300,7 @@
               <el-form-item label="所属费用科目" prop="expClassID">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.expClassID" filterable :filter-method="expClassSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllExpClassNamesAndCodes">
                   <el-option
                     v-for="item in expClassOptions"
                     :key="item.code"
@@ -315,7 +315,7 @@
               <el-form-item label="执行科室" prop="deptID">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.deptID" filterable :filter-method="departmentSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
                     v-for="item in departmentOptions"
                     :key="item.code"
@@ -331,7 +331,7 @@
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.recordType" filterable :filter-method="fMedItemTypeSearchValuesFilter"
                            clearable
-                           placeholder="请选择">
+                           placeholder="请选择" @change="this.getAllFMedItemTypeNamesAndCodes">
                   <el-option
                     v-for="item in fMedItemTypeOptions"
                     :key="item.code"
@@ -689,6 +689,7 @@
       },
 //根据名称或编号查找项目信息
       fMedItemSearchChange(val) {
+        this.getAllFMedItemNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;
@@ -745,6 +746,8 @@
       },
       //处理选择的项目类型或科室名称发生改变
       handleFMedItemTypeOrDeptChange() {
+        this.getAllFMedItemTypeNamesAndCodes();
+        this.getAllDeptNamesAndCodes();
         this.pageParams.pageNum = 1;
         this.getFMedItemList();
       },

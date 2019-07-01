@@ -40,7 +40,7 @@
           <el-col :span="2" class="el-col-display">疾病分类</el-col>
           <el-select style="float: left;margin-left: 8px" @change="handleDicaTypeOrDiseaseCategoryChange"
                      v-model="listParam.diseaseCategoryID"
-                     clearable placeholder="请选择">
+                     clearable placeholder="请选择" filterable>
             <el-option
               v-for="item in diseaseCategoryOptions"
               :key="item.code"
@@ -193,7 +193,7 @@
               <el-form-item label="疾病分类类别" prop="dicaType">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.dicaType" filterable :filter-method="dicaTypeSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="getAllDicaTypeNamesAndCodes('0')">
                   <el-option
                     v-for="item in dicaTypeOptions"
                     :key="item.code"
@@ -208,7 +208,7 @@
               <el-form-item label="疾病分类" prop="diseaseCatagoryId">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.diseaseCatagoryId" filterable
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" >
                   <el-option
                     v-for="item in diseaseCategoryAllOptions"
                     :key="item.code"
@@ -244,7 +244,7 @@
               <el-form-item label="疾病分类类别" prop="dicaType">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.dicaType" filterable :filter-method="dicaTypeSearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="getAllDicaTypeNamesAndCodes('1')">
                   <el-option
                     v-for="item in dicaTypeOptions"
                     :key="item.code"
@@ -501,7 +501,11 @@
 
 
       //获得所有疾病分类类别名称和编号
-      getAllDicaTypeNamesAndCodes() {
+      getAllDicaTypeNamesAndCodes(state) {
+        if(state==='0')
+          this.editForm.diseaseCatagoryId='';
+        else if(state=='1')
+          this.addForm.diseaseCatagoryId='';
         dicaTypeGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
@@ -620,6 +624,7 @@
       },
       //处理选择的疾病分类类别或疾病分类发生改变
       handleDicaTypeOrDiseaseCategoryChange() {
+       this.refreshDiseaseCategoryChange();
         this.pageParams.pageNum = 1;
         this.searchValue = '';
         this.getDiseaseList();
@@ -693,8 +698,17 @@
           .catch(_ => {
           });
       },
+      //选择的疾病分类改变时刷新
+      refreshDiseaseCategoryChange(){
+        if(this.listParam.dicaTypeID==='')
+          this.getAllDiseaseCategoryAndCodes();
+        else
+          this.getAllDicaTypeNamesAndCodes();
+      },
       //根据疾病分类类别获得疾病分类
       getDiseaseCategoriesByDicaTypeID() {
+        this.getAllDicaTypeNamesAndCodes();
+        this.listParam.diseaseCategoryID='';
         if (this.listParam.dicaTypeID === '')
           this.getAllDiseaseCategoryAndCodes();
         else {
@@ -730,7 +744,7 @@
         this.editForm.code = propRow.code;
         this.editForm.diseaseIcd=propRow.diseaseIcd;
         this.editForm.dicaType = propRow.dicaTypeID;
-        this.editForm.diseaseCatagoryId = propRow.diseaseCategoryId;
+        this.editForm.diseaseCatagoryId = propRow.diseaseCatagoryId;
         this.editDialogFormVisible = true;
       },
       //点击添加疾病

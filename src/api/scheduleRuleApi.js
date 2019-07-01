@@ -28,6 +28,10 @@ export const doctorGetAllNamesAndCodes=_=>{
   return axios.post(`${hospital}/scheduleRule/findAllDoctorNamesAndCodes`);
 };
 
+export const onDutyTimeGetAllNamesAndCodes=_=>{
+  return axios.post(`${hospital}/scheduleRule/findAllOnDutyTimeNamesAndCodes`);
+};
+
 
 
 export const scheduleRuleDeleteByID=params=>{

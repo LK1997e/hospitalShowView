@@ -193,7 +193,7 @@
               <el-form-item label="科室分类" prop="deptCategoryID">
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="getAllDeptCategoryNamesAndCodes">
                   <el-option
                     v-for="item in deptCategoryOptions"
                     :key="item.code"
@@ -208,7 +208,7 @@
                 <el-select style="float: left;width: 250px"
                            v-model="editForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
                            clearable
-                           placeholder="请选择">
+                           placeholder="请选择" @change="getAllDeptTypeNamesAndCodes">
                   <el-option
                     v-for="item in deptTypeOptions"
                     :key="item.code"
@@ -238,7 +238,7 @@
               <el-form-item label="科室分类" prop="deptCategoryID">
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
-                           clearable placeholder="请选择">
+                           clearable placeholder="请选择" @change="getAllDeptCategoryNamesAndCodes">
                   <el-option
                     v-for="item in deptCategoryOptions"
                     :key="item.code"
@@ -253,7 +253,7 @@
                 <el-select style="float: left;width: 250px"
                            v-model="addForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
                            clearable
-                           placeholder="请选择">
+                           placeholder="请选择" @change="getAllDeptTypeNamesAndCodes">
                   <el-option
                     v-for="item in deptTypeOptions"
                     :key="item.code"
@@ -572,6 +572,7 @@
       },
 //根据名称或编号查找科室信息
       deptSearchChange(val) {
+        this.getAllDeptNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;
@@ -630,6 +631,8 @@
       },
       //处理选择科室类型或科室分类发生改变
       handleDeptTypeOrDeptCategoryChange() {
+        this.getAllDeptCategoryNamesAndCodes();
+        this.getAllDeptTypeNamesAndCodes();
         this.pageParams.pageNum = 1;
         this.getDepartmentList();
       },

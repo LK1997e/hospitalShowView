@@ -291,7 +291,6 @@
           registrationLevelListCopy: [],
           pageNumCopy: '',
           totalCopy: '',
-
         },
 
         //挂号级别搜索的名称或编号
@@ -418,6 +417,7 @@
       },
 //根据名称或编号查找挂号级别信息
       regLevSearchChange(val) {
+        this.getAllRegLevNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;

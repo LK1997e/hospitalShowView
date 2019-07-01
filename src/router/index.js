@@ -7,6 +7,8 @@ import SettlementCategory from '@/components/Basic/SettlementCategory'
 import RegistrationLevel from '@/components/Basic/RegistrationLevel'
 import FMedItem from '@/components/Basic/FMedItem'
 import Disease from '@/components/Basic/Disease'
+import ScheduleRule from '@/components/Basic/ScheduleRule'
+import Schedule from '@/components/Basic/Schedule'
 import Home from '@/components/Home'
 import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
@@ -144,6 +146,28 @@ export const adminRoutes = [
         meta: {
           name: '诊断目录管理',
         },
+
+      },
+      {
+        path: '/baseInfoManage/scheduleRuleManage',
+        component: ScheduleRule,
+        iconCls: 'el-icon-message',
+        name: '排班规则管理',
+        meta: {
+          name: '排班规则管理',
+        },
+
+
+      },
+      {
+        path: '/baseInfoManage/scheduleManage',
+        component: Schedule,
+        iconCls: 'el-icon-message',
+        name: '排班信息管理',
+        meta: {
+          name: '排班信息管理',
+        },
+
 
       },
     ]

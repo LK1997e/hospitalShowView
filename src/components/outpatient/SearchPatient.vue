@@ -36,7 +36,7 @@
               </el-header>
               <el-table
                 ref="singleTable"
-                :data="patientRecListOptions"
+                :data="patientRecList"
                 highlight-current-row
                 @current-change="handleCurrentChange" style="width: 100%">
 
