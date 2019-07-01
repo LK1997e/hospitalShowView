@@ -45,12 +45,12 @@
                    label-position="top" label-width="100px" class="demo-ruleForm">
             <el-col :span="22" :offset="1" class="grid-content">
               <el-form-item label="检查检验所见" prop="view">
-                <el-input type="textarea" v-model="inspectionResultWithBLOBs.view"></el-input>
+                <el-input type="textarea" :rows="4"  v-model="inspectionResultWithBLOBs.view"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="22" :offset="1" class="grid-content">
               <el-form-item label="检查检验诊断" prop="diagnosis">
-                <el-input type="textarea" v-model="inspectionResultWithBLOBs.diagnosis"></el-input>
+                <el-input type="textarea" :rows="4" v-model="inspectionResultWithBLOBs.diagnosis"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="2" :offset="11" class="grid-content">
@@ -131,7 +131,7 @@
   import Qs from 'qs';
 
   export default {
-    name: "inpectionCheck",
+    name: "inpectionExcute",
     data() {
       return {
         condition: {
@@ -161,6 +161,14 @@
           data:{
             number:'',
           }
+        },
+        rules:{
+          view: [
+            { required: true, message: '请输入检查检验所见', trigger: 'blur' },
+          ],
+          diagnosis: [
+            { required: true, message: '请输入检查检验诊断', trigger: 'blur' },
+          ],
         }
 
 

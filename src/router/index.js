@@ -19,14 +19,23 @@ import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
 import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
-import Pharmacy from '@/components/pharmacy/Pharmacy'
 import DepartmentWorkCharts from '@/components/finance/DepartmentWorkCharts'
 import UserWorkCharts from '@/components/finance/UserWorkCharts'
+import PharmacySearch from '@/components/pharmacy/PharmacySearch'
 import Register from '../components/registerAndCharge/Register'
 import SearchPatient from '@/components/outpatient/SearchPatient'
 import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
 import ApplyInspection from '@/components/outpatient/ApplyInspection'
 import RegisterInfo from '../components/registerAndCharge/RegisterInfo'
+import PharmacyDeal from '@/components/pharmacy/PharmacyDeal'
+import Toll from '@/components/registerAndCharge/Toll'
+import DailySettle from '@/components/registerAndCharge/DailySettle'
+import DailySettleSearch from '@/components/registerAndCharge/DailySettleSearch'
+
+import DisposalSearch from '@/components/medicalTech/disposal/DisposalSearch'
+import DisposalCheck from '@/components/medicalTech/disposal/DisposalCheck'
+
+
 
 Vue.use(Router)
 Vue.use(Vuex)
@@ -332,6 +341,36 @@ export const medicalTechRoutes = [
         },
       }
     ]
+  },
+  {
+    path: '/medicalTech',
+    component: Home,
+    name: '处置',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '处置',
+    },
+    children: [
+      {
+        path: '/medicalTech/disposalSearch',
+        component: DisposalSearch,
+        name: '处置查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '处置查询',
+        },
+      },
+      {
+        path: '/medicalTech/disposalCheck',
+        component: DisposalCheck,
+        name: '处置审核',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '处置审核',
+        },
+      }
+
+    ]
   }
 
 ]
@@ -436,12 +475,21 @@ export const pharmacyRoutes = [
     },
     children: [
       {
-        path: '/pharmacy/UserInfo',
-        component: Pharmacy,
-        name: '药房',
+        path: '/pharmacy/PharmacySearch',
+        component: PharmacySearch,
+        name: '药房搜索',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '药房',
+          name: '药房搜索',
+        },
+      },
+      {
+        path: '/pharmacy/PharmacyDeal',
+        component: PharmacyDeal,
+        name: '药房处理',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '药房处理',
         },
       }
     ]
@@ -510,10 +558,10 @@ export const registerAndChargeRoutes = [
   {
     path: '/registerAndCharge',
     component: Home,
-    name: '费用查询',
+    name: '费用管理',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '费用查询',
+      name: '费用管理',
     },
     children: [
       {
@@ -524,9 +572,47 @@ export const registerAndChargeRoutes = [
         meta: {
           name: '费用查询',
         },
+      }, {
+        path: '/registerAndCharge/Toll',
+        component: Toll,
+        name: '挂号收费',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '挂号收费',
+        },
+      },
+    ]
+  },
+   {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '日结',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '日结',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/DailySettle',
+        component: DailySettle,
+        name: '收费员日结',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '收费员日结',
+        },
+      },
+      {
+        path: '/registerAndCharge/DailySettleSearch',
+        component: DailySettleSearch,
+        name: '日结查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '日结查询',
+        },
       },
     ]
   }
+
 ]
 
 export default routes;
