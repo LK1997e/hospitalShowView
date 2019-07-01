@@ -1,4 +1,4 @@
-<template>
+<template xmlns:el-col = "http://www.w3.org/1999/html">
 
     <el-container>
 
@@ -41,7 +41,19 @@
                         style = " padding-bottom: 10px;border-left: solid 1px #eee">
                     <el-divider content-position = "left">病历号查找</el-divider>
                     <el-col :span = "18" offset = "3">
-                        <el-input></el-input>
+                        <!--<el-input v-model="medRecSearchValue" placeholder="请输入内容"></el-input>-->
+                        <el-select style = "width: 100%" v-model = "medRecSearchValue"
+                                   @click.native = "handleClick" @change = "handleMedRecNoChange" filterable
+                                   :filter-method = "medRecNoFilter" clearable placeholder = "请选择">
+                            <el-option
+                                    v-for = "item in medRecNoList"
+                                    :key = "item.medicalRecordNo"
+                                    :label = "item.medicalRecordNo"
+                                    :value = "item.medicalRecordNo">
+                                <span style = "float: left">{{ item.medicalRecordNo }}</span>
+                            </el-option>
+
+                        </el-select>
                     </el-col>
                 </el-col>
 
@@ -53,9 +65,11 @@
                     <el-header>
                         <el-divider content-position = "left">挂号列表</el-divider>
                     </el-header>
+
                     <el-table ref = "multipleTable"
                               :data = "regInfoList"
                               style = "width: 100%">
+
 
                         <el-table-column type = "expand">
                             <template slot-scope = "props">
@@ -80,9 +94,7 @@
                         </el-table-column>
                         <el-table-column label = "挂号级别" prop = "regLevel">
                         </el-table-column>
-                        <el-table-column label = "挂号日期" prop = "registrationDate">
-                        </el-table-column>
-                        <el-table-column label = "看诊日期" prop = "seeDoctorDate">
+                        <el-table-column label = "挂号时间" prop = "registrationDate">
                         </el-table-column>
                         <el-table-column label = "是否已看诊">
                             <template slot-scope = "props">
@@ -109,7 +121,7 @@
 
 <script>
 
-  import {getRegInfoList, getTodayWorkload} from '../../api/registerApi'
+  import {getRegInfo, getRegInfoList, getTodayWorkload} from '../../api/registerApi'
 
   export default {
     name: 'RegisterInfo',
@@ -133,6 +145,8 @@
 
         //输入的要查找的病历号
         medRecSearchValue: '',
+        medRecNoList: [],
+        medRecNoSearchList: '',
 
         //是否已经复制
         isCopy: '0',
@@ -208,8 +222,28 @@
         })
       },
 
+      getRegInfo(val) {
+
+        getRegInfo(val).then((res) => {
+          if (res.status === 200) {
+            let data = res.data
+            if (data.status === 'OK') {
+              this.fresh(data.data)
+            }
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      },
+
+      fresh(val) {
+        this.regInfoList = [val]
+      },
+
       copyInfo() {
 
+        this.medRecNoList = this.regInfoList
+        this.medRecNoSearchList = this.regInfoList
         this.copy.regInfoListCopy = this.regInfoList
         this.copy.pageNumCopy = this.pageNum
         this.copy.pageSizeCopy = this.pageSize
@@ -223,14 +257,42 @@
         this.pageSize = this.copy.pageSizeCopy
       },
 
+      handleClick() {
+        this.timeRange = []
+        this.returnCopyInfo()
+        this.medRecNoList = this.copy.regInfoListCopy
+      },
+
+      handleMedRecNoChange(val) {
+
+        if (val === '') {
+          this.medRecNoList = []
+          this.returnCopyInfo()
+        } else {
+          this.getRegInfo(this.medRecSearchValue)
+        }
+      },
+
+      //处理所选的时间范围改变
       handleTimeChange(val) {
 
-        if (val === null) {
+        if (val === null || val === '') {
           this.returnCopyInfo()
         } else {
 
           this.pageParams.pageNum = 1
           this.getRegInfoList()
+        }
+      },
+
+      medRecNoFilter(val) {
+        this.medRecNoList = val
+            ? this.medRecNoSearchList.filter(this.createFilter(val))
+            : this.medRecNoSearchList
+      },
+      createFilter(queryString) {
+        return (item) => {
+          return (item.medicalRecordNo.toLowerCase().indexOf(queryString.toLowerCase()) >= 0)
         }
       },
 

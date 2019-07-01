@@ -74,9 +74,18 @@ export const calculateRegFee = (listParams) => {
 //从后台获取所有挂号信息
 export const getRegInfoList = (listParams) => {
 
-  listParams=Qs.stringify(listParams);
+  listParams = Qs.stringify(listParams)
 
   return axios.post(`${hospital}/register/allInfo`, listParams,
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+}
+
+//从后台根据病历号获取指定挂号信息
+export const getRegInfo = (medRecNo) => {
+
+  let params = 'medRecNo=' + medRecNo
+
+  return axios.post(`${hospital}/register/getSelectRegInfo`, params,
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 }
 
