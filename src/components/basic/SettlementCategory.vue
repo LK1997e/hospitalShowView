@@ -76,6 +76,26 @@
                   <el-form-item label="修改人">
                     <span>{{ props.row.changeUserName }}</span>
                   </el-form-item>
+                  <el-form-item label="区间1" v-if="props.row.thresnold1>=0&&props.row.thresnold2>0 ">
+                    <span>{{ props.row.thresnold1+"元  - "+props.row.thresnold2+"元"}}</span>
+                  </el-form-item>
+                  <el-form-item label="报销比例1" v-if="props.row.thresnold1>=0&&props.row.thresnold2>0 ">
+                    <span>{{props.row.proportion1+"%"}}</span>
+                  </el-form-item>
+
+                  <el-form-item label="区间2" v-if="props.row.thresnold3>props.row.thresnold2&&props.row.thresnold1>=0&&props.row.thresnold2>0">
+                    <span>{{ props.row.thresnold2+"元  - "+props.row.thresnold3+"元"}}</span>
+                  </el-form-item>
+                  <el-form-item label="报销比例2" v-if="props.row.thresnold3>props.row.thresnold2&&props.row.thresnold1>=0&&props.row.thresnold2>0">
+                    <span>{{ "报销比例："+props.row.proportion2+"%"}}</span>
+                  </el-form-item>
+
+                  <el-form-item label="区间3" v-if="props.row.thresnold3>props.row.thresnold2&&props.row.thresnold1>=0&&props.row.thresnold2>0">
+                    <span>{{props.row.thresnold3+"元以上"}}</span>
+                  </el-form-item>
+                  <el-form-item label="报销比例3" v-if="props.row.thresnold3>props.row.thresnold2&&props.row.thresnold1>=0&&props.row.thresnold2>0">
+                    <span>{{"报销比例："+props.row.proportion3+"%"}}</span>
+                  </el-form-item>
                 </el-form>
               </template>
             </el-table-column>
@@ -579,7 +599,6 @@
         this.$confirm('确认批量删除？')
           .then(_ => {
             let params = {"id": this.checkList};
-            alert(this.checkList.length);
             setCatDeleteByChooses(params).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
@@ -632,7 +651,6 @@
       },
       //提交（编辑表单）或（添加表单）
       submitForm(formName) {
-        alert('start');
         this.$refs[formName].validate((valid) => {
           //提交结算类别列表详情信息
          if (formName === 'editDetailsForm')
