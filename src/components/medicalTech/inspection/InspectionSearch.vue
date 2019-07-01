@@ -24,7 +24,7 @@
 
 
         <el-select style="float: left;margin-left: 8px"  @change="handleFMedItemChange"
-                   v-model="condition.itemName" filterable :filter-method="fMedItemSearchValuesFilter"
+                   v-model="condition.itemID" filterable :filter-method="fMedItemSearchValuesFilter"
                    clearable placeholder="请选择">
           <el-option
             v-for="item in fMedItemSearchOptions"
@@ -189,7 +189,7 @@
       return {
         condition:{
           search:'',
-          itemName:'',
+          itemID:'',
           date:'',
           mark:'134',
         },
@@ -217,13 +217,14 @@
         let params = Qs.stringify(
           {
               search:this.condition.search,
-              itemName:this.condition.itemName,
+              itemID:this.condition.itemID,
               date:this.condition.date,
               mark:this.condition.mark,
               pageNum: this.pageParams.pageNum,
               pageSize: this.pageParams.pageSize
           }
         );
+        alert(params);
         Inspectformview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;

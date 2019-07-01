@@ -440,7 +440,7 @@
 
 
         addDrugForm:{
-          itemsType : 129,
+          itemsType : 117,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -448,7 +448,7 @@
         },
         editDrugForm:{
           id:'',
-          itemsType : 129,
+          itemsType : 117,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -456,7 +456,7 @@
         },
 
         addMatForm:{
-          itemsType : 130,
+          itemsType : 117,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -464,7 +464,7 @@
         },
         editMatForm:{
           id:'',
-          itemsType : 130,
+          itemsType : 117,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
