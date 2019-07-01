@@ -3,7 +3,7 @@
     <el-header style="background:#41cde5;padding: 20px;height: 100px">
       <el-row class="row-bg" type="flex" align="middle">
         <el-col :span="4" class="grid-content">
-          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 检查检验审核</span>
+          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 处置审核</span>
         </el-col>
       </el-row>
 
@@ -34,13 +34,13 @@
             <el-form-item label="过敏">
               <span v-model="medicalRecHome.allergies">{{medicalRecHome.allergies}}</span>
             </el-form-item>
-            <el-form-item label="体格检查">
+            <el-form-item label="体格处置">
               <span v-model="medicalRecHome.physicalExamination">{{medicalRecHome.physicalExamination}}</span>
             </el-form-item>
             <el-form-item label="初步诊断">
               <span v-model="medicalRecHome.initialDiagnosis">{{medicalRecHome.initialDiagnosis}}</span>
             </el-form-item>
-            <el-form-item label="检查建议">
+            <el-form-item label="处置建议">
               <span v-model="medicalRecHome.inspectRecommend">{{medicalRecHome.inspectRecommend}}</span>
             </el-form-item>
             <el-form-item label="注意事项">
@@ -82,12 +82,12 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="left">检查检验审核项目</el-divider>
+            <el-divider content-position="left">处置审核项目</el-divider>
           </el-header>
           <el-col :span="22" :offset="1" class="grid-content">
             <el-table
               ref="multipleTable"
-              :data="inspectReviewList"
+              :data="disposalReviewList"
               style="width: 100%">
               <el-table-column label="项目编码" prop="fmeditemCode">
               </el-table-column>
@@ -179,7 +179,7 @@
               <el-form-item label="药品搜索" prop="medicinesMaterialsID">
                 <el-select  style="float: left;width: 250px"
                             filterable :filter-method="DrugsSearchValuesFilter"
-                            v-model="editDrugForm.medicinesMaterialsID"  @change="setEditDrugs"
+                            v-model="editDrugForm.medicinesMaterialsID"  @change="setDrugs"
                             clearable placeholder="请选择" value="">
                   <el-option
                     v-for="item in DrugOptions"
@@ -214,7 +214,7 @@
               <el-form-item label="药品搜索" prop="medicinesMaterialsID">
                 <el-select  style="float: left;width: 250px"
                             filterable :filter-method="DrugsSearchValuesFilter"
-                            v-model="addDrugForm.medicinesMaterialsID"  @change="setAddDrugs"
+                            v-model="addDrugForm.medicinesMaterialsID"  @change="setDrugs"
                             clearable placeholder="请选择">
                   <el-option
                     v-for="item in DrugOptions"
@@ -309,7 +309,7 @@
               <el-form-item label="材料搜索" prop="medicinesMaterialsID">
                 <el-select  style="float: left;width: 250px"
                             filterable :filter-method="matSearchValuesFilter"
-                            v-model="editMatForm.medicinesMaterialsID"  @change="setEditMat"
+                            v-model="editMatForm.medicinesMaterialsID"  @change="setMat"
                             clearable placeholder="请选择" value="">
                   <el-option
                     v-for="item in MatOptions"
@@ -338,7 +338,7 @@
               <el-form-item label="材料搜索" prop="medicinesMaterialsID">
                 <el-select  style="float: left;width: 250px"
                             filterable :filter-method="matSearchValuesFilter"
-                            v-model="addMatForm.medicinesMaterialsID"  @change="setAddMat"
+                            v-model="addMatForm.medicinesMaterialsID"  @change="setMat"
                             clearable placeholder="请选择">
                   <el-option
                     v-for="item in MatOptions"
@@ -367,7 +367,7 @@
         <br>
         <br>
         <el-col :span="2" :offset="11" class="grid-content">
-          <el-button type="primary" @click="approveInspect">完成审核</el-button>
+          <el-button type="primary" @click="approveDisposal">完成审核</el-button>
         </el-col>
         <br>
         <br>
@@ -388,8 +388,8 @@
 
 <script>
   import {
-    InspectReview,InspectMatReview,InspectMedReview,DeleteMedMat,DeleteMedMatByList,SearchDrugs,SearchMaterials,InsertMedMat,ApproveMat,ApproveMed,UpdateMedMat,ApproveInspectionDetails
-  } from '../../../api/inspectionApi';
+    DisposalReview,DisposalMatReview,DisposalMedReview,DeleteMedMat,DeleteMedMatByList,SearchDrugs,SearchMaterials,InsertMedMat,ApproveMat,ApproveMed,UpdateMedMat,ApproveDisposalDetails
+  } from '../../../api/disposalApi';
   import Qs from 'qs';
 
   export default {
@@ -397,7 +397,7 @@
     data() {
       return {
         condition: {
-          inspectionDetailsID: ''
+          disposalDetailsID: ''
         },
         medicalRecHome: {
           cheifComplaint: '',
@@ -407,7 +407,7 @@
           allergies: '',
           physicalExamination: '',
           initialDiagnosis: '',
-          inspectRecommend: '',
+          disposalRecommend: '',
           attention: ''
         },
         patient: {
@@ -421,7 +421,7 @@
         },
 
 
-        inspectReviewList: [],
+        disposalReviewList: [],
         inpectMatList:[],
         inpectMedList:[],
         DrugList:[],
@@ -440,7 +440,7 @@
 
 
         addDrugForm:{
-          itemsType : 129,
+          itemsType : 119,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -448,7 +448,7 @@
         },
         editDrugForm:{
           id:'',
-          itemsType : 129,
+          itemsType : 119,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -456,7 +456,7 @@
         },
 
         addMatForm:{
-          itemsType : 130,
+          itemsType : 119,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -464,7 +464,7 @@
         },
         editMatForm:{
           id:'',
-          itemsType : 130,
+          itemsType : 119,
           itemsDetailID:'',
           medicinesMaterialsID:'',
           dosage:'',
@@ -482,23 +482,23 @@
       }
     },
     methods: {
-      getInspectReviewList() {
-        this.condition.inspectionDetailsID = this.$route.params.inspectionDetailsID;
-        InspectReview("inspectionDetailsID=" + this.condition.inspectionDetailsID).then((res) => {
+      getDisposalReviewList() {
+        this.condition.disposalDetailsID = this.$route.params.disposalDetailsID;
+        DisposalReview("disposalDetailsID=" + this.condition.disposalDetailsID).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.inspectReviewList = data.data;
+              this.disposalReviewList = data.data;
               let arrayLength = 0;
-              for (let inspectReview in this.inspectReviewList) {
+              for (let disposalReview in this.disposalReviewList) {
                 arrayLength++;
               }
               if (arrayLength !== 0) {
-                let tempData = this.inspectReviewList[0];
+                let tempData = this.disposalReviewList[0];
                 this.getmedicalRecHome(tempData);
                 this.getPatient(tempData);
-                this.getMed(tempData.inspectiondetailsId);
-                this.getMat(tempData.inspectiondetailsId);
+                this.getMed(tempData.disposaldetailsId);
+                this.getMat(tempData.disposaldetailsId);
               }
             } else {
             }
@@ -527,7 +527,7 @@
       },
       getMed(id){
         let params="itemsDetailID="+id;
-        InspectMedReview(params).then((res) => {
+        DisposalMedReview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -547,6 +547,7 @@
       approvedDrugs() {
         this.$confirm('确认通过批准？')
           .then(_ => {
+            alert(JSON.stringify(this.drugCheckList));
             let params = {id: this.drugCheckList};
             ApproveMed(params).then((res) => {
                 if (res.status === 200) {
@@ -649,18 +650,12 @@
           });
 
       },
-      setAddDrugs(){
+      setDrugs(){
         this.getDrugs();
-        this.addDrugForm.itemsType=(this.inspectReviewList[0].type===0?117:118);
-        this.addDrugForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
-      },
-      setEditDrugs(){
-        this.getDrugs();
-        this.editDrugForm.itemsType=(this.inspectReviewList[0].type===0?117:118);
-        this.editDrugForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
+        this.addDrugForm.itemsDetailID=this.disposalReviewList[0].disposaldetailsId;
       },
       freshDrugInfo(){
-        this.getMed(this.inspectReviewList[0].inspectiondetailsId);
+        this.getMed(this.disposalReviewList[0].disposaldetailsId);
       },
       getDrugs(params){
         SearchDrugs().then((res) => {
@@ -755,7 +750,7 @@
 
       getMat(id){
         let params="itemsDetailID="+id;
-        InspectMatReview(params).then((res) => {
+        DisposalMatReview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -877,18 +872,12 @@
           });
 
       },
-      setAddMat(){
+      setMat(){
         this.getMaterials();
-        this.addMatForm.itemsType=(this.inspectReviewList[0].type===0?117:118);
-        this.addMatForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
-      },
-      setEditMat(){
-        this.getMaterials();
-        this.editMatForm.itemsType=(this.inspectReviewList[0].type===0?117:118);
-        this.editMatForm.itemsDetailID=this.inspectReviewList[0].inspectiondetailsId;
+        this.addMatForm.itemsDetailID=this.disposalReviewList[0].disposaldetailsId;
       },
       freshMatInfo(){
-        this.getMat(this.inspectReviewList[0].inspectiondetailsId);
+        this.getMat(this.disposalReviewList[0].disposaldetailsId);
       },
       getMaterials(params){
         SearchMaterials().then((res) => {
@@ -981,8 +970,8 @@
         this.$refs[formName].resetFields();
       },
 
-      approveInspect(){
-        ApproveInspectionDetails("inspectionDetailsID=" + this.condition.inspectionDetailsID).then((res) => {
+      approveDisposal(){
+        ApproveDisposalDetails("disposalDetailsID=" + this.condition.disposalDetailsID).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -1002,7 +991,7 @@
 
     },
     mounted() {
-      this.getInspectReviewList();
+      this.getDisposalReviewList();
       this.getDrugs();
       this.getMaterials();
     }

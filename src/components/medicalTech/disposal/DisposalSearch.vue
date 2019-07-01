@@ -3,10 +3,10 @@
   <el-header style="background:#41cde5;padding: 20px;height: 100px">
     <el-row class="row-bg" type="flex" align="middle">
       <el-col :span="4" class="grid-content">
-       <span  style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 检查检验搜索</span>
+       <span  style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 处置搜索</span>
       </el-col>
       <el-col  class="grid-content" :span="6" :offset="1">
-        <el-input v-model="condition.search" @change="handleSearchChange" style="font-size:20px;" clearable placeholder="请输入检查检验相关信息"></el-input>
+        <el-input v-model="condition.search" @change="handleSearchChange" style="font-size:20px;" clearable placeholder="请输入处置相关信息"></el-input>
       </el-col>
     </el-row>
 
@@ -66,28 +66,23 @@
         </el-tabs>
         </el-col>
         <el-header>
-          <el-divider content-position="left">检查检验列表</el-divider>
+          <el-divider content-position="left">处置列表</el-divider>
         </el-header>
         <el-col  :span="22" :offset="1" class="grid-content">
         <el-table
           ref="multipleTable"
-          :data="inspectFormViewList"
+          :data="disposalFormViewList"
           style="width: 100%"
           @selection-change="handleSelectionChange">
-          <el-table-column label="申请编号" prop="inspectionDetailsID">
+          <el-table-column label="申请编号" prop="disposaldetailsID">
           </el-table-column>
-          <el-table-column label="检查编号" prop="inspectionId">
-          </el-table-column>
-          <el-table-column label="类型" >
-            <template slot-scope="props">
-              {{props.row.type===0?"检查":"检验"}}
-            </template>
+          <el-table-column label="处置编号" prop="disposalId">
           </el-table-column>
           <el-table-column label="患者名称" prop="patientName">
           </el-table-column>
           <el-table-column label="申请医生" prop="realName">
           </el-table-column>
-          <el-table-column label="申请时间" prop="inspectionAppearDate">
+          <el-table-column label="申请时间" prop="disposalAppearDate">
           </el-table-column>
           <el-table-column label="项目编号" prop="fmeditemId">
           </el-table-column>
@@ -117,21 +112,19 @@
 
             <template slot-scope="props">
               <template v-if="condition.mark==='144'">
-                <router-link :to="{ name: '检查检验执行', params: { inspectionDetailsID: props.row.inspectionDetailsID}}">
                 <el-button icon="el-icon-delete"  type="text"
-                           size="small" style="color: #2266e6">开始执行
+                           size="small" style="color: #2266e6" @click="finishDisposal(props.row.disposaldetailsID)">开始执行
                 </el-button>
-                </router-link>
               </template>
               <template v-else-if="condition.mark==='142'">
-                <router-link :to="{ name: '检查检验审核', params: { inspectionDetailsID: props.row.inspectionDetailsID}}">
+                <router-link :to="{ name: '处置审核', params: { disposalDetailsID: props.row.disposaldetailsID}}">
                   <el-button icon="el-icon-delete"  type="text"
                              size="small" style="color: #2266e6">开始审核
                   </el-button>
                 </router-link>
               </template>
               <template v-else-if="condition.mark==='137'">
-                <el-button icon="el-icon-delete" @click.native.prevent="handleRegistered(props.row.inspectionDetailsID)" type="text"
+                <el-button icon="el-icon-delete" @click.native.prevent="handleRegistered(props.row.disposaldetailsID)" type="text"
                            size="small" style="color: #2266e6">开始登记
                 </el-button>
               </template>
@@ -177,10 +170,11 @@
 
 <script>
   import {
-    InspectSearchFMedItem,
-    Inspectformview,
-    RegisterInspectionDetails
-  } from '../../../api/inspectionApi';
+    DisposalSearchFMedItem,
+    Disposalformview,
+    RegisterDisposalDetails,
+    FinishDisposal
+  } from '../../../api/disposalApi';
   import Qs from 'qs';
 
   export default {
@@ -205,7 +199,7 @@
         fMedItemSearchValues: [],
         fMedItemSearchOptions: [],
 
-        inspectFormViewList: [],
+        disposalFormViewList: [],
 
 
       }
@@ -213,7 +207,7 @@
     },
     methods: {
 
-      getInspectFormViewList() {
+      getDisposalFormViewList() {
         let params = Qs.stringify(
           {
               search:this.condition.search,
@@ -224,11 +218,11 @@
               pageSize: this.pageParams.pageSize
           }
         );
-        Inspectformview(params).then((res) => {
+        Disposalformview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.inspectFormViewList = data.data.list;
+              this.disposalFormViewList = data.data.list;
               this.pageParams.total = data.data.total;
             } else {
               alert(data.msg);
@@ -238,7 +232,7 @@
       },
       //获得非药品项目名称和编号
       getAllFMedItemNamesAndCodes(){
-        InspectSearchFMedItem().then((res) => {
+        DisposalSearchFMedItem().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -268,31 +262,31 @@
       },
       handleSizeChange(val) {
         this.pageParams.pageSize=val;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },
       handleCurrentChange(val) {
         this.pageParams.pageNum=val;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },handleSearchChange(){
         this.pageParams.pageNum=1;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },
       handleMark(tab, event){
         this.pageParams.pageNum=1;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },
       handleFMedItemChange(){
         this.getAllFMedItemNamesAndCodes();
         this.pageParams.pageNum=1;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },
       handleDateChange(){
         this.pageParams.pageNum=1;
-        this.getInspectFormViewList();
+        this.getDisposalFormViewList();
       },
       handleRegistered(propRow){
-        let params='inspectionDetailsID='+propRow;
-            RegisterInspectionDetails(params).then((res) => {
+        let params='disposalDetailsID='+propRow;
+            RegisterDisposalDetails(params).then((res) => {
               if (res.status === 200) {
                 let data = res.data;
                 if (data.status === 'OK') {
@@ -308,11 +302,31 @@
                 }
               }
             });
+      },
+      finishDisposal(disposalDetailsID){
+        let params='disposalDetailsID='+disposalDetailsID;
+        alert(params);
+        FinishDisposal(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.$message({
+                message: data.msg,
+                type: 'success'
+              });
+            }else if (data.status === 'NG') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }
+          }
+        });
       }
     },
     mounted() {
       this.getAllFMedItemNamesAndCodes();
-      this.getInspectFormViewList();
+      this.getDisposalFormViewList();
     }
 
 

@@ -3,7 +3,7 @@
     <el-header style="background:#41cde5;padding: 20px;height: 100px">
       <el-row class="row-bg" type="flex" align="top">
         <el-col :span="4" class="grid-content">
-          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i>费用查询</span>
+          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 费用查询</span>
         </el-col>
         <el-col class="grid-content" :span="6" :offset="1">
           <el-form :model="condition" :rules="rules" class="demo-ruleForm">
@@ -23,8 +23,8 @@
 
         <el-col :span="24"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
-          <el-divider content-position="left">筛选查询</el-divider>
 
+            <el-divider content-position="left">筛选查询</el-divider>
 
           <el-col :span="2" class="el-col-display">开始时间</el-col>
 
@@ -61,8 +61,8 @@
         <el-container>
           <el-col :span="22" :offset="1" class="grid-content">
             <el-tabs v-model="condition.payStatus" @tab-click="handlePayStatusChange">
-              <el-tab-pane label="已缴费" name="133"></el-tab-pane>
               <el-tab-pane label="未缴费" name="134"></el-tab-pane>
+              <el-tab-pane label="已缴费" name="133"></el-tab-pane>
               <el-tab-pane label="已退费" name="135"></el-tab-pane>
             </el-tabs>
           </el-col>
@@ -76,9 +76,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">挂号费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollRegList"
                 :data="tollRegList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handleRegSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -148,6 +149,10 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="挂号编号" prop="chargeItemID">
                 </el-table-column>
                 <el-table-column label="收费类别" prop="feeCategoryName">
@@ -170,9 +175,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">检查检验费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollInspectList"
                 :data="tollInspectList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handleInspectSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -263,6 +269,10 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="项目检查编号" prop="chargeItemID">
                 </el-table-column>
                 <el-table-column label="项目名称" prop="name">
@@ -289,9 +299,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">处置费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollDisposalList"
                 :data="tollDisposalList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handleDisposalSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -383,6 +394,9 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="患者费用编号" prop="id">
                 </el-table-column>
                 <el-table-column label="项目处置编号" prop="chargeItemID">
@@ -413,9 +427,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">处置费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollPresList"
                 :data="tollPresList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handlePresSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -542,6 +557,9 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="患者费用编号" prop="id">
                 </el-table-column>
                 <el-table-column label="收费类别" prop="feeCategoryName">
@@ -566,9 +584,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">项目药品费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollMedList"
                 :data="tollMedList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handleMedSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -639,7 +658,7 @@
                         <span>{{ props.row.tollDate }}</span>
                       </el-form-item>
                       <el-form-item label="项目药品编号" prop="medicinesMaterialsID">
-                        <span>{{ props.row.drugID }}</span>
+                        <span>{{ props.row.medicinesMaterialsID }}</span>
                       </el-form-item>
                       <el-form-item label="药品编码" prop="drugsCode">
                         <span>{{ props.row.drugsCode }}</span>
@@ -686,6 +705,9 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="药品名称" prop="drugsName">
                 </el-table-column>
                 <el-table-column label="项目类型" prop=" itemsTypeName">
@@ -716,9 +738,10 @@
             <el-col :span="22" :offset="1" class="grid-content">
               <el-divider content-position="left">项目药品费</el-divider>
               <el-table
-                ref="multipleTable"
+                ref="tollMatList"
                 :data="tollMatList"
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="handleMatSelectionChange">
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
@@ -812,6 +835,9 @@
                     </el-form>
                   </template>
                 </el-table-column>
+
+                <el-table-column type="selection" prop="id">
+                </el-table-column>
                 <el-table-column label="材料名称" prop="matName">
                 </el-table-column>
                 <el-table-column label="项目类型" prop=" itemsTypeName">
@@ -841,6 +867,43 @@
 
       </el-row>
 
+      <el-row class="row-bg show-shadow" type="flex" align="middle">
+        <el-col :span="24" style="padding-bottom: 10px;border-right: solid 1px #eee">
+          <el-header>
+            <el-divider content-position="left">收费小结</el-divider>
+          </el-header>
+
+
+          <el-form :model="feeSummary" label-position="left" label-width="150px" class="demo-form-inline">
+            <el-row>
+              <el-col :span="6" :offset="1" class="grid-content">
+                <el-form-item   label="总计项数">
+                  <el-input v-model="feeSummary.number" :readonly="true"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6" :offset="1" class="grid-content">
+                <el-form-item label="总计费用">
+                  <el-input v-model="feeSummary.amount" :readonly="true"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-col :span="5" :offset="19" class="grid-content">
+              <template v-if="condition.payStatus==134">
+            <el-form-item>
+              <el-button type="primary" @click="toll">收&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp费</el-button>
+            </el-form-item>
+              </template>
+              <template v-if="condition.payStatus==133">
+                <el-form-item>
+                  <el-button type="primary" @click="refund">退&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp费</el-button>
+                </el-form-item>
+              </template>
+            </el-col>
+          </el-form>
+        </el-col>
+      </el-row>
+
     </el-main>
   </el-container>
 
@@ -848,11 +911,11 @@
 
 
 <script>
-  import {TollReg, TollInspection, TollDisposal, TollPres, TollMat, TollMed} from "../../../api/feeApi";
+  import {TollReg, TollInspection, TollDisposal, TollPres, TollMat, TollMed,Toll,Refund} from "../../api/feeApi";
   import Qs from 'qs';
 
   export default {
-    name: "FeeSearch",
+    name: "Toll",
     data() {
       return {
         condition: {
@@ -869,6 +932,24 @@
         tollMatList: [],
         tollMedList: [],
 
+        regCheckList: [],
+        inspectCheckList: [],
+        disposalCheckList: [],
+        presCheckList: [],
+        medCheckList: [],
+        matCheckList: [],
+
+        regAmountList: [],
+        inspectAmountList: [],
+        disposalAmountList: [],
+        presAmountList: [],
+        medAmountList: [],
+        matAmountList: [],
+
+        checkList: [],
+        amountList: [],
+
+
         tollExist: {
           regExist: false,
           inspectExist: false,
@@ -877,6 +958,11 @@
           matExist: false,
           medExist: false
         },
+        feeSummary: {
+          number: '',
+          amount: ''
+        }
+        ,
         rules: {
           search: [
             {required: true, message: '请输入病例号', trigger: 'blur'},
@@ -955,7 +1041,7 @@
           }
         });
       },
-      //获得项目药品收费
+      //获得项目材料收费
       getTollMat(params) {
         TollMat(params).then((res) => {
           if (res.status === 200) {
@@ -972,7 +1058,7 @@
           }
         });
       },
-      //获得项目材料费
+      //获得项目药品费
       getTollMed(params) {
         TollMed(params).then((res) => {
           if (res.status === 200) {
@@ -1021,7 +1107,130 @@
       handleEndDateChange() {
         this.getToll();
       },
+      handleRegSelectionChange(items) {
+        this.regCheckList = [];
+        this.regAmountList = [];
+        items.forEach((item) => {
+          this.regCheckList.push(item.id);
+          this.regAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+      handleInspectSelectionChange(items) {
+        this.inspectCheckList = [];
+        this.inspectAmountList = [];
+        items.forEach((item) => {
+          this.inspectCheckList.push(item.id);
+          this.inspectAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+      handleDisposalSelectionChange(items) {
+        this.disposalCheckList = [];
+        this.disposalAmountList = [];
+        items.forEach((item) => {
+          this.disposalCheckList.push(item.id);
+          this.disposalAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+      handlePresSelectionChange(items) {
+        this.presCheckList = [];
+        this.presAmountList = [];
+        items.forEach((item) => {
+          this.presCheckList.push(item.id);
+          this.presAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+      handleMedSelectionChange(items) {
+        this.medCheckList = [];
+        this.medAmountList = [];
+        items.forEach((item) => {
+          this.medCheckList.push(item.id);
+          this.medAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+      handleMatSelectionChange(items) {
+        this.matCheckList = [];
+        this.matAmountList = [];
+        items.forEach((item) => {
+          this.matCheckList.push(item.id);
+          this.matAmountList.push(item.fee);
+        });
+        this.getFeeMsg();
+      },
+    getFeeMsg() {
+      this.checkList = [];
+      this.checkList = this.checkList.concat(this.regCheckList);
+      this.checkList = this.checkList.concat(this.inspectCheckList);
+      this.checkList = this.checkList.concat(this.disposalCheckList);
+      this.checkList = this.checkList.concat(this.presCheckList);
+      this.checkList = this.checkList.concat(this.medCheckList);
+      this.checkList = this.checkList.concat(this.matCheckList);
+      let arrayLength = 0;
+      for (let num in this.checkList) {
+        arrayLength++;
+      }
+      this.feeSummary.number = arrayLength;
+
+      this.amountList=[];
+      this.amountList = this.amountList.concat(this.regAmountList);
+      this.amountList = this.amountList.concat(this.inspectAmountList);
+      this.amountList = this.amountList.concat(this.disposalAmountList);
+      this.amountList = this.amountList.concat(this.presAmountList);
+      this.amountList = this.amountList.concat(this.medAmountList);
+      this.amountList = this.amountList.concat(this.matAmountList);
+      let total = 0;
+      this.amountList.forEach((fee)=>{
+        total=total+fee;
+      })
+      this.feeSummary.amount = total;
     },
+      toll(){
+        let params={id:this.checkList};
+        Toll(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.$message({
+                message: data.msg,
+                type: 'success'
+              });
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+        });
+      },
+      refund(){
+        let params={id:this.checkList};
+        Refund(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.$message({
+                message: data.msg,
+                type: 'success'
+              });
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+        });
+      }
+  },
     mounted() {
 
     }
