@@ -318,6 +318,8 @@
         });
       },
       deptSearchChange(val) {
+        this.getAllDeptNamesAndCodes();
+        this.getAllUserNamesAndCodes();
         // if (val === '') {
         //   this.returnCopyInfo();
         // } else {
