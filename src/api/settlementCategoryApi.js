@@ -49,7 +49,6 @@ export const setCatInfoAdd=params=>{
 };
 export const setCatDetailsUpdate=params=>{
   params=Qs.stringify(params);
-  alert(params);
   return axios.post(`${hospital}/settlementCategory/updateDetails`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 };
 
