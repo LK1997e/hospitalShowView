@@ -20,7 +20,8 @@ import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
 import WorkloadStatistics from '@/components/finance/WorkloadStatistics'
 import Pharmacy from '@/components/pharmacy/Pharmacy'
-import ECharts from '@/components/finance/echarts'
+import DepartmentWorkCharts from '@/components/finance/DepartmentWorkCharts'
+import UserWorkCharts from '@/components/finance/UserWorkCharts'
 import Register from '../components/registerAndCharge/Register'
 import SearchPatient from '@/components/outpatient/SearchPatient'
 import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
@@ -240,8 +241,25 @@ export const financeRoutes = [
           name: '工作量统计',
         },
       },
-
-    ]
+      {
+        path: '/finance/DepartmentWorkCharts',
+        component: DepartmentWorkCharts,
+        name: '部门工作量统计图表',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '部门工作量统计图表',
+        },
+      },
+      {
+        path: '/finance/UserWorkCharts',
+        component: UserWorkCharts,
+        name: '个人工作量统计图表',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '个人工作量统计图表',
+        },
+      },
+    ],
   },
 
 ]
