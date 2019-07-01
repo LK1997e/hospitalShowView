@@ -129,6 +129,7 @@
                                         :label = "item.name"
                                         :value = "item.id">
                                     <span>{{ item.name }}</span>
+                                    <span style = "float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
                                 </el-option>
                             </el-select>
                         </el-form-item>
