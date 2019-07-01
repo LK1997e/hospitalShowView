@@ -79,3 +79,9 @@ export const getRegInfoList = (listParams) => {
   return axios.post(`${hospital}/register/allInfo`, listParams,
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 }
+
+//从后台获取今日工作量
+export const getTodayWorkload = () => {
+
+  return axios.post(`${hospital}/register/todayWorkload`)
+}
