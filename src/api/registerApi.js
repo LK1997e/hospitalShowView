@@ -91,8 +91,8 @@ export const getRegInfo = (medRecNo) => {
 
 //从后台获取今日工作量
 export const getTodayWorkload = () => {
-
-  return axios.post(`${hospital}/register/todayWorkload`)
+  kload
+  return axios.post(`${hospital}/register/todayWor`)
 }
 
 //退号

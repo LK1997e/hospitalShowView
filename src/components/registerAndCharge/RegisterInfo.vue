@@ -16,28 +16,30 @@
         <el-main style = "border: 1px solid #49cde5;">
 
             <el-row class = "row-bg show-shadow">
-                <el-col :span = "12"
+                <el-col :span = "11"
                         style = "padding-bottom: 10px;border-right: solid 1px #eee">
                     <el-divider content-position = "left">时间筛选</el-divider>
-                    <div class = "block">
-                        <el-col :span = "4" class = "el-col-display">选择范围</el-col>
-                        <el-date-picker
-                                v-model = "timeRange"
-                                type = "daterange"
-                                value-format = "yyyy-MM-dd"
-                                align = "left"
-                                unlink-panels
-                                range-separator = "至"
-                                start-placeholder = "开始日期"
-                                end-placeholder = "结束日期"
-                                @change = "handleTimeChange"
-                                clearable = "true"
-                                :picker-options = "pickerOptions">
-                        </el-date-picker>
-                    </div>
+                    <el-col  offset="4">
+                        <div class = "block">
+                            <el-date-picker
+                                    v-model = "timeRange"
+                                    type = "daterange"
+                                    value-format = "yyyy-MM-dd"
+                                    align = "left"
+                                    unlink-panels
+                                    range-separator = "至"
+                                    start-placeholder = "开始日期"
+                                    end-placeholder = "结束日期"
+                                    @change = "handleTimeChange"
+                                    clearable = "true"
+                                    :picker-options = "pickerOptions">
+                            </el-date-picker>
+                        </div>
+
+                    </el-col>
                 </el-col>
 
-                <el-col :span = "12"
+                <el-col :span = "11"
                         style = " padding-bottom: 10px;border-left: solid 1px #eee">
                     <el-divider content-position = "left">病历号查找</el-divider>
                     <el-col :span = "18" offset = "3">
@@ -57,6 +59,16 @@
                     </el-col>
                 </el-col>
 
+                <el-col :span = "2"
+                        style = " padding-bottom: 10px;border-left: solid 1px #eee">
+                    <el-divider content-position = "left">刷新</el-divider>
+                    <el-col align = "center">
+                        <el-button type="primary" circle icon = "el-icon-refresh" style = "border: 0;"
+                                   @click = "refresh" ></el-button>
+
+                    </el-col>
+                </el-col>
+
             </el-row>
 
             <el-row class = "row show-shadow" style = "padding-bottom: 10px;">
@@ -66,9 +78,9 @@
                         <el-divider content-position = "left">挂号列表</el-divider>
                     </el-header>
 
-                    <el-table ref = "multipleTable"
-                              :data = "regInfoList"
-                              style = "width: 100%">
+                    <el-table  ref = "multipleTable"
+                               :data = "regInfoList"
+                               style = "width: 100%">
 
 
                         <el-table-column type = "expand">
@@ -84,32 +96,32 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column label = "编号" prop = "id">
+                        <el-table-column align="center" width="60px"  label = "编号" prop = "id">
                         </el-table-column>
-                        <el-table-column label = "病历号" prop = "medicalRecordNo">
+                        <el-table-column align="center" width="160px" label = "病历号" prop = "medicalRecordNo">
                         </el-table-column>
-                        <el-table-column label = "患者姓名" prop = "patientName">
+                        <el-table-column align="center" label = "患者姓名" prop = "patientName">
                         </el-table-column>
-                        <el-table-column label = "挂号科室" prop = "deptName">
+                        <el-table-column  align="center" label = "挂号科室" prop = "deptName">
                         </el-table-column>
-                        <el-table-column label = "挂号级别" prop = "regLevel">
+                        <el-table-column align="center" label = "挂号级别" prop = "regLevel">
                         </el-table-column>
-                        <el-table-column label = "挂号时间" prop = "registrationDate">
+                        <el-table-column align="center" width="160px"  label = "挂号时间" prop = "registrationDate">
                         </el-table-column>
-                        <el-table-column label = "是否已看诊">
+                        <el-table-column align="center" label = "是否已看诊">
                             <template slot-scope = "props">
                                 {{props.row.isSeenDoctor==='1'?'是':(props.row.isSeenDoctor==='0'?'否':'')}}
                             </template>
                         </el-table-column>
-                        <el-table-column label = "挂号状态">
+                        <el-table-column align="center" label = "挂号状态">
                             <template slot-scope = "props">
                                 {{props.row.regStatus==='1'?'挂号':(props.row.regStatus==='0'?'退号':'')}}
                             </template>
                         </el-table-column>
-                        <el-table-column label = "挂号费用" prop = "expense">
+                        <el-table-column align="center" label = "挂号费用" prop = "expense">
                         </el-table-column>
 
-                        <el-table-column label = "操作">
+                        <el-table-column align="center" label = "操作">
                             <template slot-scope = "props">
                                 <el-button icon = "el-icon-edit" @click = "confirm(props.row.id)"
                                            type = "text" size = "small"
@@ -168,8 +180,9 @@
         medRecNoList: [],
         medRecNoSearchList: '',
 
-        //是否已经复制
-        isCopy: '0',
+        //是否应该备份
+        isShouldCopy: true,
+
         copy: {
           regInfoListCopy: [],
           pageNumCopy: '',
@@ -231,9 +244,9 @@
               this.pageParams.pages = data.data.pages
               this.pageParams.total = data.data.total
 
-              if (this.isCopy === '0') {
+              if (this.isShouldCopy) {
                 this.copyInfo()
-                this.isCopy = 1
+                this.isShouldCopy = false
               }
             }
           } else {
@@ -243,7 +256,6 @@
       },
 
       getRegInfo(val) {
-
         getRegInfo(val).then((res) => {
           if (res.status === 200) {
             let data = res.data
@@ -297,9 +309,8 @@
       handleTimeChange(val) {
 
         if (val === null || val === '') {
-          this.returnCopyInfo()
+          this.refresh()
         } else {
-
           this.pageParams.pageNum = 1
           this.getRegInfoList()
         }
@@ -352,6 +363,7 @@
                 type: 'success',
                 message: '退号成功!',
               })
+              this.refresh()
             }
           } else {
             this.$message.error('退号失败!')
@@ -373,6 +385,14 @@
             message: '已取消退号',
           })
         })
+      },
+
+      refresh() {
+
+        this.timeRange = []
+        this.medRecSearchValue = ''
+        this.isShouldCopy = true
+        this.getRegInfoList()
       },
 
     },//method end
