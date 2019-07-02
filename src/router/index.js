@@ -572,10 +572,10 @@ export const registerAndChargeRoutes = [
       {
         path: '/reg/RegInfo',
         component: RegisterInfo,
-        name: '挂号列表',
+        name: '查询及退号',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '挂号列表',
+          name: '查询及退号',
         },
       }
     ]
