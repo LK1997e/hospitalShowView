@@ -1,4 +1,4 @@
-<template xmlns:el-col = "http://www.w3.org/1999/html">
+<template>
 
     <el-container>
 
@@ -19,7 +19,7 @@
                 <el-col :span = "11"
                         style = "padding-bottom: 10px;border-right: solid 1px #eee">
                     <el-divider content-position = "left">时间筛选</el-divider>
-                    <el-col  offset="4">
+                    <el-col offset = "4">
                         <div class = "block">
                             <el-date-picker
                                     v-model = "timeRange"
@@ -63,8 +63,8 @@
                         style = " padding-bottom: 10px;border-left: solid 1px #eee">
                     <el-divider content-position = "left">刷新</el-divider>
                     <el-col align = "center">
-                        <el-button type="primary" circle icon = "el-icon-refresh" style = "border: 0;"
-                                   @click = "refresh" ></el-button>
+                        <el-button type = "primary" circle icon = "el-icon-refresh" style = "border: 0;"
+                                   @click = "refresh"></el-button>
 
                     </el-col>
                 </el-col>
@@ -78,9 +78,9 @@
                         <el-divider content-position = "left">挂号列表</el-divider>
                     </el-header>
 
-                    <el-table  ref = "multipleTable"
-                               :data = "regInfoList"
-                               style = "width: 100%">
+                    <el-table ref = "multipleTable"
+                              :data = "regInfoList"
+                              style = "width: 100%">
 
 
                         <el-table-column type = "expand">
@@ -96,32 +96,32 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column align="center" width="60px"  label = "编号" prop = "id">
+                        <el-table-column align = "center" width = "60px" label = "编号" prop = "id">
                         </el-table-column>
-                        <el-table-column align="center" width="160px" label = "病历号" prop = "medicalRecordNo">
+                        <el-table-column align = "center" width = "160px" label = "病历号" prop = "medicalRecordNo">
                         </el-table-column>
-                        <el-table-column align="center" label = "患者姓名" prop = "patientName">
+                        <el-table-column align = "center" label = "患者姓名" prop = "patientName">
                         </el-table-column>
-                        <el-table-column  align="center" label = "挂号科室" prop = "deptName">
+                        <el-table-column align = "center" label = "挂号科室" prop = "deptName">
                         </el-table-column>
-                        <el-table-column align="center" label = "挂号级别" prop = "regLevel">
+                        <el-table-column align = "center" label = "挂号级别" prop = "regLevel">
                         </el-table-column>
-                        <el-table-column align="center" width="160px"  label = "挂号时间" prop = "registrationDate">
+                        <el-table-column align = "center" width = "160px" label = "挂号时间" prop = "registrationDate">
                         </el-table-column>
-                        <el-table-column align="center" label = "是否已看诊">
+                        <el-table-column align = "center" label = "是否已看诊">
                             <template slot-scope = "props">
                                 {{props.row.isSeenDoctor==='1'?'是':(props.row.isSeenDoctor==='0'?'否':'')}}
                             </template>
                         </el-table-column>
-                        <el-table-column align="center" label = "挂号状态">
+                        <el-table-column align = "center" label = "挂号状态">
                             <template slot-scope = "props">
                                 {{props.row.regStatus==='1'?'挂号':(props.row.regStatus==='0'?'退号':'')}}
                             </template>
                         </el-table-column>
-                        <el-table-column align="center" label = "挂号费用" prop = "expense">
+                        <el-table-column align = "center" label = "挂号费用" prop = "expense">
                         </el-table-column>
 
-                        <el-table-column align="center" label = "操作">
+                        <el-table-column align = "center" label = "操作">
                             <template slot-scope = "props">
                                 <el-button icon = "el-icon-edit" @click = "confirm(props.row.id)"
                                            type = "text" size = "small"
@@ -153,7 +153,7 @@
   import {getRegInfo, getRegInfoList, getTodayWorkload, retreat} from '../../api/registerApi'
 
   export default {
-    name: 'RegisterInfo',
+    name: 'RegisterInfoList',
 
     data() {
       return {

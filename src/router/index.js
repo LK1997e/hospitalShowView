@@ -28,7 +28,7 @@ import Register from '../components/registerAndCharge/Register'
 import SearchPatient from '@/components/outpatient/SearchPatient'
 import MedicalRecHome from '@/components/outpatient/MedicalRecHome'
 import ApplyInspection from '@/components/outpatient/ApplyInspection'
-import RegisterInfo from '../components/registerAndCharge/RegisterInfo'
+import RegisterInfoList from '../components/registerAndCharge/RegisterInfoList'
 import PharmacyDeal from '@/components/pharmacy/PharmacyDeal'
 import Toll from '@/components/registerAndCharge/Toll'
 import DailySettle from '@/components/registerAndCharge/DailySettle'
@@ -36,6 +36,7 @@ import DailySettleSearch from '@/components/registerAndCharge/DailySettleSearch'
 
 import DisposalSearch from '@/components/medicalTech/disposal/DisposalSearch'
 import DisposalCheck from '@/components/medicalTech/disposal/DisposalCheck'
+import ApplyPatientCard from '../components/registerAndCharge/ApplyPatientCard'
 
 
 
@@ -571,13 +572,22 @@ export const registerAndChargeRoutes = [
       },
       {
         path: '/reg/RegInfo',
-        component: RegisterInfo,
+        component: RegisterInfoList,
         name: '查询及退号',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '查询及退号',
         },
-      }
+      },
+      {
+        path: '/reg/applyPatientCard',
+        component: ApplyPatientCard,
+        name: '申请就诊卡',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '申请就诊卡',
+        },
+      },
     ]
   },
   {
