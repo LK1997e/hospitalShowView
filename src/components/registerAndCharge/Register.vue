@@ -17,7 +17,7 @@
                      class = "regForm">
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "就诊卡" prop = "isHaveCard">
                             <el-radio-group v-model = "regForm.isHaveCard">
                                 <el-radio label = "1">有</el-radio>
@@ -27,8 +27,8 @@
                     </el-col>
                 </el-row>
 
-                <el-row :gutter = "20">
-                    <el-col :span = "8">
+                <el-row :gutter = "20" >
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "患者名字" prop = "patientName">
                             <el-input v-model = "regForm.patientName"></el-input>
                         </el-form-item>
@@ -44,7 +44,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "身份证号" prop = "identityCardNo">
                             <el-input v-model = "regForm.identityCardNo"></el-input>
                         </el-form-item>
@@ -58,7 +58,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "家庭住址" prop = "familyAddress">
                             <el-input v-model = "regForm.familyAddress"></el-input>
                         </el-form-item>
@@ -71,7 +71,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item ref = "deptID" label = "挂号科室" prop = "departmentID">
                             <el-select style = "width: 100%" v-model = "regForm.departmentID"
                                        @click.native = "getDeptList"
@@ -110,7 +110,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item ref = "seeDoctorDate" label = "看诊时间" prop = "seeDoctorDate">
                             <el-date-picker style = "width: 100%;" v-model = "regForm.seeDoctorDate"
                                             value-format = "yyyy-MM-dd"
@@ -138,7 +138,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "挂号来源" prop = "registrationSourceID">
                             <el-select style = "width: 100%" v-model = "regForm.registrationSourceID"
                                        @click.native = "getRegSource"
@@ -171,7 +171,7 @@
                 </el-row>
 
                 <el-row :gutter = "20">
-                    <el-col :span = "8">
+                    <el-col :span = "8" offset="4">
                         <el-form-item label = "挂号费用" prop = "expense">
                             <el-input :disabled = "true" v-model = "regForm.expense" clearable placeholder = "挂号费用">
                                 <template slot = "append">￥</template>
@@ -181,7 +181,7 @@
                 </el-row>
 
                 <el-form-item>
-                    <el-col :span = "8">
+                    <el-col :span = "12">
                         <el-form-item align = "right">
                             <el-button ref = "submit" type = "primary" @click = "submitForm('regForm')">确认挂号</el-button>
                             <el-button @click = "resetForm('regForm')">重置</el-button>
