@@ -78,7 +78,8 @@
 
 <script>
 
-  import {applyCard} from '@/api/applyPatientCard'
+
+  import {applyCard} from '../../api/patientCard'
 
   export default {
 

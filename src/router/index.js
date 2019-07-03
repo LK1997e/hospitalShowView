@@ -37,6 +37,8 @@ import DailySettleSearch from '@/components/registerAndCharge/DailySettleSearch'
 import DisposalSearch from '@/components/medicalTech/disposal/DisposalSearch'
 import DisposalCheck from '@/components/medicalTech/disposal/DisposalCheck'
 import ApplyPatientCard from '../components/registerAndCharge/ApplyPatientCard'
+import PatientCardManage
+  from '../components/registerAndCharge/PatientCardManage'
 
 
 
@@ -586,6 +588,15 @@ export const registerAndChargeRoutes = [
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '申请就诊卡',
+        },
+      },
+      {
+        path: '/reg/patientCardManage',
+        component: PatientCardManage,
+        name: '就诊卡管理',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '就诊卡管理',
         },
       },
     ]

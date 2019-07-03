@@ -43,7 +43,6 @@
                         style = " padding-bottom: 10px;border-left: solid 1px #eee">
                     <el-divider content-position = "left">病历号查找</el-divider>
                     <el-col :span = "18" offset = "3">
-                        <!--<el-input v-model="medRecSearchValue" placeholder="请输入内容"></el-input>-->
                         <el-select style = "width: 100%" v-model = "medRecSearchValue"
                                    @click.native = "handleClick" @change = "handleMedRecNoChange" filterable
                                    :filter-method = "medRecNoFilter" clearable placeholder = "请选择">
