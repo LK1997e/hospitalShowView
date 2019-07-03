@@ -698,7 +698,7 @@
                             type: 'success'
                           });
                           this.freshDrugInfo();
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -726,7 +726,7 @@
                             message: data.msg,
                             type: 'success'
                           });
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -926,7 +926,7 @@
                             type: 'success'
                           });
                           this.freshMatInfo();
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -954,7 +954,7 @@
                             message: data.msg,
                             type: 'success'
                           });
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -990,6 +990,7 @@
                 message: data.msg,
                 type: 'success'
               });
+              this.$router.push({ path: '/medicalTech/disposalSearch' });
             } else {
               this.$message({
                 message: data.msg,

@@ -294,6 +294,7 @@
                     message: data.msg,
                     type: 'success'
                   });
+                  this.getDisposalFormViewList();
                 } else {
                   this.$message({
                     message: data.msg,

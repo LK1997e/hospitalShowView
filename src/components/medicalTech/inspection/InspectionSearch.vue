@@ -224,7 +224,6 @@
               pageSize: this.pageParams.pageSize
           }
         );
-        alert(params);
         Inspectformview(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
@@ -301,6 +300,7 @@
                     message: data.msg,
                     type: 'success'
                   });
+                  this.getInspectFormViewList();
                 } else {
                   this.$message({
                     message: data.msg,

@@ -21,12 +21,13 @@
 
           <el-date-picker
             style="float: left;margin-left: 8px"
-            v-model="condition.date"
+            v-model="condition.endDate"
             type="datetime"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日 HH:mm:ss"
             value-format="yyyy-MM-dd HH:mm:ss"
-            @change="handleDateChange">
+            :picker-options="pickerOptions"
+            >
           </el-date-picker>
 
 
@@ -42,8 +43,65 @@
       </el-row>
 
 
+      <el-row class="row show-shadow"
+              style="padding-bottom: 10px;">
+        <el-container>
+          <el-header>
+            <el-divider content-position="left">日结结果</el-divider>
+          </el-header>
+          <el-col :span="22" :offset="1" class="grid-content">
+            <el-table
+              ref="dailySettleViewList"
+              :data="dailySettleViewList"
+              style="width: 100%">
+
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-table
+                    :data="dailySettleFeeList[props.$index]"
+                    style="width: 100%">
+                    <el-table-column label="病历编号" prop="medicalRecordID">
+                    </el-table-column>
+                    <el-table-column label="项目编号" prop="chargeItemID">
+                    </el-table-column>
+                    <el-table-column label="费用科目" prop="expName">
+                    </el-table-column>
+                    <el-table-column label="支付状态" prop="payStatusName">
+                    </el-table-column>
+                    <el-table-column label="收费时间" prop="tollDate">
+                    </el-table-column>
+                    <el-table-column label="金额" prop="fee">
+                    </el-table-column>
+                  </el-table>
+                </template>
+              </el-table-column>
+
+
+              <el-table-column label="日结编号" prop="id">
+              </el-table-column>
+              <el-table-column label="收费员名字" prop="tollManName">
+              </el-table-column>
+              <el-table-column label="日结开始时间" prop="startTime">
+              </el-table-column>
+              <el-table-column label="日结结束时间" prop="endTime">
+              </el-table-column>
+              <el-table-column label="总金额" prop="amount">
+              </el-table-column>
+            </el-table>
+          </el-col>
+          <hr>
+
+
+
+        </el-container>
+
+      </el-row>
+
 
     </el-main>
+
+
+
   </el-container>
 
 </template>
@@ -53,40 +111,52 @@
 <script>
   import {
     DailySettle,
-    DailySettleSearch,
     DailySettleFee
   } from "../../api/feeApi";
   import Qs from 'qs';
 
   export default {
-    name: "inpectionSearch",
+    name: "dailySettle",
     data() {
       return {
         condition:{
-          date:'',
+          startDate: '',
+          endDate: '',
         },
+
+        dailySettleViewList: [],
+        dailySettleFeeList: [],
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+        }
       }
 
     },
     methods: {
-      handleDateChange(){
-        this.pageParams.pageNum=1;
-      },
       dailySettle(){
         let params = Qs.stringify(
           {
-            endDate:this.condition.date,
+            endDate:this.condition.endDate,
           }
         );
+
         DailySettle(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
+               this.dailySettleViewList=data.data;
+               this.dailySettleFeeList=[];
+               data.data.forEach((item)=>{
+                this.dailySettleFee(item.startTime,item.endTime);
+              });
               this.$message({
                 message: data.msg,
                 type: 'success'
               });
             } else if (data.status === 'WARN') {
+              this.dailySettleViewList=[];
               this.$message({
                 message: data.msg,
                 type: 'warning'
@@ -96,7 +166,23 @@
             }
           }
         });
-      }
+      },
+      dailySettleFee(startDate, endDate) {
+        let params = 'startDate=' + startDate + '&endDate=' + endDate;
+        DailySettleFee(params).then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.dailySettleFeeList.push(data.data);
+            } else {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            }
+          }
+        });
+      },
     },
     mounted() {
     }

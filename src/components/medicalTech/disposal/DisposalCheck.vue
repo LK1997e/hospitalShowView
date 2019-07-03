@@ -979,6 +979,7 @@
                 message: data.msg,
                 type: 'success'
               });
+              this.$router.push({ path: '/medicalTech/inspectionSearch' });
             } else {
               this.$message({
                 message: data.msg,

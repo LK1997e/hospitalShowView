@@ -49,7 +49,7 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="left">检查检验列表</el-divider>
+            <el-divider content-position="left">日结列表</el-divider>
           </el-header>
           <el-col :span="22" :offset="1" class="grid-content">
             <el-table
@@ -122,7 +122,7 @@
   import Qs from 'qs';
 
   export default {
-    name: "inpectionSearch",
+    name: "dailySettleSearch",
     data() {
       return {
         condition: {
