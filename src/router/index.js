@@ -355,6 +355,7 @@ export const medicalTechRoutes = [
         component: InspectionCheck,
         name: '检查检验审核',
         iconCls: 'el-icon-message',//图标样式class
+        hidden: true,
         meta: {
           name: '检查检验审核',
         },
@@ -364,6 +365,7 @@ export const medicalTechRoutes = [
         component: InspectionExcute,
         name: '检查检验执行',
         iconCls: 'el-icon-message',//图标样式class
+        hidden: true,
         meta: {
           name: '检查检验执行',
         },
@@ -393,6 +395,7 @@ export const medicalTechRoutes = [
         component: DisposalCheck,
         name: '处置审核',
         iconCls: 'el-icon-message',//图标样式class
+        hidden: true,
         meta: {
           name: '处置审核',
         },

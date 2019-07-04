@@ -151,6 +151,8 @@
               </el-table-column>
               <el-table-column label="用量" prop="dosage">
               </el-table-column>
+              <el-table-column label="审核状态" prop="checkedName">
+              </el-table-column>
               <el-table-column label="操作1">
                 <template slot-scope="props">
                   <el-button icon="el-icon-edit" @click.native.prevent="editDrugs(props.row)" type="text"
@@ -280,6 +282,8 @@
               <el-table-column label="材料规格" prop="format">
               </el-table-column>
               <el-table-column label="用量" prop="dosage">
+              </el-table-column>
+              <el-table-column label="审核状态" prop="checkedName">
               </el-table-column>
               <el-table-column label="操作1">
                 <template slot-scope="props">
