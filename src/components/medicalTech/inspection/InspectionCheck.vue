@@ -151,6 +151,8 @@
               </el-table-column>
               <el-table-column label="用量" prop="dosage">
               </el-table-column>
+              <el-table-column label="审核状态" prop="checkedName">
+              </el-table-column>
               <el-table-column label="操作1">
                 <template slot-scope="props">
                   <el-button icon="el-icon-edit" @click.native.prevent="editDrugs(props.row)" type="text"
@@ -280,6 +282,8 @@
               <el-table-column label="材料规格" prop="format">
               </el-table-column>
               <el-table-column label="用量" prop="dosage">
+              </el-table-column>
+              <el-table-column label="审核状态" prop="checkedName">
               </el-table-column>
               <el-table-column label="操作1">
                 <template slot-scope="props">
@@ -698,7 +702,7 @@
                             type: 'success'
                           });
                           this.freshDrugInfo();
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -726,7 +730,7 @@
                             message: data.msg,
                             type: 'success'
                           });
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -926,7 +930,7 @@
                             type: 'success'
                           });
                           this.freshMatInfo();
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -954,7 +958,7 @@
                             message: data.msg,
                             type: 'success'
                           });
-                        } else if (data.status === 'NG') {
+                        } else if (data.status === 'WARN') {
                           this.$message({
                             message: data.msg,
                             type: 'warning'
@@ -990,6 +994,7 @@
                 message: data.msg,
                 type: 'success'
               });
+              this.$router.push({ path: '/medicalTech/disposalSearch' });
             } else {
               this.$message({
                 message: data.msg,

@@ -1,5 +1,16 @@
 <template>
+  <div id="logo">
   <el-container>
+    <el-header style="background:#41cde5;">
+      <el-row class="row-bg">
+        <el-col span="4" class="grid-content">
+          <span style="font-size:20px;color: white;">用户个人信息</span>
+        </el-col>
+
+      </el-row>
+
+    </el-header>
+    <el-container>
     <el-aside width="350px">
     <div style="margin: 15%">
       <img :src=this.user.photoLocation style="width: 200px; height: 200px;">
@@ -55,7 +66,9 @@
 <!--    </el-row>-->
   </el-form>
     </el-main>
+    </el-container>
   </el-container>
+  </div>
 </template>
 
 <script>
@@ -121,5 +134,11 @@
 </script>
 
 <style scoped>
-
+  #logo{
+    background: url("../../../static/hospital2.jpg");
+    background-size: 100% 100%;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+  }
 </style>

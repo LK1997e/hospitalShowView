@@ -353,6 +353,7 @@
                 message: data.msg,
                 type: 'success'
               });
+              this.$router.push({ path: '/medicalTech/inspectionSearch' });
             }else if (data.status === 'NG') {
               this.$message({
                 message: data.msg,

@@ -3,7 +3,7 @@
     <el-header style="background:#41cde5;padding: 20px;height: 100px">
       <el-row class="row-bg" type="flex" align="top">
         <el-col :span="4" class="grid-content">
-          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 费用查询</span>
+          <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i> 收 费</span>
         </el-col>
         <el-col class="grid-content" :span="6" :offset="1">
           <el-form :model="condition" :rules="rules" class="demo-ruleForm">

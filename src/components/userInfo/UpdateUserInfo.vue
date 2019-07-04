@@ -1,6 +1,16 @@
 <template>
-  <div>
+  <div id="logo">
     <el-container>
+      <el-header style="background:#41cde5;">
+        <el-row class="row-bg">
+          <el-col span="4" class="grid-content">
+            <span style="font-size:20px;color: white;">个人信息修改</span>
+          </el-col>
+
+        </el-row>
+
+      </el-header>
+      <el-container>
       <el-aside width="350px">
         <div style="margin: 15%">
           <div>
@@ -26,96 +36,107 @@
       </el-aside>
       <el-main>
         <el-form >
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <div>
-                <el-form-item label="用户名" prop="userName">
-                  <el-input
-                    ref="userName"
-                    v-model="updateForm.updateUserInfoForm.userName"
-                    name="userName"
-                    placeholder="如需修改，在这里输入新用户名">
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <div>
-                <el-form-item label="真实姓名" prop="realName">
-                  <el-input
-                    ref="realName"
-                    v-model="updateForm.updateUserInfoForm.realName"
-                    name="realName"
-                    placeholder="如需修改，在这里输入新姓名">
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <div>
-                <el-form-item label="旧密码" prop="oldPasswd">
-                  <el-input
-                    ref="oldPasswd"
-                    v-model="updateForm.updatePasswdForm.oldPasswd"
-                    name="oldPasswd"
-                    type="password"
-                    placeholder="若要修改密码，请输入旧密码">
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <div>
-                <el-form-item label="新密码" prop="newPasswd">
-                  <el-input
-                    ref="newPasswd"
-                    v-model="updateForm.updatePasswdForm.newPasswd"
-                    type="password"
-                    name="newPasswd"
-                    placeholder="请输入新密码">
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <div>
-                <el-form-item label="确认新密码" prop="newPasswd2">
-                  <el-input
-                    ref="newPasswd2"
-                    v-model="updateForm.updatePasswdForm.newPasswd2"
-                    type="password"
-                    name="newPasswd2"
-                    placeholder="再次输入新密码">
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row type="flex" class="row-bg" >
-            <el-col :span="8">
-              <el-form-item label="联系方式" prop="contact">
-                <el-input
-                  ref="contact"
-                  v-model="updateForm.updateUserInfoForm.contact"
-                  name="contact"
-                  placeholder="如需修改，在这里输入新联系方式">
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
           <el-row>
-            <el-col :span="8" align="right">
+            <el-col :span="9">
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <div>
+                    <el-form-item label="用户名" prop="userName">
+                      <el-input
+                        ref="userName"
+                        v-model="updateForm.updateUserInfoForm.userName"
+                        name="userName"
+                        placeholder="如需修改，在这里输入新用户名">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <div>
+                    <el-form-item label="真实姓名" prop="realName">
+                      <el-input
+                        ref="realName"
+                        v-model="updateForm.updateUserInfoForm.realName"
+                        name="realName"
+                        placeholder="如需修改，在这里输入新姓名">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <el-form-item label="联系方式" prop="contact">
+                    <el-input
+                      ref="contact"
+                      v-model="updateForm.updateUserInfoForm.contact"
+                      name="contact"
+                      placeholder="如需修改，在这里输入新联系方式">
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+
+            <el-col :span="9">
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <div>
+                    <el-form-item label="旧密码" prop="oldPasswd">
+                      <el-input
+                        ref="oldPasswd"
+                        v-model="updateForm.updatePasswdForm.oldPasswd"
+                        name="oldPasswd"
+                        type="password"
+                        placeholder="若要修改密码，请输入旧密码">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <div>
+                    <el-form-item label="新密码" prop="newPasswd">
+                      <el-input
+                        ref="newPasswd"
+                        v-model="updateForm.updatePasswdForm.newPasswd"
+                        type="password"
+                        name="newPasswd"
+                        placeholder="请输入新密码">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row type="flex" class="row-bg" >
+                <el-col :span="15">
+                  <div>
+                    <el-form-item label="确认新密码" prop="newPasswd2">
+                      <el-input
+                        ref="newPasswd2"
+                        v-model="updateForm.updatePasswdForm.newPasswd2"
+                        type="password"
+                        name="newPasswd2"
+                        placeholder="再次输入新密码">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+
+
+
+          <el-row>
+            <el-col :span="8" align="right" style="margin-top: 100px">
               <el-form-item>
-                <el-button type="primary" @click="updateUserInfo">&nbsp;&nbsp;确认&nbsp;&nbsp;</el-button>
-                <el-button @click.native.prevent>取消</el-button>
+                <el-col>
+                  <el-button type="primary" @click="updateUserInfo">&nbsp;&nbsp;确认修改&nbsp;&nbsp;</el-button>
+                </el-col>
               </el-form-item>
             </el-col>
           </el-row>
@@ -128,6 +149,7 @@
           <!--    </el-row>-->
         </el-form>
       </el-main>
+      </el-container>
     </el-container>
 
   </div>
@@ -429,5 +451,11 @@
 </script>
 
 <style scoped>
-
+  #logo{
+    background: url("../../../static/hospital2.jpg");
+    background-size: 100% 100%;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+  }
 </style>

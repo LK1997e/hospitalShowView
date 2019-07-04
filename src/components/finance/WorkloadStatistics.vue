@@ -14,11 +14,11 @@
       <el-row class="row-bg show-shadow">
 
 
-        <el-col :span="20"
+        <el-col :span="24"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
           <el-row>
-            <el-col :span="1.2" class="el-col-display">医生姓名</el-col>
+            <el-col :span="1.2" class="el-col-display" style="margin-left: 100px">医生姓名</el-col>
             <el-col :span="3.8">
 
 
