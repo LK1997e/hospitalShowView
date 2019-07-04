@@ -6,7 +6,7 @@ let hospital = 'http://localhost:8081/hospital';
 export const addDiagnosis =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
-  alert(listParams);
+  // alert(listParams);
   return axios.post(
     `${hospital}/Diagnosis/addDiagnosis`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }

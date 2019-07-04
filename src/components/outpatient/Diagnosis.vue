@@ -380,7 +380,7 @@
                   this.$message.error(data.msg);
                 }
               } else {
-                alert('error');
+                // alert('error');
 
               }
 
@@ -425,7 +425,7 @@
                           let data = res.data;
                           if (data.status === 'OK') {
                             diseaseID=data.data;
-                            alert(diseaseID);
+                            // alert(diseaseID);
                             if(diseaseID===null) {
                               this.$message({
                                 message: '改疾病不存在',
@@ -433,7 +433,7 @@
                               });
                               return;
                             }
-                            alert(diseaseID);
+                            // alert(diseaseID);
                             let params2={
                               id:this.editForm.id,
                               medicalRecordID:this.medicalRecordID,
@@ -495,7 +495,7 @@
                           let data = res.data;
                           if (data.status === 'OK') {
                             diseaseID=data.data;
-                            alert(diseaseID);
+                            // alert(diseaseID);
                             if(diseaseID===null) {
                               this.$message({
                                 message: '改疾病不存在',
@@ -503,7 +503,7 @@
                               });
                               return;
                             }
-                            alert(diseaseID);
+                            // alert(diseaseID);
                             let params2={
                               id:this.addForm.id,
                               medicalRecordID:this.medicalRecordID,
