@@ -11,17 +11,21 @@
 			</el-col>
 			<el-col :span=4 class="userinfo">
 				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner">
+            <img :src=this.user.photoLocation />
+            {{this.user.sysUserName}}
+          </span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item divided @click.native="reload">刷新</el-dropdown-item>
+            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
 		</el-col>
 		<el-col :span=24 class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
+			<aside :class="collapsed?'menu-collapsed':'menu-expanded'" style="overflow-y: scroll">
 				<!--导航菜单-->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
 					 unique-opened router v-if="!collapsed">
@@ -65,6 +69,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span=24 class="content-wrapper">
+                        <el-divider></el-divider>
 						<transition name="fade" mode="out-in">
 							<router-view></router-view>
 						</transition>
@@ -78,12 +83,17 @@
 <script>
 
 	export default {
+    inject:['reload'],
 		data() {
 			return {
 				sysName:'东软医疗系统',
 				collapsed:false,
-				sysUserName: '',
-				sysUserAvatar: '',
+        user:{
+          sysUserName: '',
+          photoLocation:'',
+        },
+
+				// sysUserAvatar: '',
 				form: {
 					name: '',
 					region: '',
@@ -135,10 +145,9 @@
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-
-
+				this.user.sysUserName = user.name ;
+				// this.sysUserAvatar = user.avatar || '';
+        this.user.photoLocation = "http://localhost:8081/hospital/images/"+user.photoLocation;
 			}
 		}
 	}
@@ -270,7 +279,7 @@
 				.content-wrapper {
 					background-color: #fff;
 					box-sizing: content-box;
-					width: 1600px;
+					width: 100%;
 				}
 			}
 		}

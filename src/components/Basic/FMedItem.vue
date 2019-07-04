@@ -2,16 +2,15 @@
   <el-container style="margin-top: 6px">
     <el-header style="background:#41cde5;">
 
-
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
-          <span style="font-size:20px;color: white;">科室管理</span>
+          <span style="font-size:20px;color: white;">项目管理</span>
         </el-col>
         <el-col class="grid-content" :span="6" :offset="16">
-          <el-select v-model="searchValue" @change="deptSearchChange"
-                     filterable :filter-method="deptSearchValuesFilter" clearable placeholder="请输入科室名称">
+          <el-select v-model="searchValue" @change="fMedItemSearchChange"
+                     filterable :filter-method="fMedItemSearchValuesFilter" clearable placeholder="请输入项目名称">
             <el-option
-              v-for="item in deptSearchOptions"
+              v-for="item in fMedItemSearchOptions"
               :key="item.code"
               :label="item.name"
               :value="item.name">
@@ -32,12 +31,12 @@
         <el-col :span="12"
                 style="padding-bottom: 10px;border-right: solid 1px #eee">
           <el-divider content-position="left">筛选查询</el-divider>
-          <el-col :span="2" class="el-col-display">科室分类</el-col>
-          <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
-                     v-model="listParam.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
+          <el-col :span="2" class="el-col-display">科室名称</el-col>
+          <el-select style="float: left;margin-left: 8px" @change="handleFMedItemTypeOrDeptChange"
+                     v-model="listParam.deptID" filterable :filter-method="departmentSearchValuesFilter"
                      clearable placeholder="请选择">
             <el-option
-              v-for="item in deptCategoryOptions"
+              v-for="item in departmentOptions"
               :key="item.code"
               :label="item.name"
               :value="item.id">
@@ -45,12 +44,12 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
             </el-option>
           </el-select>
-          <el-col :span="2" class="el-col-display">科室类型</el-col>
-          <el-select style="float: left;margin-left: 8px" @change="handleDeptTypeOrDeptCategoryChange"
-                     v-model="listParam.typeID" filterable :filter-method="deptTypeSearchValuesFilter" clearable
+          <el-col :span="2" class="el-col-display">项目类型</el-col>
+          <el-select style="float: left;margin-left: 8px" @change="handleFMedItemTypeOrDeptChange"
+                     v-model="listParam.recordType" filterable :filter-method="fMedItemTypeSearchValuesFilter" clearable
                      placeholder="请选择">
             <el-option
-              v-for="item in deptTypeOptions"
+              v-for="item in fMedItemTypeOptions"
               :key="item.code"
               :label="item.name"
               :value="item.id">
@@ -73,7 +72,7 @@
 
             <el-upload
               name="file"
-              action="http://localhost:8081/hospital/department/upload"
+              action="http://localhost:8081/hospital/fMedItem/upload"
               :http-request="myUpload"
               :before-upload="handleBeforeUpload"
 
@@ -107,11 +106,11 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="left">科室列表</el-divider>
+            <el-divider content-position="left">项目列表</el-divider>
           </el-header>
           <el-table
             ref="multipleTable"
-            :data="departmentList"
+            :data="fMedItemList"
             style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column type="expand">
@@ -138,13 +137,19 @@
             </el-table-column>
             <el-table-column label="编号" prop="id">
             </el-table-column>
-            <el-table-column label="科室编码" prop="deptCode">
+            <el-table-column label="项目编码" prop="mnemonicCode">
             </el-table-column>
-            <el-table-column label="科室名称" prop="deptName">
+            <el-table-column label="项目名称" prop="name">
             </el-table-column>
-            <el-table-column label="科室分类" prop="deptCategory">
+            <el-table-column label="项目规格" prop="format">
             </el-table-column>
-            <el-table-column label="科室类别" prop="deptType">
+            <el-table-column label="价格" prop="price">
+            </el-table-column>
+            <el-table-column label="所属费用科目" prop="expClassName">
+            </el-table-column>
+            <el-table-column label="执行科室" prop="deptName">
+            </el-table-column>
+            <el-table-column label="项目类型" prop="typeName">
             </el-table-column>
             <el-table-column label="操作1">
               <template slot-scope="props">
@@ -182,20 +187,40 @@
           </div>
 
 
-          <el-dialog title="修改科室信息" :visible.sync="editDialogFormVisible" width="30%">
-            <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="科室名称" prop="deptName">
-                <el-input v-model="editForm.deptName" style="width: 280px"></el-input>
+          <el-dialog title="修改项目信息" :visible.sync="editDialogFormVisible" width="40%">
+            <el-form :model="editForm" :rules="rules" ref="editForm" label-width="150px" class="demo-ruleForm">
+              <el-form-item label="项目名称" prop="name">
+                <el-input v-model="editForm.name" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室编号" prop="deptCode">
-                <el-input v-model="editForm.deptCode" style="width: 280px"></el-input>
+              <el-form-item label="项目编号" prop="mnemonicCode">
+                <el-input v-model="editForm.mnemonicCode" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室分类" prop="deptCategoryID">
+
+              <el-form-item label="项目规格" prop="format">
                 <el-select style="float: left;width: 250px"
-                           v-model="editForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
-                           clearable placeholder="请选择" @change="getAllDeptCategoryNamesAndCodes">
+                           v-model="editForm.format" filterable
+                           clearable placeholder="请选择">
+                  <el-option label="日"></el-option>
+                  <el-option label="小时"></el-option>
+                  <el-option label="次"></el-option>
+                  <el-option label="疗程"></el-option>
+                  <el-option label="每个部位"></el-option>
+                  <el-option label="半小时"></el-option>
+                  <el-option label="单侧"></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="价格" prop="price">
+                <el-input-number v-model.number="editForm.price" :precision="2" style="width: 250px" :step="0.1"
+                                 :min="0"></el-input-number>
+              </el-form-item>
+
+              <el-form-item label="所属费用科目" prop="expClassID">
+                <el-select style="float: left;width: 250px"
+                           v-model="editForm.expClassID" filterable :filter-method="expClassSearchValuesFilter"
+                           clearable placeholder="请选择" @change="this.getAllExpClassNamesAndCodes">
                   <el-option
-                    v-for="item in deptCategoryOptions"
+                    v-for="item in expClassOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -204,13 +229,29 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="科室类别" prop="deptTypeID" width="30%">
+
+              <el-form-item label="执行科室" prop="deptID">
                 <el-select style="float: left;width: 250px"
-                           v-model="editForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
-                           clearable
-                           placeholder="请选择" @change="getAllDeptTypeNamesAndCodes">
+                           v-model="editForm.deptID" filterable :filter-method="departmentSearchValuesFilter"
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
-                    v-for="item in deptTypeOptions"
+                    v-for="item in departmentOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="项目类别" prop="recordType" width="30%">
+                <el-select style="float: left;width: 250px"
+                           v-model="editForm.recordType" filterable :filter-method="fMedItemTypeSearchValuesFilter"
+                           clearable
+                           placeholder="请选择" @change="this.getAllFMedItemTypeNamesAndCodes">
+                  <el-option
+                    v-for="item in fMedItemTypeOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -227,20 +268,41 @@
 
           </el-dialog>
 
-          <el-dialog title="添加科室信息" :visible.sync="addDialogFormVisible" width="30%">
-            <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="科室名称" prop="deptName">
-                <el-input v-model="addForm.deptName" style="width: 280px"></el-input>
+          <!--添加项目信息-->
+          <el-dialog title="添加项目信息" :visible.sync="addDialogFormVisible" width="40%">
+            <el-form :model="addForm" :rules="rules" ref="addForm" label-width="150px" class="demo-ruleForm">
+              <el-form-item label="项目名称" prop="name">
+                <el-input v-model="addForm.name" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室编号" prop="deptCode">
-                <el-input v-model="addForm.deptCode" style="width: 280px"></el-input>
+              <el-form-item label="项目编号" prop="mnemonicCode">
+                <el-input v-model="addForm.mnemonicCode" style="width: 280px"></el-input>
               </el-form-item>
-              <el-form-item label="科室分类" prop="deptCategoryID">
+
+              <el-form-item label="项目规格" prop="format">
                 <el-select style="float: left;width: 250px"
-                           v-model="addForm.deptCategoryID" filterable :filter-method="deptCategorySearchValuesFilter"
-                           clearable placeholder="请选择" @change="getAllDeptCategoryNamesAndCodes">
+                           v-model="addForm.format" filterable=""
+                           clearable placeholder="请选择">
+                  <el-option label="日" key="日" value="日"></el-option>
+                  <el-option label="小时" key="小时" value="小时"></el-option>
+                  <el-option label="次" key="次" value="次"></el-option>
+                  <el-option label="疗程" key="疗程" value="疗程"></el-option>
+                  <el-option label="每个部位" key="每个部位" value="每个部位"></el-option>
+                  <el-option label="半小时" key="半小时" value="半小时"></el-option>
+                  <el-option label="单侧" key="单侧" value="单侧"></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="价格" prop="price">
+                <el-input-number v-model.number="addForm.price" :precision="2" style="width: 250px" :step="0.1"
+                                 :min="0"></el-input-number>
+              </el-form-item>
+
+              <el-form-item label="所属费用科目" prop="expClassID">
+                <el-select style="float: left;width: 250px"
+                           v-model="addForm.expClassID" filterable :filter-method="expClassSearchValuesFilter"
+                           clearable placeholder="请选择" @change="this.getAllExpClassNamesAndCodes">
                   <el-option
-                    v-for="item in deptCategoryOptions"
+                    v-for="item in expClassOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -249,13 +311,29 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="科室类别" prop="deptTypeID">
+
+              <el-form-item label="执行科室" prop="deptID">
                 <el-select style="float: left;width: 250px"
-                           v-model="addForm.deptTypeID" filterable :filter-method="deptTypeSearchValuesFilter"
-                           clearable
-                           placeholder="请选择" @change="getAllDeptTypeNamesAndCodes">
+                           v-model="addForm.deptID" filterable :filter-method="departmentSearchValuesFilter"
+                           clearable placeholder="请选择" @change="this.getAllDeptNamesAndCodes">
                   <el-option
-                    v-for="item in deptTypeOptions"
+                    v-for="item in departmentOptions"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.id">
+                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.code }}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="项目类别" prop="recordType" width="30%">
+                <el-select style="float: left;width: 250px"
+                           v-model="addForm.recordType" filterable :filter-method="fMedItemTypeSearchValuesFilter"
+                           clearable
+                           placeholder="请选择" @change="this.getAllFMedItemTypeNamesAndCodes">
+                  <el-option
+                    v-for="item in fMedItemTypeOptions"
                     :key="item.code"
                     :label="item.name"
                     :value="item.id">
@@ -265,7 +343,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('addForm')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('addForm')">立即添加</el-button>
                 <el-button @click="resetForm('addForm')">重置</el-button>
               </el-form-item>
             </el-form>
@@ -323,47 +401,48 @@
 
 <script>
   import {
-    departmentGetList,
-    deptGetAllNamesAndCodes,
-    deptCategoryGetAllNamesAndCodes,
-    deptTypeGetAllNamesAndCodes,
-    deptGetByNameOrCode,
-    deptDeleteByID,
-    deptDeleteByChooses,
-    deptInfoUpdate,
-    deptInfoAdd,
+    fMedItemGetList,
+    fMedItemGetAllNamesAndCodes,
+    fMedItemTypeGetAllNamesAndCodes,
+    fMedItemGetByNameOrCode,
+    fMedItemDeleteByID,
+    fMedItemDeleteByChooses,
+    fMedItemInfoUpdate,
+    fMedItemInfoAdd,
     downloadXLS,
     createXLS,
     uploadXLS,
-    createXLSTemplate
-  } from '../../api/departmentApi';
-  import Qs from 'qs';
+    createXLSTemplate,
+    deptGetAllNamesAndCodes,
+    expClassGetAllNamesAndCodes
+  } from '../../api/fMedItemApi';
 
   export default {
-    name: "Department",
+    name: "FMedItem",
     data() {
       return {
         //判断是否需要copy
         checkIfCopy: 0,
-        //所有科室的名称或编号
-        deptSearchValues: [],
-        //存放入选择列表的科室名称或编号
-        deptSearchOptions: [],
-        //所有科室分类的名称或编号
-        deptCategoryValues: [],
-        //存放入选择列表的科室分类名称或编号
-        deptCategoryOptions: [],
-        //所有科室类型的名称或编号
-        deptTypeValues: [],
-        //存放入选择列表的科室分类名称或编号
-        deptTypeOptions: [],
-
+        //所有项目的名称或编号
+        fMedItemSearchValues: [],
+        //存放入选择列表的项目名称或编号
+        fMedItemSearchOptions: [],
+        //所有科室名称的名称或编号
+        departmentValues: [],
+        //存放入选择列表的科室名称名称或编号
+        departmentOptions: [],
+        //所有项目类型的名称或编号
+        fMedItemTypeValues: [],
+        //存放入选择列表的科室名称名称或编号
+        fMedItemTypeOptions: [],
+        expClassOptions: [],
+        expClassValues: [],
 
         listParam: {
-          //选择的科室分类id
-          deptCategoryID: '',
-          //选择的科室类别id
-          typeID: ''
+          //选择的科室名称id
+          deptID: '',
+          //选择的项目类别id
+          recordType: ''
 
         },
         pageParams: {
@@ -374,66 +453,79 @@
           //总条数
           total: 0,
         },
-        //存放科室列表
-        departmentList: [],
+        //存放项目列表
+        fMedItemList: [],
         //copy部分
         copy: {
-          departmentListCopy: [],
+          fMedItemListCopy: [],
           pageNumCopy: '',
           totalCopy: '',
-          //复制的科室分类id
-          deptCategoryIDCopy: undefined,
-          //复制的科室类别id
-          typeIDCopy: undefined
+          //复制的科室名称id
+          deptIDCopy: undefined,
+          //复制的项目类别id
+          recordTypeCopy: undefined
 
         },
 
-        //科室搜索的名称或编号
+        //项目搜索的名称或编号
         searchValue: '',
-        //选中的科室id
+        //选中的项目id
         checkList: [],
-        //添加科室的对话框是否显示
+        //添加项目的对话框是否显示
         addDialogFormVisible: false,
-        //修改科室的对话框是否显示
+        //修改项目的对话框是否显示
         editDialogFormVisible: false,
-        //添加科室的内容
+        //添加项目的内容
         addForm: {
-          deptName: '',
-          deptCode: '',
-          deptTypeID: '',
-          deptCategoryID: ''
+          name:'',
+          mnemonicCode: '',
+          format:'',
+          price:undefined,
+          expClassID:'',
+          deptID:'',
+          recordType:''
         },
-        //修改科室的内容
+        //修改项目的内容
         editForm: {
           id: '',
-          deptName: '',
-          deptCode: '',
-          deptTypeID: '',
-          deptCategoryID: ''
+          name:'',
+          mnemonicCode: '',
+          format:'',
+          price:undefined,
+          expClassID:'',
+          deptID:'',
+          recordType:''
 
         },
-        //修改科室规则
+        //修改项目规则
         rules: {
-          deptName: [
-            {required: true, message: '请输入科室名称', trigger: 'blur'},
+          name: [
+            {required: true, message: '请输入项目名称', trigger: 'blur'},
             {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'},
 
           ],
-          deptCode: [
-            {required: true, message: '请输入科室编号', trigger: 'blur'},
+          mnemonicCode: [
+            {required: true, message: '请输入项目编号', trigger: 'blur'},
             {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
           ],
-          deptCategoryID: [
-            {required: true, message: '请选择科室分类', trigger: 'change'}
+          format: [
+            {required: true, message: '请选择项目规格', trigger: 'change'}
           ],
-          deptTypeID: [
-            {required: true, message: '请选择科室类别', trigger: 'change'}
+          price: [
+            {required: true, message: '请输入项目价格', trigger: 'blur'},
+            { type: 'number', message: '项目价格必须为数字值'}
+          ],
+          expClassID: [
+            {required: true, message: '请选择费用科目类别', trigger: 'change'}
+          ],
+          deptID: [
+            {required: true, message: '请选择科室名称', trigger: 'change'}
+          ],
+          recordType: [
+            {required: true, message: '请选择项目类别', trigger: 'change'}
           ]
-
-
         },
-        //是否显示上传列表
-        whetherShowList: false,
+
         //导入条件选定
         uploadXLSCondition: {
           //遇到错误继续执行
@@ -447,20 +539,22 @@
 
     },
     methods: {
-      //获得所有科室列表
-      getDepartmentList() {
+      //获得所有项目列表
+
+      getFMedItemList() {
+
         let params = {
-          deptCategoryID: this.listParam.deptCategoryID,
-          typeID: this.listParam.typeID,
+          deptID: this.listParam.deptID,
+          recordType: this.listParam.recordType,
           pageNum: this.pageParams.pageNum,
           pageSize: this.pageParams.pageSize
         };
-        departmentGetList(params).then((res) => {
+        fMedItemGetList(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
               this.searchValue = '';
-              this.departmentList = data.data.list;
+              this.fMedItemList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
               this.copyInfo();
@@ -477,68 +571,88 @@
       },
       //复制信息
       copyInfo() {
-        this.copy.departmentListCopy = this.departmentList;
+        this.copy.fMedItemListCopy = this.fMedItemList;
         this.copy.pageNumCopy = this.pageParams.pageNum;
         this.copy.totalCopy = this.pageParams.total;
-        this.copy.deptCategoryIDCopy = this.listParam.deptCategoryID;
-        this.copy.typeIDCopy = this.listParam.typeID;
+        this.copy.deptIDCopy = this.listParam.deptID;
+        this.copy.recordTypeCopy = this.listParam.recordType;
       },
       //返回复制信息
       returnCopyInfo() {
-        this.departmentList = this.copy.departmentListCopy;
+        this.fMedItemList = this.copy.fMedItemListCopy;
         this.pageParams.pageNum = this.copy.pageNumCopy;
         this.pageParams.total = this.copy.totalCopy;
-        this.listParam.deptCategoryID = this.copy.deptCategoryIDCopy;
-        this.listParam.typeID = this.copy.typeIDCopy;
+        this.listParam.deptID = this.copy.deptIDCopy;
+        this.listParam.recordType = this.copy.recordTypeCopy;
       },
-      //获得所有科室名称和编号
+      //获得所有项目名称和编号
+      getAllFMedItemNamesAndCodes() {
+        fMedItemGetAllNamesAndCodes().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.fMedItemSearchValues = data.data;
+              this.fMedItemSearchOptions = data.data;
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+
+        });
+      },
+      //获得所有费用科目的名称和编号
+      getAllExpClassNamesAndCodes() {
+        expClassGetAllNamesAndCodes().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.expClassValues= data.data;
+              this.expClassOptions = data.data;
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+
+        });
+      },
+      //获得所有项目类型名称和编号
+      getAllFMedItemTypeNamesAndCodes() {
+        fMedItemTypeGetAllNamesAndCodes().then((res) => {
+          if (res.status === 200) {
+            let data = res.data;
+            if (data.status === 'OK') {
+              this.fMedItemTypeValues = data.data;
+              this.fMedItemTypeOptions = data.data;
+            } else if (data.status === 'WARN') {
+              this.$message({
+                message: data.msg,
+                type: 'warning'
+              });
+            } else {
+              this.$message.error(data.msg);
+            }
+          }
+
+        });
+      },
+      //获得所有科室名称名称和编号
       getAllDeptNamesAndCodes() {
         deptGetAllNamesAndCodes().then((res) => {
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
-              this.deptSearchValues = data.data;
-              this.deptSearchOptions = data.data;
-            } else if (data.status === 'WARN') {
-              this.$message({
-                message: data.msg,
-                type: 'warning'
-              });
-            } else {
-              this.$message.error(data.msg);
-            }
-          }
-
-        });
-      },
-      //获得所有科室类型名称和编号
-      getAllDeptTypeNamesAndCodes() {
-        deptTypeGetAllNamesAndCodes().then((res) => {
-          if (res.status === 200) {
-            let data = res.data;
-            if (data.status === 'OK') {
-              this.deptTypeValues = data.data;
-              this.deptTypeOptions = data.data;
-            } else if (data.status === 'WARN') {
-              this.$message({
-                message: data.msg,
-                type: 'warning'
-              });
-            } else {
-              this.$message.error(data.msg);
-            }
-          }
-
-        });
-      },
-      //获得所有科室分类名称和编号
-      getAllDeptCategoryNamesAndCodes() {
-        deptCategoryGetAllNamesAndCodes().then((res) => {
-          if (res.status === 200) {
-            let data = res.data;
-            if (data.status === 'OK') {
-              this.deptCategoryValues = data.data;
-              this.deptCategoryOptions = data.data;
+              this.departmentValues = data.data;
+              this.departmentOptions = data.data;
             } else if (data.status === 'WARN') {
               this.$message({
                 message: data.msg,
@@ -555,14 +669,17 @@
         });
       },
 
-      deptSearchValuesFilter(val) {
-        this.deptSearchOptions = val ? this.deptSearchValues.filter(this.createFilter(val)) : this.deptSearchValues;
+      fMedItemSearchValuesFilter(val) {
+        this.fMedItemSearchOptions = val ? this.fMedItemSearchValues.filter(this.createFilter(val)) : this.fMedItemSearchValues;
       },
-      deptTypeSearchValuesFilter(val) {
-        this.deptTypeOptions = val ? this.deptTypeValues.filter(this.createFilter(val)) : this.deptTypeValues;
+      fMedItemTypeSearchValuesFilter(val) {
+        this.fMedItemTypeOptions = val ? this.fMedItemTypeValues.filter(this.createFilter(val)) : this.fMedItemTypeValues;
       },
-      deptCategorySearchValuesFilter(val) {
-        this.deptCategoryOptions = val ? this.deptCategoryValues.filter(this.createFilter(val)) : this.deptCategoryValues;
+      departmentSearchValuesFilter(val) {
+        this.departmentOptions = val ? this.departmentValues.filter(this.createFilter(val)) : this.departmentValues;
+      },
+      expClassSearchValuesFilter(val) {
+        this.expClassOptions = val ? this.expClassValues.filter(this.createFilter(val)) : this.expClassValues;
       },
 
       createFilter(queryString) {
@@ -570,9 +687,9 @@
           return (item.name.toLowerCase().indexOf(queryString.toLowerCase()) >= 0 || item.code.toLowerCase().indexOf(queryString.toLowerCase()) >= 0);
         };
       },
-//根据名称或编号查找科室信息
-      deptSearchChange(val) {
-        this.getAllDeptNamesAndCodes();
+//根据名称或编号查找项目信息
+      fMedItemSearchChange(val) {
+        this.getAllFMedItemNamesAndCodes();
         if (val === '') {
           this.returnCopyInfo();
           this.checkIfCopy = 0;
@@ -582,19 +699,19 @@
             this.copyInfo();
             this.checkIfCopy = this.checkIfCopy + 1;
           }
-          this.listParam.typeID = '';
-          this.listParam.deptCategoryID = '';
+          this.listParam.recordType = '';
+          this.listParam.deptID = '';
           this.pageParams.pageNum = 1;
           let params = {
             nameOrCode: this.searchValue,
             pageNum: this.pageParams.pageNum,
             pageSize: this.pageParams.pageSize
           };
-          deptGetByNameOrCode(params).then((res) => {
+          fMedItemGetByNameOrCode(params).then((res) => {
               if (res.status === 200) {
                 let data = res.data;
                 if (data.status === 'OK') {
-                  this.departmentList = data.data.list;
+                  this.fMedItemList = data.data.list;
                   this.pageParams.total = data.data.total;
                 } else if (data.status === 'WARN') {
                   this.$message({
@@ -609,10 +726,8 @@
           );
 
         }
-
-
       },
-      //科室的选择发生改变
+      //项目的选择发生改变
       handleSelectionChange(items) {
         this.checkList = [];
         items.forEach((item) => {
@@ -622,26 +737,26 @@
       //处理页大小改变
       handleSizeChange(val) {
         this.pageParams.pageSize = val;
-        this.getDepartmentList();
+        this.getFMedItemList();
       },
       //处理当前页改变
       handleCurrentChange(val) {
         this.pageParams.pageNum = val;
-        this.getDepartmentList();
+        this.getFMedItemList();
       },
-      //处理选择科室类型或科室分类发生改变
-      handleDeptTypeOrDeptCategoryChange() {
-        this.getAllDeptCategoryNamesAndCodes();
-        this.getAllDeptTypeNamesAndCodes();
+      //处理选择的项目类型或科室名称发生改变
+      handleFMedItemTypeOrDeptChange() {
+        this.getAllFMedItemTypeNamesAndCodes();
+        this.getAllDeptNamesAndCodes();
         this.pageParams.pageNum = 1;
-        this.getDepartmentList();
+        this.getFMedItemList();
       },
       //删除对象
       handleDelete(val) {
         let id = {'id': val};
         this.$confirm('确认删除？')
           .then(_ => {
-            deptDeleteByID(id).then((res) => {
+            fMedItemDeleteByID(id).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -669,20 +784,20 @@
       //刷新页面信息
       freshInfo() {
         if (this.searchValue === '') {
-          this.getDepartmentList();
+          this.getFMedItemList();
         } else {
-          this.deptSearchChange(this.searchValue);
+          this.fMedItemSearchChange(this.searchValue);
         }
+        this.getAllFMedItemNamesAndCodes();
+        this.getAllFMedItemTypeNamesAndCodes();
         this.getAllDeptNamesAndCodes();
-        this.getAllDeptTypeNamesAndCodes();
-        this.getAllDeptCategoryNamesAndCodes();
       },
-      //删除所选科室
+      //删除所选项目
       deleteByChoose() {
         this.$confirm('确认批量删除？')
           .then(_ => {
             let params = {"id": this.checkList};
-            deptDeleteByChooses(params).then((res) => {
+            fMedItemDeleteByChooses(params).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;
                   if (data.status === 'OK') {
@@ -711,28 +826,35 @@
       //点击编辑
       handleEdit(propRow) {
         this.editForm.id = propRow.id;
-        this.editForm.deptName = propRow.deptName;
-        this.editForm.deptCode = propRow.deptCode;
-        this.editForm.deptCategoryID = propRow.deptCategoryID;
-        this.editForm.deptTypeID = propRow.deptTypeID;
+        this.editForm.name=propRow.name;
+        this.editForm.mnemonicCode = propRow.mnemonicCode;
+        this.editForm.format=propRow.format;
+        this.editForm.price=propRow.price;
+        this.editForm.expClassID=propRow.expClassID;
+        this.editForm.deptID = propRow.deptID;
+        this.editForm.recordType = propRow.recordType;
         this.editDialogFormVisible = true;
       },
-      //点击添加科室
+      //点击添加项目
       handleAdd() {
+        this.editForm.id ='';
+        this.editForm.name='';
+        this.editForm.mnemonicCode = '';
+        this.editForm.format='';
+        this.editForm.expClassID='';
+        this.editForm.price='';
+        this.editForm.deptID = '';
+        this.editForm.recordType = '';
         this.addDialogFormVisible = true;
-        this.addForm.deptName = '';
-        this.addForm.deptCode = '';
-        this.addForm.deptCategoryID = '';
-        this.addForm.deptTypeID = '';
       },
       //提交（编辑表单）或（添加表单）
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (formName === 'editForm')
-              this.$confirm('确认修改科室信息？')
+              this.$confirm('确认修改项目信息？')
                 .then(_ => {
-                  deptInfoUpdate(this.editForm).then((res) => {
+                  fMedItemInfoUpdate(this.editForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -758,9 +880,9 @@
                 .catch(_ => {
                 });
             else if (formName === 'addForm')
-              this.$confirm('确认添加科室信息？')
+              this.$confirm('确认添加项目信息？')
                 .then(_ => {
-                  deptInfoAdd(this.addForm).then((res) => {
+                  fMedItemInfoAdd(this.addForm).then((res) => {
                       if (res.status === 200) {
                         let data = res.data;
                         if (data.status === 'OK') {
@@ -795,7 +917,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      //导出科室信息的XLS文件
+      //导出项目信息的XLS文件
       getDownloadXLS() {
         createXLS().then((res) => {
           if (res.status === 200) {
@@ -880,7 +1002,7 @@
             this.uploadXLSCondition.errorHappenContinue = false;
           });
         }).then(_ => {
-          this.$confirm('科室信息重复是否覆盖？').then(_ => {
+          this.$confirm('项目信息重复是否覆盖？').then(_ => {
             this.uploadXLSCondition.repeatCoverage = true;
           }).catch(_ => {
             this.uploadXLSCondition.repeatCoverage = false;
@@ -912,18 +1034,14 @@
         })
       },
 
-      handleAvatarSuccess(file) {
-        this.whetherShowList = false;
-        console.log(file);
-      }
-
 
     },
     mounted() {
-      this.getDepartmentList();
+      this.getFMedItemList();
+      this.getAllFMedItemNamesAndCodes();
+      this.getAllFMedItemTypeNamesAndCodes();
       this.getAllDeptNamesAndCodes();
-      this.getAllDeptTypeNamesAndCodes();
-      this.getAllDeptCategoryNamesAndCodes();
+      this.getAllExpClassNamesAndCodes();
     }
   }
 </script>

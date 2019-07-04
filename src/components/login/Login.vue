@@ -1,5 +1,6 @@
 <template>
-  <el-form :model="loginCheckForm"  ref="loginCheckForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <div id="logo">
+  <el-form :model="loginCheckForm"  ref="loginCheckForm" label-position="left" label-width="0px" class="demo-ruleForm login-container" style="margin-top: 200px">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="userName">
       <el-input
@@ -25,6 +26,7 @@
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
+  </div>
 </template>
 
 <script>
@@ -81,8 +83,9 @@
                 sessionStorage.setItem('user', JSON.stringify(this.result.data));
                 //管理员
                 if(this.result.data.typeID === 112){
+                  sessionStorage.setItem('adminUser', JSON.stringify(this.result.data));
+                  var user = sessionStorage.getItem('adminUser');
                   this.$router.addRoutes(router.adminRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.adminRoutes));
                   var num=0;
                   for(var a in router.adminRoutes){
                     num++;
@@ -94,8 +97,8 @@
                 }
                 //财务人员
                 else if(this.result.data.typeID === 111){
+                  sessionStorage.setItem('financeUser', JSON.stringify(this.result.data));
                   this.$router.addRoutes(router.financeRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.adminRoutes));
                   var num=0;
                   for(var a in router.financeRoutes){
                     num++;
@@ -107,8 +110,8 @@
                 }
                 //挂号收费员
                 else if(this.result.data.typeID === 107){
+                  sessionStorage.setItem('registerAndChargeUser', JSON.stringify(this.result.data));
                   this.$router.addRoutes(router.registerAndChargeRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.registerAndChargeRoutes));
                   var num=0;
                   for(var a in router.registerAndChargeRoutes){
                     num++;
@@ -120,8 +123,8 @@
                 }
                 //门诊
                 else if(this.result.data.typeID === 108){
+                  sessionStorage.setItem('outpatientUser', JSON.stringify(this.result.data));
                   this.$router.addRoutes(router.outpatientRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.outpatientRoutes));
                   var num=0;
                   for(var a in router.outpatientRoutes){
                     num++;
@@ -133,8 +136,8 @@
                 }
                 //医技
                 else if(this.result.data.typeID === 109){
+                  sessionStorage.setItem('medicalTechUser', JSON.stringify(this.result.data));
                   this.$router.addRoutes(router.medicalTechRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.medicalTechRoutes));
                   var num=0;
                   for(var a in router.medicalTechRoutes){
                     num++;
@@ -146,8 +149,8 @@
                 }
                 //药房
                 else if(this.result.data.typeID === 110){
+                  sessionStorage.setItem('pharmacyUser', JSON.stringify(this.result.data));
                   this.$router.addRoutes(router.pharmacyRoutes);
-                  sessionStorage.setItem('route',JSON.stringify(router.pharmacyRoutes));
                   var num=0;
                   for(var a in router.pharmacyRoutes){
                     num++;
@@ -174,6 +177,13 @@
 </script>
 
 <style lang="scss" scoped>
+  #logo{
+    background: url("../../../static/hospital.jpg");
+    background-size: 100% 100%;
+    height: 100%;
+    position: fixed;
+    width: 100%
+  }
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
