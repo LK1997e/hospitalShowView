@@ -50,6 +50,20 @@
             </el-pagination>
           </div>
 
+
+
+          <el-dialog
+            title="未选择需诊断的患者"
+            :visible.sync="initDialogVisible"
+            width="30%"
+            :before-close="handleClose">
+            <span>您未选中任何一位患者进行诊治~~</span>
+            <span slot="footer" class="dialog-footer">
+
+    <el-button type="primary" @click="goSearchPatient">确 定</el-button>
+  </span>
+          </el-dialog>
+
         </el-container>
       </el-row>
     </el-main>
@@ -96,6 +110,7 @@
             },
             //被选中的病人
             medicalRecordID : '',
+            initDialogVisible:'false',//初始化时用到的对话框
 
           }
 
@@ -108,10 +123,21 @@
             var index = JSON.parse(sessionStorage.getItem('patient'));
 
             this.indexPatient = index;
+            //alert(this.indexPatient);
+            if( this.indexPatient === null){
+
+              this.initDialogVisible = true;
+            }
             console.log(this.indexPatient);
             console.log(this.indexPatient.patientID);
             this.medicalRecordID = this.indexPatient.medicalRecID;
             console.log(this.medicalRecordID );
+          },
+          goSearchPatient() {
+            this.$router.push({
+              path: '/outPatient/SearchPatient',
+
+            });
           },
           getIndexDiagnosis(){
             let id = {'medicalRecordID' :this.indexPatient.medicalRecID};
