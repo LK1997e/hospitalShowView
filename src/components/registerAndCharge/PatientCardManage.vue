@@ -5,7 +5,7 @@
         <el-header style = "line-height: 60px;background:#41cde5;">
             <el-row type = "flex" align = "middle" style = "height: 60px;" class = "row-bg">
                 <el-col style = "text-align: center;" span = "3" class = "grid-content">
-                    <span style = "font-size:20px;color: white;">就诊卡管理</span>
+                    <span style = "font-size:20px;color: white;">查询及充值</span>
                 </el-col>
             </el-row>
         </el-header>

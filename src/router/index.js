@@ -14,9 +14,12 @@ import NotFound from '@/components/404'
 import Login from '@/components/login/Login'
 import UserInfo from '@/components/userInfo/UserInfo'
 import UpdateUserInfo from '@/components/userInfo/UpdateUserInfo'
-import InspectionSearch from '@/components/medicalTech/inspection/InspectionSearch'
-import InspectionCheck from '@/components/medicalTech/inspection/InspectionCheck'
-import InspectionExcute from '@/components/medicalTech/inspection/InspectionExcute'
+import InspectionSearch
+  from '@/components/medicalTech/inspection/InspectionSearch'
+import InspectionCheck
+  from '@/components/medicalTech/inspection/InspectionCheck'
+import InspectionExcute
+  from '@/components/medicalTech/inspection/InspectionExcute'
 import FeeSearch from '@/components/registerAndCharge/feeSearch/FeeSearch'
 import CheckWork from '@/components/finance/CheckWork'
 import Expenseclass from '@/components/finance/Expenseclass'
@@ -39,7 +42,6 @@ import MedicalRecHomeTemp from '@/components/outpatient/MedicalRecHomeTemp'
 import ProjectTemp from '@/components/outpatient/ProjectTemp'
 import CommonInspection from '@/components/outpatient/CommonInspection'
 
-
 import RegisterInfoList from '../components/registerAndCharge/RegisterInfoList'
 import PharmacyDeal from '@/components/pharmacy/PharmacyDeal'
 import Toll from '@/components/registerAndCharge/Toll'
@@ -52,9 +54,6 @@ import ApplyPatientCard from '../components/registerAndCharge/ApplyPatientCard'
 import PatientCardManage
   from '../components/registerAndCharge/PatientCardManage'
 
-
-
-
 Vue.use(Router)
 Vue.use(Vuex)
 
@@ -64,16 +63,15 @@ let routes = [
     path: '/login',
     component: Login,
     name: '',
-    hidden: true
+    hidden: true,
   },
   {
     path: '/404',
     component: NotFound,
     name: '',
-    hidden: true
+    hidden: true,
   },
-];
-
+]
 
 export const adminRoutes = [
   {
@@ -88,7 +86,7 @@ export const adminRoutes = [
       {
         path: '/admin/UserInfo',
         component: UserInfo,
-        name: '管理人员主页' ,
+        name: '管理人员主页',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '管理人员主页',
@@ -97,13 +95,13 @@ export const adminRoutes = [
       {
         path: '/admin/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
         },
       },
-    ]
+    ],
   },
   {
     path: '/admin',
@@ -113,7 +111,7 @@ export const adminRoutes = [
     meta: {
       name: '基础信息管理',
     },
-    children:[
+    children: [
       {
         path: '/baseInfoManage/departmentManage',
         component: Department,
@@ -183,7 +181,6 @@ export const adminRoutes = [
           name: '排班规则管理',
         },
 
-
       },
       {
         path: '/baseInfoManage/scheduleManage',
@@ -194,10 +191,9 @@ export const adminRoutes = [
           name: '排班信息管理',
         },
 
-
       },
 
-    ]
+    ],
   },
 
 ]
@@ -224,13 +220,13 @@ export const financeRoutes = [
       {
         path: '/finance/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
         },
       },
-    ]
+    ],
   },
   {
     path: '/finance',
@@ -251,7 +247,7 @@ export const financeRoutes = [
         },
       },
 
-    ]
+    ],
   },
   {
     path: '/finance',
@@ -272,7 +268,7 @@ export const financeRoutes = [
         },
       },
 
-    ]
+    ],
   },
   {
     path: '/finance',
@@ -337,13 +333,13 @@ export const medicalTechRoutes = [
       {
         path: '/medicalTech/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
         },
       },
-    ]
+    ],
   },
   {
     path: '/medicalTech',
@@ -382,8 +378,8 @@ export const medicalTechRoutes = [
         meta: {
           name: '检查检验执行',
         },
-      }
-    ]
+      },
+    ],
   },
   {
     path: '/medicalTech',
@@ -412,10 +408,10 @@ export const medicalTechRoutes = [
         meta: {
           name: '处置审核',
         },
-      }
+      },
 
-    ]
-  }
+    ],
+  },
 
 ]
 
@@ -441,13 +437,13 @@ export const outpatientRoutes = [
       {
         path: '/outpatient/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
         },
       },
-      ]
+    ],
   },
 
   {
@@ -469,10 +465,9 @@ export const outpatientRoutes = [
         },
       },
 
-
       {
         path: '/outpatient/MedicalRecHome',
-        component:MedicalRecHome,
+        component: MedicalRecHome,
         name: '病历首页编辑',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
@@ -489,7 +484,6 @@ export const outpatientRoutes = [
           name: '申请检查项目',
         },
       },
-
 
       {
         path: '/outpatient/ApplyDisposal',
@@ -573,7 +567,6 @@ export const outpatientRoutes = [
         },
       },
 
-
     ],
   },
 ]
@@ -600,13 +593,13 @@ export const pharmacyRoutes = [
       {
         path: '/pharmacy/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
         },
       },
-    ]
+    ],
   },
   {
     path: '/pharmacy',
@@ -635,9 +628,9 @@ export const pharmacyRoutes = [
         meta: {
           name: '药房处理',
         },
-      }
-    ]
-  }
+      },
+    ],
+  },
 ]
 
 export const registerAndChargeRoutes = [
@@ -668,8 +661,39 @@ export const registerAndChargeRoutes = [
           name: '日结查询',
         },
       },
-    ]
+    ],
   },
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '就诊卡管理',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '就诊卡管理',
+    },
+    children: [
+
+      {
+        path: '/reg/applyPatientCard',
+        component: ApplyPatientCard,
+        name: '申请就诊卡',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '申请就诊卡',
+        },
+      },
+      {
+        path: '/reg/patientCardManage',
+        component: PatientCardManage,
+        name: '查询及充值',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '查询及充值',
+        },
+      },
+    ],
+  },
+
   {
     path: '/registerAndCharge',
     component: Home,
@@ -696,7 +720,7 @@ export const registerAndChargeRoutes = [
           name: '门诊收费',
         },
       },
-    ]
+    ],
   },
   {
     path: '/registerAndCharge',
@@ -725,25 +749,7 @@ export const registerAndChargeRoutes = [
           name: '查询及退号',
         },
       },
-      {
-        path: '/reg/applyPatientCard',
-        component: ApplyPatientCard,
-        name: '申请就诊卡',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '申请就诊卡',
-        },
-      },
-      {
-        path: '/reg/patientCardManage',
-        component: PatientCardManage,
-        name: '就诊卡管理',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '就诊卡管理',
-        },
-      },
-    ]
+    ],
   },
   {
     path: '/registerAndCharge',
@@ -766,7 +772,7 @@ export const registerAndChargeRoutes = [
       {
         path: '/registerAndCharge/UpdateUserInfo',
         component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        name: '修改个人信息',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
           name: '修改个人信息',
@@ -777,4 +783,4 @@ export const registerAndChargeRoutes = [
 
 ]
 
-export default routes;
+export default routes
