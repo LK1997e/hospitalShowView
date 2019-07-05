@@ -35,3 +35,11 @@ export const deleteInspection =  (listParams) =>
   return axios.post(
     `${hospital}/CommonInspection/deleteInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
+
+export const listCommonInspection =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/CommonInspection/listCommonInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+

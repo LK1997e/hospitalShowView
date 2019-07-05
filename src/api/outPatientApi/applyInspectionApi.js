@@ -107,3 +107,17 @@ export const listInspection =  (listParams) =>
     `${hospital}/ApplyInspection/listInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
+export const listIndexInspection =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyInspection/listIndexInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+
+export const deleteInspectionDetailsByID =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyInspection/deleteInspectionDetailsByID`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}

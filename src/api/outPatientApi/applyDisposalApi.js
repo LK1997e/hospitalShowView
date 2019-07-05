@@ -77,5 +77,10 @@ export const listDisposal =  (listParams) =>
     `${hospital}/ApplyDisposal/listDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
-
+export const listIndexDisposal =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/listIndexDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
 

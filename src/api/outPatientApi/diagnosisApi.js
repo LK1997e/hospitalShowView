@@ -57,4 +57,10 @@ export const defineDiagnose =  (listParams) =>
     `${hospital}/Diagnosis/defineDiagnose`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
+export const getIndexDiagnosis =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/Diagnosis/getIndexDiagnosis`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
 

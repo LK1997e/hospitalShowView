@@ -114,29 +114,21 @@
 
 </template>
 <style>
-
   .el-col-display {
     float: left;
     margin-left: 46px;
     margin-top: 6px;
     height: 40px
   }
-
   .el-row {
     margin-bottom: 10px;
   }
-
   .show-shadow {
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   }
-
   .row-bg {
     padding: 10px 0;
   }
-
-
-
-
 </style>
 <script>
   import {
@@ -162,7 +154,6 @@
           //总条数
           total: 0,
         },
-
         //patientList :[] ,
         patientRecList :[],
         patientRecListValues :[],
@@ -183,7 +174,6 @@
         state1: '',
         state2: ''
       }
-
     },
     methods: {
       //获取所有未诊断病人
@@ -193,24 +183,18 @@
         let params = {
           pageNum: this.pageParams.pageNum,
           pageSize: this.pageParams.pageSize
-
         };
-
         listPatientNoDiagnosis(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
-           // alert("1");
+            alert("1");
             if (data.status === 'OK') {
               this.searchValue = '';
-
-
-
               this.patientRecListValues = data.data.list;
               this.patientRecListOptions = data.data.list;
               this.patientRecList = data.data.list;
               this.pageParams.pages = data.data.pages;
               this.pageParams.total = data.data.total;
-
               console.log(this.patientRecList.length);
             } else {
               alert(data.msg);
@@ -218,8 +202,6 @@
           }
         });
       },
-
-
       ////查询患者:通过患者病历号或患者名字
       findPatient() {
         this.pageParams.pageNum = 1;
@@ -230,33 +212,27 @@
           pageSize: this.pageParams.pageSize
         };
         if( this.nameOrMedicalRecNo === ''){
-          this.listPatientNoDiagnosis();
+          //this.listPatientNoDiagnosis();
         }else{
           findPatient(params).then((res) => {
-
             if (res.status === 200) {
-
               let data = res.data;
               if (data.status === 'OK') {
-                this.searchValue = '';
+                //this.searchValue = '';
                 this.patientRecList = data.data.list;
-               // this.patientRecListOptions = data.data.list;
-                this.pageParams.pages = data.data.pages;
+                this.patientRecListOptions = data.data.list;
+                //this.pageParams.pages = data.data.pages;
                 this.pageParams.total = data.data.total;
                 console.log(this.patientRecList.length);
-
-
               } else {
                 alert(data.msg);
               }
             }
           })
         }
-
       },
       findPatientValuesFilter(val) {
         this.patientRecListOptions = val ? this.patientRecListValues.filter(this.createFilter(val)) : this.patientRecListValues ;
-
       },
       createFilter(queryString) {
         return (item) => {
@@ -269,9 +245,7 @@
       },
       handleCurrentChange(val) {
         this.currentRow = val;
-
         this.indexPatient=val;
-
         console.log(this.indexPatient.patientName);
       },
       //处理页大小改变
@@ -287,16 +261,12 @@
       //去选中病人的信息
       getInfo(val){
         this.indexPatient = this.patientRecListValues[val];
-
-
       },
       goMedicalRecHome(){
         /*this.$router.push({
           path: '/outPatient/MedicalRecHome',
-
           query: {
             indexPatient : this.indexPatient,
-
           }
         });*/
         sessionStorage.setItem('patient', JSON.stringify(this.indexPatient));
@@ -307,14 +277,6 @@
     mounted() {
       this.listPatientNoDiagnosis();
       // this.listSearchValue();
-
-
     }
-
-
-
-
-
   }
 </script>
-
