@@ -172,7 +172,6 @@
         this.$confirm('确认取药？')
           .then(_ => {
             let params = {id: this.checkList};
-            alert(JSON.stringify(params));
             TakeMedicine(params).then((res) => {
                 if (res.status === 200) {
                   let data = res.data;

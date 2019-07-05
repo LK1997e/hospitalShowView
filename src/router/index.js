@@ -520,6 +520,7 @@ export const pharmacyRoutes = [
         component: PharmacyDeal,
         name: '药房处理',
         iconCls: 'el-icon-message',//图标样式class
+        hidden: true,
         meta: {
           name: '药房处理',
         },
