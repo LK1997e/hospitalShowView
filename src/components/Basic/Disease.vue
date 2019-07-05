@@ -1,6 +1,6 @@
 <template>
   <el-container style="margin-top: 6px">
-    <el-header style="background:#41cde5;">
+    <el-header style="background:#a2a8d3;">
 
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">
@@ -86,7 +86,7 @@
             </el-link>
           </el-col>
           <el-col :span="3" class="el-col-display">
-            <el-link icon="el-icon-download" style="font-size: 16px;color: #41cde5"
+            <el-link icon="el-icon-download" style="font-size: 16px;color: #a2a8d3"
                      @click="getDownloadXLSTemplate">下载模板
             </el-link>
           </el-col>

@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header style="background:#41cde5;">
+    <el-header style="background:#a2a8d3;">
       <el-row class="row-bg">
         <el-col span="4" class="grid-content">
           <span style="font-size:20px;color: white;">个人工作量统计图表</span>

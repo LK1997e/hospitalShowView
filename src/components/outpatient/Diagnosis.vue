@@ -1,6 +1,8 @@
 <template>
   <el-container style="margin-top: 6px">
-    <el-main style="border: 1px solid #49cde5;">
+    <el-header style="background:#a2a8d3;">
+    </el-header>
+    <el-main style="border: 1px solid #a2a8d3;">
       <el-row class="row-bg show-shadow">
         <el-col :span="24"
                 style=" padding-bottom: 10px;border-left: solid 1px #eee">
@@ -445,7 +447,7 @@
                           let data = res.data;
                           if (data.status === 'OK') {
                             diseaseID=data.data;
-                            alert(diseaseID);
+                            //alert(diseaseID);
                             if(diseaseID===null) {
                               this.$message({
                                 message: '改疾病不存在',
@@ -453,7 +455,8 @@
                               });
                               return;
                             }
-                            alert(diseaseID);
+                            //
+                            // alert(diseaseID);
                             let params2={
                               id:this.editForm.id,
                               medicalRecordID:this.medicalRecordID,
@@ -515,7 +518,7 @@
                           let data = res.data;
                           if (data.status === 'OK') {
                             diseaseID=data.data;
-                            alert(diseaseID);
+                            //alert(diseaseID);
                             if(diseaseID===null) {
                               this.$message({
                                 message: '改疾病不存在',
@@ -523,7 +526,7 @@
                               });
                               return;
                             }
-                            alert(diseaseID);
+                            //alert(diseaseID);
                             let params2={
                               id:this.addForm.id,
                               medicalRecordID:this.medicalRecordID,

@@ -1,7 +1,7 @@
 <template>
   <div id="logo">
   <el-container>
-    <el-header style="background:#41cde5;">
+    <el-header style="background:#a2a8d3;">
       <el-row class="row-bg">
         <el-col span="4" class="grid-content">
           <span style="font-size:20px;color: white;">用户个人信息</span>

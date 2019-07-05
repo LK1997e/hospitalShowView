@@ -187,7 +187,7 @@
         listPatientNoDiagnosis(params).then((res) => {
           if (res.status === 200) {
             let data = res.data;
-            alert("1");
+           // alert("1");
             if (data.status === 'OK') {
               this.searchValue = '';
               this.patientRecListValues = data.data.list;
@@ -263,14 +263,12 @@
         this.indexPatient = this.patientRecListValues[val];
       },
       goMedicalRecHome(){
-        /*this.$router.push({
+        this.$router.push({
           path: '/outPatient/MedicalRecHome',
-          query: {
-            indexPatient : this.indexPatient,
-          }
-        });*/
+
+        });
         sessionStorage.setItem('patient', JSON.stringify(this.indexPatient));
-        alert(this.indexPatient.patientID);
+        //(this.indexPatient.patientID);
         console.log(sessionStorage.getItem('patient'));
       }
     },

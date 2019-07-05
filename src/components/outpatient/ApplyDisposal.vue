@@ -1,6 +1,8 @@
 <template>
   <el-container style="margin-top: 6px">
-    <el-main style="border: 1px solid #49cde5;">
+    <el-header style="background:#a2a8d3;">
+    </el-header>
+    <el-main style="border: 1px solid #a2a8d3;">
       <el-row class="row show-shadow"
               style="padding-bottom: 10px;">
         <el-container>

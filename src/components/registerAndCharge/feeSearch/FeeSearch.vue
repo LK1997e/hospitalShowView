@@ -1,6 +1,6 @@
 <template>
   <el-container style="margin-top: 20px">
-    <el-header style="background:#41cde5;padding: 20px;height: 100px">
+    <el-header style="background:#a2a8d3;padding: 20px;height: 100px">
       <el-row class="row-bg" type="flex" align="top">
         <el-col :span="4" class="grid-content">
           <span style="font-size:30px;color: white;"> <i class="el-icon-search"></i>费用查询</span>

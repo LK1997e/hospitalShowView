@@ -1,6 +1,7 @@
 <template>
   <el-container style="margin-top: 6px">
-    <el-header style="background:#41cde5;">
+
+    <el-header style="background:#a2a8d3;">
 
       <el-row class="row-bg">
         <el-col :span="2" class="grid-content" style="margin-bottom: 4px">

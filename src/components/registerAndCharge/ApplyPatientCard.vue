@@ -2,7 +2,7 @@
 
     <el-container>
 
-        <el-header style = "line-height: 60px;background:#41cde5;">
+        <el-header style = "line-height: 60px;background:#a2a8d3;">
             <el-row type = "flex" align = "middle" style = "height: 60px;" class = "row-bg">
                 <el-col style = "text-align: center;" span = "3" class = "grid-content">
                     <span style = "font-size:20px;color: white;">申请就诊卡</span>

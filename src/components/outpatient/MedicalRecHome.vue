@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header style="background:#41cde5;">
+    <el-header style="background:#a2a8d3;">
       <el-col span="2" class="grid-content">
         <span style="font-size:20px;color: white;">病例首页</span>
       </el-col>
@@ -154,9 +154,7 @@
                                 placeholder="辅助检查">
                       </el-input>
                     </el-form-item>
-                    <el-form-item>
-                      <el-button @click="resetForm('medicalRecordHome')">重置</el-button>
-                    </el-form-item>
+
                   </div>
                 </el-col>
 
@@ -172,7 +170,7 @@
 
         <el-button type="primary" @click="add()">提交</el-button>
 
-        <el-button @click="resetForm('medicalRecordHome')">重置</el-button>
+        <el-button @click="resetForm">重置</el-button>
         <el-button @click="tempStore()">暂存</el-button>
         <el-button @click="use_TempStore()">使用暂存</el-button>
         <el-button @click="saveTempDialogVisible = true">存为模板</el-button>
@@ -321,8 +319,15 @@
 
       //重置表单
 
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      resetForm() {
+
+        this.medicalRecTemp.allergies =  '';
+        this.medicalRecTemp.chiefCompliant = '';
+        this.medicalRecTemp.currentMedicalHistory = '';
+        this.medicalRecTemp.currentTreatmentSituation ='';
+        this.medicalRecTemp.pastMedicalHistory ='';
+        this.medicalRecTemp.physicalExamination ='';
+        this.medicalRecTemp.assistantExamination ='';
         //this.$refs[medicalRecordHomePart2].resetFields();
       },
 
@@ -336,7 +341,7 @@
       },
       //存为模板
       save_Template(){
-alert(this.medicalRecTemp.name);
+//alert(this.medicalRecTemp.name+"存储成功");
         this.medicalRecTemp.allergies =  this.medicalRecordHome.allergies;
         this.medicalRecTemp.chiefCompliant = this.medicalRecordHome.chiefComplaint;
         this.medicalRecTemp.currentMedicalHistory = this.medicalRecordHome.currentMedicalHistory;
@@ -346,12 +351,12 @@ alert(this.medicalRecTemp.name);
         this.medicalRecTemp.assistantExamination =this.medicalRecordHome.assistantExamination;
         let temp = this.medicalRecTemp;
         save_Template(temp).then( (res) =>{
-          alert("存模板");
+          //alert("存模板");
           if (res.status === 200) {
 
             let data = res.data;
             if (data.status === 'OK') {
-              alert("存储模板成功");
+              alert(this.medicalRecTemp.name+"存储成功");
 
             } else if (data.status === 'WARN') {
               this.$message({
@@ -370,9 +375,9 @@ alert(this.medicalRecTemp.name);
       //使用组套(可以弄一个检索框，根据组套的名字使用)
       use_Template(){
         getThisDoctorTemp().then((res) => {
-          alert("111");
+          //alert("111");
           if (res.status === 200) {
-            alert("1111");
+            //alert("1111");
             let data = res.data;
             if (data.status === 'OK') {
               this.medicalRecHomeTemplate = data.data;
@@ -395,7 +400,7 @@ alert(this.medicalRecTemp.name);
         let str = this.searchTempValue;
 
         findMedicalRecHomeTemplate(str).then((res) =>{
-          alert(str);
+          //alert(str);
           if (res.status === 200) {
             let data = res.data;
             if (data.status === 'OK') {
@@ -435,7 +440,7 @@ alert(this.medicalRecTemp.name);
         });
       },
       init(){
-        alert("11");
+        //alert("11");
         //this.indexPatient = this.$route.query.indexPatient;
         this.indexPatient= JSON.parse(sessionStorage.getItem('patient'));
 
