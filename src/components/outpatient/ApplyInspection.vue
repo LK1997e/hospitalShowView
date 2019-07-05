@@ -101,10 +101,27 @@
               <template slot-scope="props">
 
                 <el-button icon="el-icon-edit"
-                           @click.native.prevent="deleteInspectionDetailsByID(props.row.inspectionDetailsID)"
+                                       @click.native.prevent="deleteInspectionDetailsByID(props.row.inspectionDetailsID)"
+                                       type="text"
+                                       size="small">
+                删除
+              </el-button>
+
+
+
+                <el-button icon="el-icon-edit"
+                           @click.native.prevent="drawInspectionDetails(props.row.inspectionDetailsID)"
                            type="text"
                            size="small">
-                  删除
+                  开立
+                </el-button>
+
+
+                <el-button icon="el-icon-edit"
+                           @click.native.prevent="abolishInspectionDetails(props.row.inspectionDetailsID)"
+                           type="text"
+                           size="small">
+                  废除
                 </el-button>
 
                 <!--<el-button icon="el-icon-edit" @click.native.prevent="deleteInspectionDetails()" type="text"-->
@@ -120,30 +137,30 @@
                 <!--size="small">-->
                 <!--看结果-->
                 <!--</el-button>-->
-                <!--<el-popover-->
-                <!--placement="bottom"-->
+                <el-popover
+                placement="bottom"
 
-                <!--width="600"-->
-                <!--trigger="click">-->
-                <!--<el-form  :inline="true" :model="this.indexPatient"label-width="80px">-->
+                width="600"
+                trigger="click">
+                <el-form  :inline="true" :model="indexFMedItem"label-width="80px">
 
-                <!--<el-form-item label="姓名" property="patientName">-->
-                <!--<el-input v-model="indexPatient.patientName" readonly></el-input>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="病历编号" property="medicalRecordNo">-->
-                <!--<el-input v-model="indexPatient.medicalRecordNo" readonly></el-input>-->
-                <!--</el-form-item>-->
+                <el-form-item label="项目名称" property="name">
+                <el-input v-model="indexFMedItem.name" readonly></el-input>
+                </el-form-item>
+                <el-form-item label="单位" property="format">
+                <el-input v-model="indexFMedItem.format" readonly></el-input>
+                </el-form-item>
 
-                <!--<el-form-item label="年龄" property="age">-->
-                <!--<el-input v-model="indexPatient.age" readonly></el-input>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="性别" property="gender">-->
-                <!--<el-input v-model="indexPatient.gender" readonly></el-input>-->
-                <!--</el-form-item>-->
+                <el-form-item label="科室" property="deptName">
+                <el-input v-model="indexFMedItem.deptName" readonly></el-input>
+                </el-form-item>
+                <el-form-item label="收费类别" property="expClassName">
+                <el-input v-model="indexFMedItem.expClassName" readonly></el-input>
+                </el-form-item>
 
-                <!--</el-form>-->
-                <!--<el-button slot="reference">详情</el-button>-->
-                <!--</el-popover>-->
+                </el-form>
+                <el-button slot="reference" @click="getIndexFMedItem(props.row)">详情</el-button>
+                </el-popover>
 
 
               </template>
@@ -283,7 +300,7 @@
 
 <script>
   import {
-
+    getIndexFMedItem,
     newInspection,
     addInspectionDetailsList,
     addInspectionDetails,
@@ -367,6 +384,8 @@
         //存组套列表
         //存常用项目列表
 
+        indexFMedItem:{},
+
         searchItemValue: '',
         searchTempValue: '',
         inspectionTempList: [],
@@ -409,7 +428,7 @@
         newTemplateDetails: [],//新增的组套详细
 
 
-        initDialogVisible:'false',//初始化时用到的对话框
+        initDialogVisible: false ,//初始化时用到的对话框
       }
     },
     methods:
@@ -421,6 +440,34 @@
           this.indexPatient = indexPatient;
           console.log(this.indexPatient);
           console.log(this.indexPatient.patientID);
+        },
+        getIndexFMedItem(val){
+          getIndexFMedItem(val).then((res) =>{
+            if (res.status === 200) {
+              let data = res.data;
+              if (data.status === 'OK') {
+                // alert("建立inspection成功");
+                this.indexFMedItem = data.data;
+                console.log(this.indexFMedItem);
+                this.$message({
+                  message: data.msg,
+                  type: 'success'
+                });
+              } else if (data.status === 'WARN') {
+                // alert("建立inspectionbu成功")
+                this.$message({
+                  message: data.msg,
+                  type: 'warning'
+                });
+              } else {
+                // alert("建立inspection失败？？")
+                this.$message.error(data.msg);
+              }
+            }
+          });
+
+
+
         },
 
         newInspection() {
@@ -504,7 +551,40 @@
           //sessionStorage.setItem('tempStore', JSON.stringify(this.medicalRecordHome));
 
         },
-        drawInspectionDetails() {
+        drawInspectionDetails(val) {
+          this.checkList=[];
+          this.checkList.push(val);
+
+          this.$confirm('确认开立？')
+            .then(_ => {
+              let params = {"id": this.checkList};
+              drawInspectionDetails(params).then((res) => {
+                  if (res.status === 200) {
+                    let data = res.data;
+                    if (data.status === 'OK') {
+
+                      this.chu();
+
+                      this.$message({
+                        message: '开立成功',
+                        type: 'success'
+                      });
+
+                    } else if (data.status === 'WARN') {
+                      this.$message({
+                        message: data.msg,
+                        type: 'warning'
+                      });
+                    } else {
+                      this.$message.error(data.msg);
+                    }
+                  }
+                }
+              )
+
+            })
+            .catch(_ => {
+            });
 
         },
 
@@ -542,7 +622,40 @@
 
 
         },
-        abolishInspectionDetails() {
+        abolishInspectionDetails(val) {
+          this.checkList=[];
+          this.checkList.push(val);
+
+          this.$confirm('确认废除？')
+            .then(_ => {
+              let params = {"id": this.checkList};
+              abolishInspectionDetails(params).then((res) => {
+                  if (res.status === 200) {
+                    let data = res.data;
+                    if (data.status === 'OK') {
+
+                      this.chu();
+
+                      this.$message({
+                        message: '废除成功',
+                        type: 'success'
+                      });
+
+                    } else if (data.status === 'WARN') {
+                      this.$message({
+                        message: data.msg,
+                        type: 'warning'
+                      });
+                    } else {
+                      this.$message.error(data.msg);
+                    }
+                  }
+                }
+              )
+
+            })
+            .catch(_ => {
+            });
 
         },
 
@@ -727,11 +840,14 @@
 
           this.indexPatient = index;
           //alert(this.indexPatient);
-          if( this.indexPatient === null){
+          console.log(this.indexPatient);
+          if( this.indexPatient != null){
 
+            ;
+          }else{
             this.initDialogVisible = true;
           }
-          console.log(this.indexPatient);
+
           console.log(this.indexPatient.patientID);
           this.medicalRecordID = this.indexPatient.medicalRecID;
           console.log(this.medicalRecordID);

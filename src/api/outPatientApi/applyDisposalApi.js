@@ -39,9 +39,9 @@ export const tempStore =  (listParams) =>
 
 export const drawDisposalDetails =  (listParams) =>
 {
-  listParams=Qs.stringify(listParams);
+
   return axios.post(
-    `${hospital}/ApplyDisposal/drawDisposalDetails`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+    `${hospital}/ApplyDisposal/drawDisposalDetails`);
 }
 
 export const addProjectFee =  (listParams) =>
@@ -84,3 +84,34 @@ export const listIndexDisposal =  (listParams) =>
     `${hospital}/ApplyDisposal/listIndexDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
+
+export const deleteDisposalDetailsByID =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/deleteDisposalDetailsByID`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const listCommonDisposal =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/listCommonDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const getIndexFMedItem =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/getIndexFMedItem`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+
+
+
+export const use_Check =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyDisposal/use_Check`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
