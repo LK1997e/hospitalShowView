@@ -40,9 +40,8 @@ export const tempStore =  (listParams) =>
 
 export const drawInspectionDetails =  (listParams) =>
 {
-  listParams=Qs.stringify(listParams);
   return axios.post(
-    `${hospital}/ApplyInspection/drawInspectionDetails`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+    `${hospital}/ApplyInspection/drawInspectionDetails`,listParams);
 }
 
 export const addProjectFee =  (listParams) =>
@@ -120,4 +119,11 @@ export const deleteInspectionDetailsByID =  (listParams) =>
   listParams=Qs.stringify(listParams);
   return axios.post(
     `${hospital}/ApplyInspection/deleteInspectionDetailsByID`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const getIndexFMedItem =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyInspection/getIndexFMedItem`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }

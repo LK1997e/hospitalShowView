@@ -455,7 +455,7 @@
     background: url("../../../static/hospital2.jpg");
     background-size: 100% 100%;
     height: 100%;
-    position: fixed;
+    /*position: fixed;*/
     width: 100%;
   }
 </style>

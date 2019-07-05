@@ -282,7 +282,7 @@
           type:'',
         },
         saveTempDialogVisible:false,
-        initDialogVisible:'false',//初始化时用到的对话框
+        initDialogVisible:false,//初始化时用到的对话框
 
       }
 

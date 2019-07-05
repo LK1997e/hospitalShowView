@@ -5,7 +5,7 @@
         <el-header style = "line-height: 60px;background:#41cde5;">
             <el-row type = "flex" align = "middle" style = "height: 60px;" class = "row-bg">
                 <el-col style = "text-align: center;" span = "3" class = "grid-content">
-                    <span style = "font-size:20px;color: white;">就诊卡管理</span>
+                    <span style = "font-size:20px;color: white;">查询及充值</span>
                 </el-col>
             </el-row>
         </el-header>
@@ -80,6 +80,22 @@
 
                     </el-table>
 
+                    <hr>
+
+                    <div class = "block" align = "center">
+
+                        <el-pagination
+                                @size-change = "handleSizeChange"
+                                @current-change = "handleCurrentChange"
+                                background
+                                :current-page = "pageParams.pageNum"
+                                :page-sizes = "[5, 10, 15, 20]"
+                                :page-size = "pageParams.pageSize"
+                                layout = "total, sizes, prev, pager, next, jumper"
+                                :total = "pageParams.total">
+                        </el-pagination>
+                    </div>
+
                     <el-dialog title = "充值" :visible.sync = "rechargeDialogVisible" width = "30%">
                         <el-form :model = "rechargeForm" :rules = "rules" ref = "rechargeForm" label-width = "120px"
                                  class = "demo-ruleForm">
@@ -146,6 +162,7 @@
           patientCardListCopy: [],
           pageNumCopy: '',
           pageSizeCopy: '',
+          totalCopy: '',
         },
 
         //是否应该备份
@@ -215,18 +232,21 @@
       copyInfo() {
 
         this.patientCardIDList = this.patientCardList
+        this.patientCardIDSearchList = this.patientCardList
 
         this.copy.patientCardListCopy = this.patientCardList
-        this.copy.pageNumCopy = this.pageNum
-        this.copy.pageSizeCopy = this.pageSize
+        this.copy.pageNumCopy = this.pageParams.pageNum
+        this.copy.pageSizeCopy = this.pageParams.pageSize
+        this.copy.totalCopy = this.pageParams.total
 
       },
 
       returnCopyInfo() {
 
         this.patientCardList = this.copy.patientCardListCopy
-        this.pageNum = this.copy.pageNumCopy
-        this.pageSize = this.copy.pageSizeCopy
+        this.pageParams.pageNum = this.copy.pageNumCopy
+        this.pageParams.pageSize = this.copy.pageSizeCopy
+        this.pageParams.total = this.copy.totalCopy
       },
 
       patientCardIDFilter(val) {
@@ -249,10 +269,14 @@
 
       handleChange(val) {
 
-        if (val === '' || val === '') {
-          this.returnCopyInfo()
+        if (val === null || val === '') {
+          this.patientCardIDList = []
+          this.refresh()
         } else {
           this.getPatientCard(this.patientCardIDSearchValue)
+
+          this.isShouldCopy = true
+          this.pageParams.total = 1
         }
       },
 
@@ -260,6 +284,17 @@
         this.cardID = val
         this.rechargeForm.recharge = ''
         this.rechargeDialogVisible = true
+      },
+
+      //处理页大小改变
+      handleSizeChange(val) {
+        this.pageParams.pageSize = val
+        this.getRegInfoList()
+      },
+      //处理当前页改变
+      handleCurrentChange(val) {
+        this.pageParams.pageNum = val
+        this.getRegInfoList()
       },
 
       submitRecharge(formName) {
@@ -309,6 +344,13 @@
 
       resetForm(formName) {
         this.$refs[formName].resetFields()
+      },
+
+      refresh() {
+
+        this.patientCardIDSearchValue = ''
+        this.isShouldCopy = true
+        this.getPatientCardList()
       },
     },
 

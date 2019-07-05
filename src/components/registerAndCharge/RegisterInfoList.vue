@@ -138,6 +138,20 @@
 
                     <hr>
 
+                    <div class = "block" align = "center">
+
+                        <el-pagination
+                                @size-change = "handleSizeChange"
+                                @current-change = "handleCurrentChange"
+                                background
+                                :current-page = "pageParams.pageNum"
+                                :page-sizes = "[5, 10, 15, 20]"
+                                :page-size = "pageParams.pageSize"
+                                layout = "total, sizes, prev, pager, next, jumper"
+                                :total = "pageParams.total">
+                        </el-pagination>
+                    </div>
+
                 </el-container>
             </el-row>
 
@@ -186,6 +200,7 @@
           regInfoListCopy: [],
           pageNumCopy: '',
           pageSizeCopy: '',
+          totalCopy: '',
         },
 
         pickerOptions: {
@@ -276,31 +291,37 @@
         this.medRecNoList = this.regInfoList
         this.medRecNoSearchList = this.regInfoList
         this.copy.regInfoListCopy = this.regInfoList
-        this.copy.pageNumCopy = this.pageNum
-        this.copy.pageSizeCopy = this.pageSize
+        this.copy.pageNumCopy = this.pageParams.pageNum
+        this.copy.pageSizeCopy = this.pageParams.pageSize
+        this.copy.totalCopy = this.pageParams.total
 
       },
 
       returnCopyInfo() {
 
         this.regInfoList = this.copy.regInfoListCopy
-        this.pageNum = this.copy.pageNumCopy
-        this.pageSize = this.copy.pageSizeCopy
+        this.pageParams.pageNum = this.copy.pageNumCopy
+        this.pageParams.pageSize = this.copy.pageSizeCopy
+        this.pageParams.total = this.copy.totalCopy
       },
 
       handleClick() {
+
         this.timeRange = []
-        this.returnCopyInfo()
         this.medRecNoList = this.copy.regInfoListCopy
       },
 
       handleMedRecNoChange(val) {
 
-        if (val === '') {
+        if (val === null || val === '') {
+          this.isShouldCopy = true
           this.medRecNoList = []
-          this.returnCopyInfo()
+          this.getRegInfoList()
         } else {
           this.getRegInfo(this.medRecSearchValue)
+
+          this.isShouldCopy = true
+          this.pageParams.total = 1
         }
       },
 
