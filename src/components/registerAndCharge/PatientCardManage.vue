@@ -271,7 +271,7 @@
 
         if (val === null || val === '') {
           this.patientCardIDList = []
-          this.returnCopyInfo()
+          this.refresh()
         } else {
           this.getPatientCard(this.patientCardIDSearchValue)
 
@@ -344,6 +344,13 @@
 
       resetForm(formName) {
         this.$refs[formName].resetFields()
+      },
+
+      refresh() {
+
+        this.patientCardIDSearchValue = ''
+        this.isShouldCopy = true
+        this.getPatientCardList()
       },
     },
 
