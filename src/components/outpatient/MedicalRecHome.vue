@@ -210,7 +210,17 @@
 
 
 
+        <el-dialog
+          title="未选择需诊断的患者"
+          :visible.sync="initDialogVisible"
+          width="30%"
+          :before-close="handleClose">
+          <span>您未选中任何一位患者进行诊治~~</span>
+          <span slot="footer" class="dialog-footer">
 
+    <el-button type="primary" @click="goSearchPatient">确 定</el-button>
+  </span>
+        </el-dialog>
 
 
 
@@ -272,6 +282,7 @@
           type:'',
         },
         saveTempDialogVisible:false,
+        initDialogVisible:'false',//初始化时用到的对话框
 
       }
 
@@ -417,12 +428,23 @@ alert(this.medicalRecTemp.name);
       searchHistoryRec(){
 
       },
+      goSearchPatient() {
+        this.$router.push({
+          path: '/outPatient/SearchPatient',
+
+        });
+      },
       init(){
         alert("11");
         //this.indexPatient = this.$route.query.indexPatient;
         this.indexPatient= JSON.parse(sessionStorage.getItem('patient'));
 
         //this.indexPatient = index;
+        //alert(this.indexPatient);
+        if( this.indexPatient === null){
+
+          this.initDialogVisible = true;
+        }
         console.log(this.indexPatient);
         console.log(this.indexPatient.patientID);
         this.medicalRecordHome.medicalRecId =  this.indexPatient.medicalRecID;
