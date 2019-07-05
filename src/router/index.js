@@ -673,19 +673,19 @@ export const registerAndChargeRoutes = [
   {
     path: '/registerAndCharge',
     component: Home,
-    name: '工作',
+    name: '挂号管理',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '工作',
+      name: '挂号管理',
     },
     children: [
       {
         path: '/registerAndCharge/Register',
         component: Register,
-        name: '挂号',
+        name: '门诊挂号',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '挂号',
+          name: '门诊挂号',
         },
       },
       {
@@ -737,10 +737,10 @@ export const registerAndChargeRoutes = [
       }, {
         path: '/registerAndCharge/Toll',
         component: Toll,
-        name: '挂号收费',
+        name: '门诊收费',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '挂号收费',
+          name: '门诊收费',
         },
       },
     ]
