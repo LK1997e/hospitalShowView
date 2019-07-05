@@ -15,7 +15,7 @@
                   <el-form :model="newProject" ref="newProject" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="项目" prop="FmedItemID">
                       <!-- 一个查找全部项目的搜索框-->
-                      <el-select v-model="newProject.FmedItemID" clearable placeholder="请选择">
+                      <el-select v-model="newProject.FMedItemID" clearable placeholder="请选择">
                         <el-option
                           v-for="item in fMedItemList"
                           :key="item.id"
@@ -28,7 +28,7 @@
                       <el-input v-model="newProject.number" style="width: 280px"></el-input>
                     </el-form-item>
                     <el-form-item>
-                      <el-button type="primary" @click="addInspectionDetails()">新增</el-button>
+                      <el-button type="primary" @click="addDisposalDetails()">新增</el-button>
                       <el-button @click="resetForm('newProject')">重置</el-button>
                     </el-form-item>
                   </el-form>
@@ -36,7 +36,7 @@
 
 
                 <el-tab-pane label="组套增加" name="second">
-                  <!-- 找常用检查的带建议搜索框-->
+                  <!-- 找常用处置的带建议搜索框-->
                   <el-select v-model="templateID" clearable placeholder="请选择组套">
                     <el-option
                       v-for="item in projectTemplateList"
@@ -48,11 +48,11 @@
                   <el-button type="primary" @click="use_Check()">新增</el-button>
                 </el-tab-pane>
 
-                <el-tab-pane label="常用检查项目" name="third">
-                  <!-- 找常用检查的带建议搜索框-->
-                  <el-select v-model="searchCommonValue" clearable placeholder="请选择常用检查">
+                <el-tab-pane label="常用处置项目" name="third">
+                  <!-- 找常用处置的带建议搜索框-->
+                  <el-select v-model="searchCommonValue" clearable placeholder="请选择常用处置">
                     <el-option
-                      v-for="item in commonInspectionList"
+                      v-for="item in commonDisposalList"
                       :key="item.id"
                       :label="item.name"
                       :value="item.name">
@@ -89,28 +89,28 @@
               style="padding-bottom: 10px;">
         <el-container>
           <el-header>
-            <el-divider content-position="center">检查项目</el-divider>
+            <el-divider content-position="center">处置项目</el-divider>
           </el-header>
-          <!-- 表格（放该病人的inspectionViewList）-->
+          <!-- 表格（放该病人的DisposalViewList）-->
           <el-table
             ref="multipleTable"
-            :data="inspectionDetailsList"
+            :data="disposalDetailsList"
             highlight-current-row
             @current-change="handleSelectionChange" style="width: 100%">
             <el-table-column type="expand">
               <template slot-scope="props">
 
                 <el-button icon="el-icon-edit"
-                                       @click.native.prevent="deleteInspectionDetailsByID(props.row.inspectionDetailsID)"
-                                       type="text"
-                                       size="small">
-                删除
-              </el-button>
+                           @click.native.prevent="deleteDisposalDetailsByID(props.row.disposalDetailsID)"
+                           type="text"
+                           size="small">
+                  删除
+                </el-button>
 
 
 
                 <el-button icon="el-icon-edit"
-                           @click.native.prevent="drawInspectionDetails(props.row.inspectionDetailsID)"
+                           @click.native.prevent="drawDisposalDetails(props.row.disposalDetailsID)"
                            type="text"
                            size="small">
                   开立
@@ -118,48 +118,48 @@
 
 
                 <el-button icon="el-icon-edit"
-                           @click.native.prevent="abolishInspectionDetails(props.row.inspectionDetailsID)"
+                           @click.native.prevent="abolishDisposalDetails(props.row.disposalDetailsID)"
                            type="text"
                            size="small">
                   废除
                 </el-button>
 
-                <!--<el-button icon="el-icon-edit" @click.native.prevent="deleteInspectionDetails()" type="text"-->
+                <!--<el-button icon="el-icon-edit" @click.native.prevent="deleteDisposalDetails()" type="text"-->
                 <!--size="small">-->
                 <!--开立-->
                 <!--</el-button>-->
-                <!--<el-button icon="el-icon-edit" @click.native.prevent="deleteInspectionDetails()" type="text"-->
+                <!--<el-button icon="el-icon-edit" @click.native.prevent="deleteDisposalDetails()" type="text"-->
                 <!--size="small">-->
                 <!--废除-->
                 <!--</el-button>-->
 
-                <!--<el-button icon="el-icon-edit" @click.native.prevent="lookInspectionRes()" type="text"-->
+                <!--<el-button icon="el-icon-edit" @click.native.prevent="lookDisposalRes()" type="text"-->
                 <!--size="small">-->
                 <!--看结果-->
                 <!--</el-button>-->
                 <el-popover
-                placement="bottom"
+                  placement="bottom"
 
-                width="600"
-                trigger="click">
-                <el-form  :inline="true" :model="indexFMedItem"label-width="80px">
+                  width="600"
+                  trigger="click">
+                  <el-form  :inline="true" :model="indexFMedItem"label-width="80px">
 
-                <el-form-item label="项目名称" property="name">
-                <el-input v-model="indexFMedItem.name" readonly></el-input>
-                </el-form-item>
-                <el-form-item label="单位" property="format">
-                <el-input v-model="indexFMedItem.format" readonly></el-input>
-                </el-form-item>
+                    <el-form-item label="项目名称" property="name">
+                      <el-input v-model="indexFMedItem.name" readonly></el-input>
+                    </el-form-item>
+                    <el-form-item label="单位" property="format">
+                      <el-input v-model="indexFMedItem.format" readonly></el-input>
+                    </el-form-item>
 
-                <el-form-item label="科室" property="deptName">
-                <el-input v-model="indexFMedItem.deptName" readonly></el-input>
-                </el-form-item>
-                <el-form-item label="收费类别" property="expClassName">
-                <el-input v-model="indexFMedItem.expClassName" readonly></el-input>
-                </el-form-item>
+                    <el-form-item label="科室" property="deptName">
+                      <el-input v-model="indexFMedItem.deptName" readonly></el-input>
+                    </el-form-item>
+                    <el-form-item label="收费类别" property="expClassName">
+                      <el-input v-model="indexFMedItem.expClassName" readonly></el-input>
+                    </el-form-item>
 
-                </el-form>
-                <el-button slot="reference" @click="getIndexFMedItem(props.row)">详情</el-button>
+                  </el-form>
+                  <el-button slot="reference" @click="getIndexFMedItem(props.row)">详情</el-button>
                 </el-popover>
 
 
@@ -170,7 +170,7 @@
             </el-table-column>
 
 
-            <el-table-column label="申请单号" property="inspectionID" style="width: 5%">
+            <el-table-column label="申请单号" property="disposalID" style="width: 5%">
             </el-table-column>
             <el-table-column label="项目名称" property="name" style="width: 15%">
             </el-table-column>
@@ -227,46 +227,46 @@
         <hr>
         <!-- 提示框，显示该项目的详细信息-->
         <el-dialog title="存为组套信息" :visible.sync="tempDialogVisible" width="30%">
-        <el-form :model="newTemplate" :rules="rules" ref="newTemplate" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="组套名称" prop="name">
-        <el-input v-model="newTemplate.name" style="width: 280px"></el-input>
+          <el-form :model="newTemplate" :rules="rules" ref="newTemplate" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="组套名称" prop="name">
+              <el-input v-model="newTemplate.name" style="width: 280px"></el-input>
 
-        </el-form-item>
-        <el-form-item label="组套编码" prop="templateCode">
-        <el-input v-model="newTemplate.templateCode" style="width: 280px"></el-input>
+            </el-form-item>
+            <el-form-item label="组套编码" prop="templateCode">
+              <el-input v-model="newTemplate.templateCode" style="width: 280px"></el-input>
 
-        </el-form-item>
-        <el-form-item label="适用范围" prop="area">
-        <el-select v-model="newTemplate.area" placeholder="请选择适用范围">
-        <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
-        </el-option>
-        </el-select>
+            </el-form-item>
+            <el-form-item label="适用范围" prop="area">
+              <el-select v-model="newTemplate.area" placeholder="请选择适用范围">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
 
-        </el-form-item>
+            </el-form-item>
 
-        <el-form-item label="临床印象" prop="impression">
-        <el-input v-model="newTemplate.impression" style="width: 280px"></el-input>
+            <el-form-item label="临床印象" prop="impression">
+              <el-input v-model="newTemplate.impression" style="width: 280px"></el-input>
 
-        </el-form-item>
-        <el-form-item label="临床诊断" prop="diagnosis">
-        <el-input v-model="newTemplate.diagnosis" style="width: 280px"></el-input>
+            </el-form-item>
+            <el-form-item label="临床诊断" prop="diagnosis">
+              <el-input v-model="newTemplate.diagnosis" style="width: 280px"></el-input>
 
-        </el-form-item>
-        <el-form-item label="目的要求" prop="goal">
-        <el-input v-model="newTemplate.goal" style="width: 280px"></el-input>
+            </el-form-item>
+            <el-form-item label="目的要求" prop="goal">
+              <el-input v-model="newTemplate.goal" style="width: 280px"></el-input>
 
-        </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="saveTemplate">存为组套</el-button>
-            <el-button @click="resetForm('newTemplate')">重置</el-button>
-          </el-form-item>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="saveTemplate">存为组套</el-button>
+              <el-button @click="resetForm('newTemplate')">重置</el-button>
+            </el-form-item>
 
 
-        </el-form>
+          </el-form>
 
         </el-dialog>
 
@@ -301,33 +301,30 @@
 <script>
   import {
     getIndexFMedItem,
-    newInspection,
-    addInspectionDetailsList,
-    addInspectionDetails,
-    searchInspection,
+    newDisposal,
+    adddisposalDetailsList,
+    addDisposalDetails,
+    searchDisposal,
     tempStore,
-    drawInspectionDetails,
+    drawDisposalDetails,
     addProjectFee,
-    deleteInspectionDetails,
-    abolishInspectionDetails,
-    useCommonInspection,
-    saveTemplate,
-    saveTemplateDetails,
+    deleteDisposalDetails,
+    abolishDisposalDetails,
+    useCommonDisposal,
     use_Check,
-    lookInspectionRes,
-    listInspection,
-    listIndexInspection,
-    deleteInspectionDetailsByID
-  } from '../../api/outPatientApi/applyInspectionApi';
+    listDisposal,
+    listIndexDisposal,
+    deleteDisposalDetailsByID
+  } from '../../api/outPatientApi/applyDisposalApi';
   import {
-    listCommonInspection
-  } from '../../api/outPatientApi/commonInspectionApi';
+    listCommonDisposal
+  } from '../../api/outPatientApi/commonDisposalApi';
   import {
     getThisDoctorTemp
   } from '../../api/outPatientApi/projectTempApi'
 
   export default {
-    name: "ApplyInspection",
+    name: "ApplyDisposal",
     data() {
       return {
 
@@ -380,7 +377,7 @@
         },
         indexPatientID: '',
         dialogTableVisible: false,
-        fMedItemList: [],//存用于检索全部检查检验的项目
+        fMedItemList: [],//存用于检索全部处置的项目
         //存组套列表
         //存常用项目列表
 
@@ -388,19 +385,19 @@
 
         searchItemValue: '',
         searchTempValue: '',
-        inspectionTempList: [],
+        DisposalTempList: [],
         searchCommonValue: '',
 
-        commonInspectionList: [],
+        commonDisposalList: [],
 
 
         projectTemplateList: [],
-        inspectionDetailsList: [],
+        disposalDetailsList: [],
         medicalRecordID: '',
-        inspectionViewList: [],
-        indexInspectionView: {},
+        DisposalViewList: [],
+        indexDisposalView: {},
         indexList: [],
-        inspection: {
+        disposal: {
           id: '',
           medicalRecordID: '',
           mark: '',
@@ -446,7 +443,7 @@
             if (res.status === 200) {
               let data = res.data;
               if (data.status === 'OK') {
-                // alert("建立inspection成功");
+                // alert("建立Disposal成功");
                 this.indexFMedItem = data.data;
                 console.log(this.indexFMedItem);
                 this.$message({
@@ -454,13 +451,13 @@
                   type: 'success'
                 });
               } else if (data.status === 'WARN') {
-                // alert("建立inspectionbu成功")
+                // alert("建立Disposalbu成功")
                 this.$message({
                   message: data.msg,
                   type: 'warning'
                 });
               } else {
-                // alert("建立inspection失败？？")
+                // alert("建立Disposal失败？？")
                 this.$message.error(data.msg);
               }
             }
@@ -470,30 +467,30 @@
 
         },
 
-        newInspection() {
+        newDisposal() {
           //一进入界面就调用
-          this.inspection.medicalRecordID = this.medicalRecordID;
-          // alert("newInspection medicalRecordID" +this.inspection.medicalRecordID );
-          //let params = {inspection : this.inspection};
-          newInspection(this.inspection).then((res) => {
+          this.disposal.medicalRecordID = this.medicalRecordID;
+          // alert("newDisposal medicalRecordID" +this.disposal.medicalRecordID );
+          //let params = {Disposal : this.disposal};
+          newDisposal(this.disposal).then((res) => {
             if (res.status === 200) {
               let data = res.data;
               if (data.status === 'OK') {
-                // alert("建立inspection成功");
-                this.inspection = data.data;
-                console.log(this.inspection);
+                // alert("建立Disposal成功");
+                this.disposal = data.data;
+                console.log(this.disposal);
                 this.$message({
                   message: data.msg,
                   type: 'success'
                 });
               } else if (data.status === 'WARN') {
-                // alert("建立inspectionbu成功")
+                // alert("建立Disposalbu成功")
                 this.$message({
                   message: data.msg,
                   type: 'warning'
                 });
               } else {
-                // alert("建立inspection失败？？")
+                // alert("建立Disposal失败？？")
                 this.$message.error(data.msg);
               }
             }
@@ -508,16 +505,16 @@
           this.searchItemValue = '';
           this.newProject.number = '';
         },
-        addInspectionDetailsList() {
+        adddisposalDetailsList() {
 
         },
-        addInspectionDetails() {
-          this.$confirm('确认新增该检查项目？')
+        addDisposalDetails() {
+          this.$confirm('确认新增该处置项目？')
             .then(_ => {
-              this.newProject.inspectionID = this.inspection.id;
-              this.newProject.medicalRecordID = this.inspection.medicalRecordID;
+              this.newProject.disposalID = this.disposal.id;
+              this.newProject.medicalRecordID = this.disposal.medicalRecordID;
               console.log(this.newProject);
-              addInspectionDetails(this.newProject).then((res) => {
+              addDisposalDetails(this.newProject).then((res) => {
                   console.log(this.newProject);
                   if (res.status === 200) {
                     let data = res.data;
@@ -551,14 +548,14 @@
           //sessionStorage.setItem('tempStore', JSON.stringify(this.medicalRecordHome));
 
         },
-        drawInspectionDetails(val) {
+        drawDisposalDetails(val) {
           this.checkList=[];
           this.checkList.push(val);
 
           this.$confirm('确认开立？')
             .then(_ => {
               let params = {"id": this.checkList};
-              drawInspectionDetails(params).then((res) => {
+              drawDisposalDetails(params).then((res) => {
                   if (res.status === 200) {
                     let data = res.data;
                     if (data.status === 'OK') {
@@ -588,13 +585,13 @@
 
         },
 
-        deleteInspectionDetailsByID(val) {
+        deleteDisposalDetailsByID(val) {
           console.log(val);
           this.$confirm('确认删除该项目？')
             .then(_ => {
               // alert(val);
-              let params = {"inspectionDetailsId": val};
-              deleteInspectionDetailsByID(params).then((res) => {
+              let params = {"DisposalDetailsId": val};
+              deleteDisposalDetailsByID(params).then((res) => {
                   if (res.status === 200) {
                     let data = res.data;
                     if (data.status === 'OK') {
@@ -622,14 +619,14 @@
 
 
         },
-        abolishInspectionDetails(val) {
+        abolishDisposalDetails(val) {
           this.checkList=[];
           this.checkList.push(val);
 
           this.$confirm('确认废除？')
             .then(_ => {
               let params = {"id": this.checkList};
-              abolishInspectionDetails(params).then((res) => {
+              abolishDisposalDetails(params).then((res) => {
                   if (res.status === 200) {
                     let data = res.data;
                     if (data.status === 'OK') {
@@ -659,31 +656,7 @@
 
         },
 
-        saveTemplate(val) {
 
-         saveTemplate(this.newTemplate).then(( res) =>{
-           if (res.status === 200) {
-             let data = res.data;
-             if (data.status === 'OK') {
-               this.newTemplateID = data.data;
-               alert("成功存组套1");
-               this.chu();
-               console.log(this.newTemplate);
-               // this.deptSearchOptions = data.data;
-             } else if (data.status === 'WARN') {
-               this.$message({
-                 message: data.msg,
-                 type: 'warning'
-               });
-             } else {
-               this.$message.error(data.msg);
-             }
-           }
-         });
-
-
-
-        },
         //重置表单
         resetForm(formName) {
           this.$refs[formName].resetFields();
@@ -692,7 +665,7 @@
         use_Check() {
           let id = {
             'projectTemplateID': this.templateID,
-            'inspectionID': this.inspection.id
+            'disposalID': this.disposal.id
           };
           // alert("use_Check");
           use_Check(id).then((res) => {
@@ -716,11 +689,11 @@
             }
           });
         },
-        lookInspectionRes() {
+        lookDisposalRes() {
 
         },
-        listInspection() {
-          listInspection().then((res) => {
+        listDisposal() {
+          listDisposal().then((res) => {
             // alert("mb");
             if (res.status === 200) {
               // alert("mb2");
@@ -742,18 +715,18 @@
 
         },
 
-        listIndexInspection() {
+        listIndexDisposal() {
           //存该患者的那些项目（做表格那块）
 
 
           let id = {'medicalRecordID': this.medicalRecordID};
-          listIndexInspection(id).then((res) => {
+          listIndexDisposal(id).then((res) => {
             if (res.status === 200) {
               // alert("mb3");
               let data = res.data;
               if (data.status === 'OK') {
-                this.inspectionDetailsList = data.data;
-                console.log(this.inspectionDetailsList.length);
+                this.disposalDetailsList = data.data;
+                console.log(this.disposalDetailsList.length);
                 // this.deptSearchOptions = data.data;
               } else if (data.status === 'WARN') {
                 this.$message({
@@ -769,18 +742,18 @@
         handleSelectionChange(items) {
           this.checkList = [];
           items.forEach((item) => {
-            this.checkList.push(item.inspectionDetailsID);
+            this.checkList.push(item.disposalDetailsID);
           });
         },
         //处理页大小改变
         handleSizeChange(val) {
           this.pageParams.pageSize = val;
-          this.listIndexInspection();
+          this.listIndexDisposal();
         },
         //处理当前页改变
         handleCurrentChange(val) {
           this.pageParams.pageNum = val;
-          this.listIndexInspection();
+          this.listIndexDisposal();
         },
         getThisDoctorTemp() {
           getThisDoctorTemp().then((res) => {
@@ -803,16 +776,16 @@
           });
         },
 
-        listCommonInspection() {
+        listCommonDisposal() {
           //加载该医生的常用诊断
-          listCommonInspection().then((res) => {
-            alert("listCommonInspection");
+          listCommonDisposal().then((res) => {
+            alert("listCommonDisposal");
             if (res.status === 200) {
-              // alert("listCommonInspection200");
+              // alert("listCommonDisposal200");
               let data = res.data;
               if (data.status === 'OK') {
-                this.commonInspectionList = data.data;
-                console.log(this.commonInspectionList.length);
+                this.commonDisposalList = data.data;
+                console.log(this.commonDisposalList.length);
                 // this.deptSearchOptions = data.data;
               } else if (data.status === 'WARN') {
                 this.$message({
@@ -854,13 +827,13 @@
         },
         chu() {
           this.init();
-          this.listInspection();
+          this.listDisposal();
 
-          this.listCommonInspection();
+          this.listCommonDisposal();
           this.getThisDoctorTemp();
-          this.newInspection();
-          this.listIndexInspection();
-          //this.inspection.id = this.inspectionDetailsList[0].inspectionID;
+          this.newDisposal();
+          this.listIndexDisposal();
+          //this.disposal.id = this.disposalDetailsList[0].disposalID;
         }
 
 
@@ -878,3 +851,4 @@
 <style scoped>
 
 </style>
+

@@ -6,6 +6,7 @@ let hospital = 'http://localhost:8081/hospital';
 export const addDiagnosis =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
+  // alert(listParams);
   return axios.post(
     `${hospital}/Diagnosis/addDiagnosis`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
@@ -39,6 +40,7 @@ export const deleteDiagnosisList =  (listParams) =>
 export const updateDiagnosis =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
+  // alert(listParams);
   return axios.post(
     `${hospital}/Diagnosis/updateDiagnosis`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
@@ -55,6 +57,19 @@ export const defineDiagnose =  (listParams) =>
   listParams=Qs.stringify(listParams);
   return axios.post(
     `${hospital}/Diagnosis/defineDiagnose`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const getIndexDiagnosis =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/Diagnosis/getIndexDiagnosis`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const getDiseaseID=(listParams)=>{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/Diagnosis/getDiseaseID`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
 

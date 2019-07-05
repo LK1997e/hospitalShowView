@@ -3,6 +3,7 @@ import Qs from 'qs';
 let base = '';
 let hospital = 'http://localhost:8081/hospital';
 
+
 export const addCommonInspection =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
@@ -35,3 +36,15 @@ export const deleteInspection =  (listParams) =>
   return axios.post(
     `${hospital}/CommonInspection/deleteInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
+
+export const listCommonInspection =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/CommonInspection/listCommonInspection`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const fMedItemGetAllNamesAndCodes=_=>{
+  return axios.post(`${hospital}/CommonInspection/findAllFMedItemNamesAndCodes`);
+};
+
