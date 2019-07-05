@@ -450,67 +450,86 @@ export const outpatientRoutes = [
       ]
   },
 
+    {
+      path: '/outpatient',
+      component: Home,
+      name: '门诊工作',
+      iconCls: 'el-icon-message',//图标样式class
+      meta: {
+        name: '门诊工作',
+      },
+      children: [
+        {
+          path: '/outpatient/SearchPatient',
+          component: SearchPatient,
+          name: '患者列表',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '患者列表',
+          },
+        },
+        {
+          path: '/outpatient/MedicalRecHome',
+          component: MedicalRecHome,
+          name: '病历首页编辑',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '病历首页编辑',
+          },
+
+        },
+        {
+          path: '/outpatient/Diagnosis',
+          component: Diagnosis,
+          name: '诊断',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '诊断',
+          },
+        },
+        {
+          path: '/outpatient/ApplyInspection',
+          component: ApplyInspection,
+          name: '申请检查项目',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '申请检查项目',
+          },
+        },
+
+
+        {
+          path: '/outpatient/ApplyDisposal',
+          component: ApplyDisposal,
+          name: '申请处置项目',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '申请处置项目',
+          },
+        },
+        {
+          path: '/outpatient/ApplyPrescription',
+          component: ApplyPrescription,
+          name: '申请处方',
+          iconCls: 'el-icon-message',//图标样式class
+          meta: {
+            name: '申请处方',
+          },
+        },
+
+      ],
+    },
   {
-    path: '/outpatient',
+    path: '/outpatient/manage',
     component: Home,
-    name: '门诊管理',
+    name: '医生个人管理',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '门诊管理',
+      name: '医生个人管理',
     },
     children: [
       {
-        path: '/outpatient/SearchPatient',
-        component: SearchPatient,
-        name: '患者列表',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '患者列表',
-        },
-      },
-
-
-      {
-        path: '/outpatient/MedicalRecHome',
-        component:MedicalRecHome,
-        name: '病历首页编辑',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '病历首页编辑',
-        },
-
-      },
-      {
-        path: '/outpatient/ApplyInspection',
-        component: ApplyInspection,
-        name: '申请检查项目',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '申请检查项目',
-        },
-      },
-
-
-      {
-        path: '/outpatient/ApplyDisposal',
-        component: ApplyDisposal,
-        name: '申请处置项目',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '申请处置项目',
-        },
-      },
-      {
-        path: '/outpatient/ApplyPrescription',
-        component: ApplyPrescription,
-        name: '申请处方',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '申请处方',
-        },
-      },
-      {
-        path: '/outpatient/CommonDiagnosis',
+        path: '/outpatient/manage/CommonDiagnosis',
         component: CommonDiagnosis,
         name: '常用诊断',
         iconCls: 'el-icon-message',//图标样式class
@@ -519,7 +538,7 @@ export const outpatientRoutes = [
         },
       },
       {
-        path: '/outpatient/CommonDisposal',
+        path: '/outpatient/manage/CommonDisposal',
         component: CommonDisposal,
         name: '常用处置',
         iconCls: 'el-icon-message',//图标样式class
@@ -528,7 +547,7 @@ export const outpatientRoutes = [
         },
       },
       {
-        path: '/outpatient/CommonDrugs',
+        path: '/outpatient/manage/CommonDrugs',
         component: CommonDrugs,
         name: '常用药品',
         iconCls: 'el-icon-message',//图标样式class
@@ -537,7 +556,7 @@ export const outpatientRoutes = [
         },
       },
       {
-        path: '/outpatient/CommonInspection',
+        path: '/outpatient/manage/CommonInspection',
         component: CommonInspection,
         name: '常用检查检验项目',
         iconCls: 'el-icon-message',//图标样式class
@@ -545,33 +564,8 @@ export const outpatientRoutes = [
           name: '常用检查检验项目',
         },
       },
-      {
-        path: '/outpatient/Diagnosis',
-        component: Diagnosis,
-        name: '诊断',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '诊断',
-        },
-      },
-      {
-        path: '/outpatient/MedicalRecHomeTemp',
-        component: MedicalRecHomeTemp,
-        name: '病历模板',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '病历模板',
-        },
-      },
-      {
-        path: '/outpatient/ProjectTemp',
-        component: ProjectTemp,
-        name: '项目组套',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '项目组套',
-        },
-      },
+
+
 
 
     ],

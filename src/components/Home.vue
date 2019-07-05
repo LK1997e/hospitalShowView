@@ -86,7 +86,7 @@
     inject:['reload'],
 		data() {
 			return {
-				sysName:'东软医疗系统',
+				sysName:'HIS管理',
 				collapsed:false,
         user:{
           sysUserName: '',
@@ -164,7 +164,7 @@
 		.header {
 			height: 60px;
 			line-height: 60px;
-			background:#48ace6;
+			background:#38598b;
 			color:#fff;
 			.userinfo {
 				text-align: right;

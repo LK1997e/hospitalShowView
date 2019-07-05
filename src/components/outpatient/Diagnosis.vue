@@ -160,6 +160,19 @@
             </el-form>
           </el-dialog>
 
+          <el-dialog
+            title="未选择需诊断的患者"
+            :visible.sync="initDialogVisible"
+            width="30%"
+            :before-close="handleClose">
+            <span>您未选中任何一位患者进行诊治~~</span>
+            <span slot="footer" class="dialog-footer">
+
+    <el-button type="primary" @click="goSearchPatient">确 定</el-button>
+  </span>
+          </el-dialog>
+
+
 
         </el-container>
       </el-row>
@@ -247,6 +260,7 @@
         },
         //被选中的病人
         medicalRecordID: '',
+        initDialogVisible:false,
         allDiseases: [],
         editForm: {
           id:'',
@@ -298,6 +312,12 @@
           let index = JSON.parse(sessionStorage.getItem('patient'));
 
           this.indexPatient = index;
+          if( this.indexPatient != null){
+
+            ;
+          }else{
+            this.initDialogVisible = true;
+          }
           console.log(this.indexPatient);
           console.log(this.indexPatient.patientID);
           this.medicalRecordID = this.indexPatient.medicalRecID;
@@ -559,6 +579,12 @@
               console.log('error submit!!');
               return false;
             }
+          });
+        },
+        goSearchPatient() {
+          this.$router.push({
+            path: '/outPatient/SearchPatient',
+
           });
         },
         //重置表单

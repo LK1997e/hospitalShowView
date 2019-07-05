@@ -46,3 +46,12 @@ export const listCommonDisposal =  (listParams) =>
     `${hospital}/CommonDisposal/listCommonDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
+export const fMedItemGetAllNamesAndCodes =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/CommonDisposal/findAllFMedItemNamesAndCodes`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+
+

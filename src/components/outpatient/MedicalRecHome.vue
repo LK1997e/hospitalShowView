@@ -441,8 +441,10 @@ alert(this.medicalRecTemp.name);
 
         //this.indexPatient = index;
         //alert(this.indexPatient);
-        if( this.indexPatient === null){
+        if( this.indexPatient != null){
 
+          ;
+        }else{
           this.initDialogVisible = true;
         }
         console.log(this.indexPatient);
