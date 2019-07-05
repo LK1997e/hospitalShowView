@@ -644,31 +644,59 @@ export const registerAndChargeRoutes = [
   {
     path: '/registerAndCharge',
     component: Home,
-    name: '挂号收费员',
+    name: '日结管理',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '挂号收费员',
+      name: '日结管理',
     },
     children: [
       {
-        path: '/registerAndCharge/UserInfo',
-        component: UserInfo,
-        name: '挂号收费员主页',
+        path: '/registerAndCharge/DailySettle',
+        component: DailySettle,
+        name: '收费员日结',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '挂号收费员主页',
+          name: '收费员日结',
         },
       },
       {
-        path: '/registerAndCharge/UpdateUserInfo',
-        component: UpdateUserInfo,
-        name: '修改个人信息' ,
+        path: '/registerAndCharge/DailySettleSearch',
+        component: DailySettleSearch,
+        name: '日结查询',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '修改个人信息',
+          name: '日结查询',
         },
       },
-    ],
+    ]
+  },
+  {
+    path: '/registerAndCharge',
+    component: Home,
+    name: '费用管理',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '费用管理',
+    },
+    children: [
+      {
+        path: '/registerAndCharge/FeeSearch',
+        component: FeeSearch,
+        name: '费用查询',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '费用查询',
+        },
+      }, {
+        path: '/registerAndCharge/Toll',
+        component: Toll,
+        name: '门诊收费',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '门诊收费',
+        },
+      },
+    ]
   },
   {
     path: '/registerAndCharge',
@@ -720,60 +748,32 @@ export const registerAndChargeRoutes = [
   {
     path: '/registerAndCharge',
     component: Home,
-    name: '费用管理',
+    name: '挂号收费员',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '费用管理',
+      name: '挂号收费员',
     },
     children: [
       {
-        path: '/registerAndCharge/FeeSearch',
-        component: FeeSearch,
-        name: '费用查询',
+        path: '/registerAndCharge/UserInfo',
+        component: UserInfo,
+        name: '挂号收费员主页',
         iconCls: 'el-icon-message',//图标样式class
         meta: {
-          name: '费用查询',
-        },
-      }, {
-        path: '/registerAndCharge/Toll',
-        component: Toll,
-        name: '门诊收费',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '门诊收费',
+          name: '挂号收费员主页',
         },
       },
-    ]
+      {
+        path: '/registerAndCharge/UpdateUserInfo',
+        component: UpdateUserInfo,
+        name: '修改个人信息' ,
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '修改个人信息',
+        },
+      },
+    ],
   },
-   {
-    path: '/registerAndCharge',
-    component: Home,
-    name: '日结',
-    iconCls: 'el-icon-message',//图标样式class
-    meta: {
-      name: '日结',
-    },
-    children: [
-      {
-        path: '/registerAndCharge/DailySettle',
-        component: DailySettle,
-        name: '收费员日结',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '收费员日结',
-        },
-      },
-      {
-        path: '/registerAndCharge/DailySettleSearch',
-        component: DailySettleSearch,
-        name: '日结查询',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '日结查询',
-        },
-      },
-    ]
-  }
 
 ]
 
