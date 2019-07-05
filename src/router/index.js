@@ -423,21 +423,12 @@ export const outpatientRoutes = [
   {
     path: '/outpatient',
     component: Home,
-    name: '门诊人员',
+    name: '门诊人员管理',
     iconCls: 'el-icon-message',//图标样式class
     meta: {
-      name: '门诊人员',
+      name: '门诊人员管理',
     },
     children: [
-      {
-        path: '/outpatient/SearchPatient',
-        component: SearchPatient,
-        name: '患者列表',
-        iconCls: 'el-icon-message',//图标样式class
-        meta: {
-          name: '患者列表',
-        },
-      },
       {
         path: '/outpatient/UserInfo',
         component: UserInfo,
@@ -456,6 +447,29 @@ export const outpatientRoutes = [
           name: '修改个人信息',
         },
       },
+      ]
+  },
+
+  {
+    path: '/outpatient',
+    component: Home,
+    name: '门诊管理',
+    iconCls: 'el-icon-message',//图标样式class
+    meta: {
+      name: '门诊管理',
+    },
+    children: [
+      {
+        path: '/outpatient/SearchPatient',
+        component: SearchPatient,
+        name: '患者列表',
+        iconCls: 'el-icon-message',//图标样式class
+        meta: {
+          name: '患者列表',
+        },
+      },
+
+
       {
         path: '/outpatient/MedicalRecHome',
         component:MedicalRecHome,
