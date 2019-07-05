@@ -314,8 +314,9 @@
       handleMedRecNoChange(val) {
 
         if (val === null || val === '') {
+          this.isShouldCopy = true
           this.medRecNoList = []
-          this.returnCopyInfo()
+          this.getRegInfoList()
         } else {
           this.getRegInfo(this.medRecSearchValue)
 

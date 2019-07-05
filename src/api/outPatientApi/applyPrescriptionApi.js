@@ -17,11 +17,10 @@ export const tempStore =  (listParams) =>
     `${hospital}/ApplyPrescription/tempStore`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
-export const addDrugs =  (listParams) =>
+export const addDetails =  (listParams) =>
 {
-  listParams=Qs.stringify(listParams);
   return axios.post(
-    `${hospital}/ApplyPrescription/addDrugs`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+    `${hospital}/ApplyPrescription/addDetails`,listParams);
 }
 
 export const searchDrugs =  (listParams) =>
@@ -55,6 +54,7 @@ export const deleteDrugs =  (listParams) =>
 export const deletePrescription =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
+  alert(listParams);
   return axios.post(
     `${hospital}/ApplyPrescription/deletePrescription`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
@@ -64,6 +64,13 @@ export const abolishPrescriptionDetail =  (listParams) =>
   listParams=Qs.stringify(listParams);
   return axios.post(
     `${hospital}/ApplyPrescription/abolishPrescriptionDetail`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+}
+
+export const sendPrescription =  (listParams) =>
+{
+  listParams=Qs.stringify(listParams);
+  return axios.post(
+    `${hospital}/ApplyPrescription/sendPrescription`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
 export const useCommonDrugs =  (listParams) =>
@@ -92,10 +99,22 @@ export const use_Check =  (listParams) =>
   return axios.post(
     `${hospital}/ApplyPrescription/use_Check`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
-export const listDrugs =  (listParams) =>
+export const listDrugs = _ =>
 {
-  listParams=Qs.stringify(listParams);
   return axios.post(
-    `${hospital}/ApplyPrescription/listDrugs`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+    `${hospital}/ApplyPrescription/listDrugs`);
+}
+
+export const listPrescription = _ =>
+{
+  return axios.post(
+    `${hospital}/ApplyPrescription/listPrescription`);
+}
+
+export const listPrescriptionDetails =params =>
+{
+  params=Qs.stringify(params);
+  return axios.post(
+    `${hospital}/ApplyPrescription/listPrescriptionDetail`,params,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 
