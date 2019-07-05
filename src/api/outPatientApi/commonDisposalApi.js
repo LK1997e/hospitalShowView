@@ -39,10 +39,10 @@ export const findCommonDisposal =  (listParams) =>
   return axios.post(
     `${hospital}/CommonDisposal/findCommonDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
-export const getThisDoctorTemp =  (listParams) =>
+export const listCommonDisposal =  (listParams) =>
 {
   listParams=Qs.stringify(listParams);
   return axios.post(
-    `${hospital}/CommonDisposal/getThisDoctorTemp`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+    `${hospital}/CommonDisposal/listCommonDisposal`,listParams,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
 }
 

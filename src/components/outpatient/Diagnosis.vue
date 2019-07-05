@@ -110,7 +110,7 @@
             },
             //被选中的病人
             medicalRecordID : '',
-            initDialogVisible:'false',//初始化时用到的对话框
+            initDialogVisible:false,//初始化时用到的对话框
 
           }
 
